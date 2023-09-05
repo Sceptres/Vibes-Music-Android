@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/music_library_fragment"
+        android:title="@string/music_library"
+        android:icon="@drawable/ic_music_library"/>
+    <item
+        android:id="@+id/import_music_fragment"
+        android:title="@string/import_music"
+        android:icon="@drawable/ic_import"/>
+</menu>
