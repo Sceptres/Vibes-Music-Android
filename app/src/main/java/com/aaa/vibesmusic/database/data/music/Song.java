@@ -2,13 +2,14 @@ package com.aaa.vibesmusic.database.data.music;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
-@Entity(tableName = "Songs")
+@Entity(tableName = "Songs", indices = {@Index(value = "location", unique = true)})
 public class Song {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
 
     @ColumnInfo(name = "location")
