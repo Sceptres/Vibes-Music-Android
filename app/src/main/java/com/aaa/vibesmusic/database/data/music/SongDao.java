@@ -21,6 +21,7 @@ public interface SongDao {
     @Insert(onConflict = OnConflictStrategy.FAIL)
     Completable insertSong(Song song);
 
+    @Update
     Completable updateSongs(Song... songs);
 
     @Update
