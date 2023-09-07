@@ -16,14 +16,22 @@ public class Song {
     @ColumnInfo(name = "location")
     private final String location;
 
-    public Song(int id, String location) {
+    @ColumnInfo(name="artist")
+    private final String artist;
+
+    @ColumnInfo(name="image_location")
+    private final String imageLocation;
+
+    public Song(int id, String location, String artist, String imageLocation) {
         this.id = id;
         this.location = location;
+        this.imageLocation = imageLocation;
+        this.artist = artist;
     }
 
     @Ignore
-    public Song(String location) {
-        this(0, location);
+    public Song(String location, String artist, String imageLocation) {
+        this(0, location, artist, imageLocation);
     }
 
     /**
@@ -32,6 +40,22 @@ public class Song {
      */
     public int getId() {
         return this.id;
+    }
+
+    /**
+     *
+     * @return The artist of the song
+     */
+    public String getArtist() {
+        return this.artist;
+    }
+
+    /**
+     *
+     * @return The location of the album cover image
+     */
+    public String getImageLocation() {
+        return this.imageLocation;
     }
 
     /**
