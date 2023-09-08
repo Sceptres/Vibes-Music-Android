@@ -2,4 +2,6 @@
     <string name="app_name">Vibes Music</string>
     <string name="music_library">Music Library</string>
     <string name="import_music">Import Music</string>
+    <string name="local">Local</string>
+    <string name="local_files">Local Files</string>
 </resources>
