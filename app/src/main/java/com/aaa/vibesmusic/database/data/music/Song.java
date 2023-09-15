@@ -13,6 +13,9 @@ public class Song {
     @PrimaryKey(autoGenerate = true)
     private final int id;
 
+    @ColumnInfo(name="name")
+    private final String name;
+
     @ColumnInfo(name = "location")
     private final String location;
 
@@ -22,16 +25,17 @@ public class Song {
     @ColumnInfo(name="image_location")
     private final String imageLocation;
 
-    public Song(int id, String location, String artist, String imageLocation) {
+    public Song(int id, String name, String location, String artist, String imageLocation) {
         this.id = id;
+        this.name = name;
         this.location = location;
         this.imageLocation = imageLocation;
         this.artist = artist;
     }
 
     @Ignore
-    public Song(String location, String artist, String imageLocation) {
-        this(0, location, artist, imageLocation);
+    public Song(String location, String name, String artist, String imageLocation) {
+        this(0, name, location, artist, imageLocation);
     }
 
     /**
@@ -40,6 +44,14 @@ public class Song {
      */
     public int getId() {
         return this.id;
+    }
+
+    /**
+     *
+     * @return The name of the song
+     */
+    public String getName() {
+        return this.name;
     }
 
     /**
@@ -71,7 +83,9 @@ public class Song {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Song song = (Song) o;
-        return id == song.id && Objects.equals(location, song.location);
+        return id == song.id && Objects.equals(name, song.name) &&
+                Objects.equals(location, song.location) && Objects.equals(artist, song.artist) &&
+                Objects.equals(imageLocation, song.imageLocation);
     }
 
     @Override
