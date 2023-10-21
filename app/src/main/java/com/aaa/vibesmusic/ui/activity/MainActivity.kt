@@ -6,6 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.databinding.ActivityMainBinding
+import com.aaa.vibesmusic.storage.StorageUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(this.layoutInflater)
 
         setContentView(binding.root)
+
+        StorageUtil.setup(this.applicationContext)
 
         val bottomNav: BottomNavigationView = binding.bottomNav
         val navHostFragment =
