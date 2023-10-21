@@ -41,7 +41,7 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
                 context,
                 VibesMusicDatabase.class,
                 VibesMusicDatabase.DATABASE_NAME
-        ).build();
+        ).allowMainThreadQueries().build();
     }
 
     protected VibesMusicDatabase() {}
