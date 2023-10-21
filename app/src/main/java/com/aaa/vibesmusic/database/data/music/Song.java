@@ -22,9 +22,11 @@ public class Song {
     @ColumnInfo(name = "location")
     private final String location;
 
+    @NonNull
     @ColumnInfo(name="artist")
     private final String artist;
 
+    @NonNull
     @ColumnInfo(name = "albumName")
     private final String albumName;
 
@@ -35,8 +37,8 @@ public class Song {
             int id,
             @NonNull String name,
             @NonNull String location,
-            String artist,
-            String albumName,
+            @NonNull String artist,
+            @NonNull  String albumName,
             String imageLocation
     ) {
         this.id = id;
@@ -51,8 +53,8 @@ public class Song {
     public Song(
             @NonNull String location,
             @NonNull String name,
-            String artist,
-            String albumName,
+            @NonNull String artist,
+            @NonNull String albumName,
             String imageLocation
     ) {
         this(0, name, location, artist, albumName, imageLocation);
