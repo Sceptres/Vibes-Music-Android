@@ -19,16 +19,25 @@ public interface SongDao {
     Completable insertSongs(Song... songs);
 
     @Insert(onConflict = OnConflictStrategy.FAIL)
+    Completable insertSongs(List<Song> songs);
+
+    @Insert(onConflict = OnConflictStrategy.FAIL)
     Completable insertSong(Song song);
 
     @Update
     Completable updateSongs(Song... songs);
 
     @Update
+    Completable updateSongs(List<Song> songs);
+
+    @Update
     Completable updateSong(Song song);
 
     @Delete
     Completable deleteSongs(Song... songs);
+
+    @Delete
+    Completable deleteSongs(List<Song> songs);
 
     @Delete
     Completable deleteSong(Song song);
