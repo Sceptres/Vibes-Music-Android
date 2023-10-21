@@ -50,4 +50,16 @@ public interface SongDao {
 
     @Query("SELECT * FROM Songs where location=:location")
     Single<Song> getSongByLocation(String location);
+
+    @Query(
+        """
+        SELECT EXISTS(
+        SELECT id FROM Songs
+        WHERE name=:name
+        AND artist=:artist
+        AND albumName=:albumName
+        )
+        """
+    )
+    Boolean doesSongExist(String name, String artist, String albumName);
 }
