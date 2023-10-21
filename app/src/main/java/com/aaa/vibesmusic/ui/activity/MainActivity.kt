@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.databinding.ActivityMainBinding
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        VibesMusicDatabase.getInstance(applicationContext)
         StorageUtil.setup(this.applicationContext)
 
         val bottomNav: BottomNavigationView = binding.bottomNav
