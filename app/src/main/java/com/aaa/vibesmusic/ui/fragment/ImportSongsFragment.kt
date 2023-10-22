@@ -156,20 +156,46 @@ class ImportSongsFragment : Fragment() {
             }
         }
 
-        if (failedSongs.isNotEmpty())
-            UIUtil.showLongSnackBar(
-                this.requireView(),
-                "Unable to import the songs ${failedSongs.joinToString(", ")}! Please try again!",
-                resources.getColor(R.color.foreground_color, null)
-            )
-
-        if (existingSongs.isNotEmpty())
-            UIUtil.showLongSnackBar(
-                this.requireView(),
-                "The songs ${existingSongs.joinToString(", ")} have already been imported!",
-                resources.getColor(R.color.foreground_color, null)
-            )
+        this.handleFailedSongs(failedSongs)
+        this.handleExistingSongs(existingSongs)
 
         return songs
+    }
+
+    /**
+     * @param failedSongs The [List] of songs that were failed to be imported
+     */
+    private fun handleFailedSongs(failedSongs: List<String>) {
+        if (failedSongs.isNotEmpty()) {
+            val msg: String = if(failedSongs.size > 1)
+                "Unable to import the songs ${failedSongs.joinToString(", ")}! Please try again!"
+            else
+                "Unable to import the song ${failedSongs.joinToString(", ")}! Please try again!"
+
+            UIUtil.showLongSnackBar(
+                this.requireView(),
+                msg,
+                resources.getColor(R.color.foreground_color, null)
+            )
+        }
+    }
+
+    /**
+     * @param existingSongs The [List] of songs by their names that were deemed to have already been
+     * imported
+     */
+    private fun handleExistingSongs(existingSongs: List<String>) {
+        if (existingSongs.isNotEmpty()) {
+            val msg: String = if(existingSongs.size > 1) // Has more than one element?
+                "The songs ${existingSongs.joinToString(", ")} have already been imported!"
+            else
+                "The song ${existingSongs.joinToString(", ")} has already been imported!"
+
+            UIUtil.showLongSnackBar(
+                this.requireView(),
+                msg,
+                resources.getColor(R.color.foreground_color, null)
+            )
+        }
     }
 }
