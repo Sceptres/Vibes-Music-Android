@@ -55,7 +55,7 @@ class ImportSongsFragment : Fragment() {
                             .subscribe {
                                 UIUtil.showLongSnackBar(
                                     requireView(),
-                                    "Music imported successfully",
+                                    resources.getString(R.string.songs_imported_successfully),
                                     resources.getColor(R.color.foreground_color, null)
                                 )
                             }
@@ -171,9 +171,9 @@ class ImportSongsFragment : Fragment() {
     private fun handleFailedSongs(failedSongs: List<String>) {
         if (failedSongs.isNotEmpty()) {
             val msg: String = if(failedSongs.size > 1)
-                "Unable to import the songs ${failedSongs.joinToString(", ")}! Please try again!"
+                resources.getString(R.string.failed_songs, failedSongs.joinToString(", "))
             else
-                "Unable to import the song ${failedSongs.joinToString(", ")}! Please try again!"
+                resources.getString(R.string.failed_song, failedSongs.joinToString(", "))
 
             UIUtil.showLongSnackBar(
                 this.requireView(),
@@ -190,9 +190,9 @@ class ImportSongsFragment : Fragment() {
     private fun handleExistingSongs(existingSongs: List<String>) {
         if (existingSongs.isNotEmpty()) {
             val msg: String = if(existingSongs.size > 1) // Has more than one element?
-                "The songs ${existingSongs.joinToString(", ")} have already been imported!"
+                resources.getString(R.string.songs_exist, existingSongs.joinToString(", "))
             else
-                "The song ${existingSongs.joinToString(", ")} has already been imported!"
+                resources.getString(R.string.song_exists, existingSongs.joinToString(", "))
 
             UIUtil.showLongSnackBar(
                 this.requireView(),
