@@ -1,7 +1,6 @@
 package com.aaa.vibesmusic.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class ImportSongsFragment : Fragment() {
-
     private var importSongsLauncher: ActivityResultLauncher<Void>? = null
     private val mDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -28,15 +26,20 @@ class ImportSongsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         this.importSongsLauncher = registerForActivityResult(
             ImportSongsActivityResultContract(this.requireActivity())) {
-                val database: VibesMusicDatabase = VibesMusicDatabase.getInstance(context)
-                mDisposable.add(
-                    database.songDao().insertSongs(it)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            UIUtil.showLongToast(requireContext(), "Music imported successfully")
-                        }
-                )
+                if(it.size > 0) {
+                    val database: VibesMusicDatabase = VibesMusicDatabase.getInstance(context)
+                    mDisposable.add(
+                        database.songDao().insertSongs(it)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                UIUtil.showLongToast(
+                                    requireContext(),
+                                    "Music imported successfully"
+                                )
+                            }
+                    )
+                }
         }
     }
 
