@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.database.data.music;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -13,25 +14,50 @@ public class Song {
     @PrimaryKey(autoGenerate = true)
     private final int id;
 
+    @NonNull
+    @ColumnInfo(name="name")
+    private final String name;
+
+    @NonNull
     @ColumnInfo(name = "location")
     private final String location;
 
+    @NonNull
     @ColumnInfo(name="artist")
     private final String artist;
+
+    @NonNull
+    @ColumnInfo(name = "albumName")
+    private final String albumName;
 
     @ColumnInfo(name="image_location")
     private final String imageLocation;
 
-    public Song(int id, String location, String artist, String imageLocation) {
+    public Song(
+            int id,
+            @NonNull String name,
+            @NonNull String location,
+            @NonNull String artist,
+            @NonNull  String albumName,
+            String imageLocation
+    ) {
         this.id = id;
+        this.name = name;
         this.location = location;
         this.imageLocation = imageLocation;
         this.artist = artist;
+        this.albumName = albumName;
     }
 
     @Ignore
-    public Song(String location, String artist, String imageLocation) {
-        this(0, location, artist, imageLocation);
+    public Song(
+            @NonNull String location,
+            @NonNull String name,
+            @NonNull String artist,
+            @NonNull String albumName,
+            String imageLocation
+    ) {
+        this(0, name, location, artist, albumName, imageLocation);
     }
 
     /**
@@ -44,16 +70,36 @@ public class Song {
 
     /**
      *
+     * @return The name of the song
+     */
+    @NonNull
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     *
      * @return The artist of the song
      */
+    @NonNull
     public String getArtist() {
         return this.artist;
     }
 
     /**
      *
+     * @return The album name of this song
+     */
+    @NonNull
+    public String getAlbumName() {
+        return  this.albumName;
+    }
+
+    /**
+     *
      * @return The location of the album cover image
      */
+    @NonNull
     public String getImageLocation() {
         return this.imageLocation;
     }
@@ -62,6 +108,7 @@ public class Song {
      *
      * @return The location of the song on the disk
      */
+    @NonNull
     public String getLocation() {
         return this.location;
     }
@@ -71,7 +118,9 @@ public class Song {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Song song = (Song) o;
-        return id == song.id && Objects.equals(location, song.location);
+        return id == song.id && name.equals(song.name) && location.equals(song.location) &&
+                artist.equals(song.artist) && albumName.equals(song.albumName) &&
+                imageLocation.equals(song.imageLocation);
     }
 
     @Override
