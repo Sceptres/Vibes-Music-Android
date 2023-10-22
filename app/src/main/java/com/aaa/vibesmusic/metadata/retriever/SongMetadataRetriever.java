@@ -31,6 +31,10 @@ public class SongMetadataRetriever implements AutoCloseable {
         this.retriever.setDataSource(context, dataSource);
     }
 
+    /**
+     *
+     * @return The {@link SongMetaData} that represents the metadata collected by this retriever
+     */
     public SongMetaData getAllMetaData() {
         String name = this.getSongName(SongMetadataRetriever.SONG_NAME_DEFAULT);
         String artist = this.getSongArtist(SongMetadataRetriever.SONG_ARTIST_DEFAULT);
