@@ -72,6 +72,10 @@ public class SongMetadataRetriever implements AutoCloseable {
      */
     public Bitmap getSongPicture(Bitmap defaultValue) {
         byte[] bitmapBytes = this.retriever.getEmbeddedPicture();
+
+        if(Objects.isNull(bitmapBytes))
+            return defaultValue;
+
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
         return this.ifNullDefault(bitmap, defaultValue);
     }
