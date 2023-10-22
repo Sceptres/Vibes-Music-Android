@@ -42,6 +42,8 @@
             android:layout_marginTop="10dp"
             android:layout_below="@+id/local_title"
             android:background="@drawable/button_outline"
+            android:drawableStart="@drawable/folder_24"
+            android:drawablePadding="4dp"
             android:text="@string/local_files"
             android:textColor="@color/white"
             android:fontFamily="sans-serif-light"
