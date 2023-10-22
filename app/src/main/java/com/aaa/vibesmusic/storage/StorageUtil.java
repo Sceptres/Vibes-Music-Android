@@ -3,8 +3,10 @@ package com.aaa.vibesmusic.storage;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Objects;
+import java.util.UUID;
 
 public class StorageUtil {
     private static String INTERNAL_STORAGE_PATH = "";
@@ -136,5 +140,27 @@ public class StorageUtil {
             }
         }
         return fileExtension;
+    }
+
+    /**
+     *
+     * @param resolver The {@link ContentResolver} to extract the file name
+     * @param uri The {@link Uri} of the file we are trying to get the name of
+     * @return The name of the file if available. Null otherwise.
+     */
+    public static String getFileName(ContentResolver resolver, Uri uri) {
+        try (Cursor cursor = resolver.query(
+                uri,
+                null,
+                null,
+                null,
+                null)
+        ) {
+            int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            cursor.moveToFirst();
+            return Objects.nonNull(cursor) ?
+                    cursor.getString(index) :
+                    UUID.randomUUID().toString() + StorageUtil.getExtension(resolver, uri);
+        }
     }
 }

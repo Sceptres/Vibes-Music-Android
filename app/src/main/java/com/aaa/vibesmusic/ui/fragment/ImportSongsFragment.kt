@@ -2,6 +2,7 @@ package com.aaa.vibesmusic.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,8 @@ import com.aaa.vibesmusic.ui.fragment.result.ImportSongsActivityResultContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.io.File
+import java.io.FileDescriptor
 import java.io.IOException
 import java.util.Objects
 
@@ -106,9 +109,9 @@ class ImportSongsFragment : Fragment() {
 
         val resolver = this.requireActivity().contentResolver
         resolver.openFileDescriptor(contentUri, "r").use { fd ->
-            val extension = StorageUtil.getExtension(resolver, contentUri)
-            val fileName = "$name.$extension"
-            wasSongSaved = StorageUtil.saveSong(fd!!.fileDescriptor, fileName)
+            val fileDescriptor: FileDescriptor = fd!!.fileDescriptor
+            val fileName: String = StorageUtil.getFileName(resolver, contentUri)
+            wasSongSaved = StorageUtil.saveSong(fileDescriptor, fileName)
             songLocation = StorageUtil.getSongPath(fileName)
         }
 
