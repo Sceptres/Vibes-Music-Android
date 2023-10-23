@@ -7,6 +7,10 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity(tableName = "Songs", indices = {@Index(value = "location", unique = true)})
@@ -33,13 +37,18 @@ public class Song {
     @ColumnInfo(name="image_location")
     private final String imageLocation;
 
+    @NonNull
+    @ColumnInfo(name="duration")
+    private final String duration;
+
     public Song(
             int id,
             @NonNull String name,
             @NonNull String location,
             @NonNull String artist,
             @NonNull  String albumName,
-            String imageLocation
+            String imageLocation,
+            @NonNull String duration
     ) {
         this.id = id;
         this.name = name;
@@ -47,6 +56,7 @@ public class Song {
         this.imageLocation = imageLocation;
         this.artist = artist;
         this.albumName = albumName;
+        this.duration = duration;
     }
 
     @Ignore
@@ -55,9 +65,27 @@ public class Song {
             @NonNull String name,
             @NonNull String artist,
             @NonNull String albumName,
-            String imageLocation
+            String imageLocation,
+            int duration
     ) {
-        this(0, name, location, artist, albumName, imageLocation);
+        this(0, name, location, artist, albumName, imageLocation, Song.calculateDuration(duration));
+    }
+
+    /**
+     *
+     * @param duration The duration of the song in milliseconds
+     * @return The string representation of the duration
+     */
+    private static String calculateDuration(int duration) {
+        int hours = duration / 3600000;
+        int minutes = (duration - (3600000*hours)) / 60000;
+        int seconds = (int) Math.ceil((duration - (60000*minutes)) / 1000f);
+
+        if(hours == 0) {
+            return String.format(Locale.US, "%02d:%02d", minutes, seconds);
+        } else {
+            return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
+        }
     }
 
     /**
@@ -111,6 +139,15 @@ public class Song {
     @NonNull
     public String getLocation() {
         return this.location;
+    }
+
+    /**
+     *
+     * @return The duration of this song
+     */
+    @NonNull
+    public String getDuration() {
+        return this.duration;
     }
 
     @Override
