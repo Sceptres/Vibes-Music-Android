@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.storage.StorageUtil
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import java.util.Objects
@@ -28,11 +29,12 @@ class SongsArrayAdapter(private val c: Context, val data: MutableList<Song>) :
         val artistAlbum: TextView = currentView.findViewById(R.id.artistAlbum)
         val songLength: TextView = currentView.findViewById(R.id.songLength)
 
-        Glide.with(currentView)
-            .load(song.imageLocation)
-            .centerCrop()
-            .placeholder(R.drawable.music_cover_image)
-            .into(songCoverImage)
+        if(Objects.nonNull(song.imageLocation) && StorageUtil.fileExists(song.imageLocation))
+            Glide.with(currentView)
+                .load(song.imageLocation)
+                .centerCrop()
+                .placeholder(R.drawable.music_cover_image)
+                .into(songCoverImage)
 
         songName.text = song.name
         artistAlbum.text = "${song.artist} · ${song.albumName}"
