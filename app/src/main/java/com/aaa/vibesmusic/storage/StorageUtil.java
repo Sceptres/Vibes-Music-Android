@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
+
+import com.aaa.vibesmusic.database.data.music.Song;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -18,6 +21,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -162,5 +168,15 @@ public class StorageUtil {
                     cursor.getString(index) :
                     UUID.randomUUID().toString() + StorageUtil.getExtension(resolver, uri);
         }
+    }
+
+    /**
+     *
+     * @param path The path of the file to check
+     * @return True if the file exists. False if not file or does not exist.
+     */
+    public static boolean fileExists(String path) {
+        File file = new File(path);
+        return file.exists() && file.isFile();
     }
 }
