@@ -1,13 +1,16 @@
 package com.aaa.vibesmusic.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.aaa.vibesmusic.R
+import androidx.fragment.app.Fragment
+import com.aaa.vibesmusic.databinding.FragmentSongLibraryBinding
 
 class SongLibraryFragment : Fragment() {
+    private var _binding: FragmentSongLibraryBinding? = null
+    private val binding: FragmentSongLibraryBinding
+        get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +20,8 @@ class SongLibraryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_song_library, container, false)
+        _binding = FragmentSongLibraryBinding.inflate(inflater)
+
+        return binding.root
     }
 }
