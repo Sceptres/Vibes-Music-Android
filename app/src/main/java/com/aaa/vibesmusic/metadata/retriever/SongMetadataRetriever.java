@@ -13,13 +13,16 @@ import com.aaa.vibesmusic.metadata.SongMetaData;
 import java.io.IOException;
 import java.util.Objects;
 
+import wseemann.media.FFmpegMediaMetadataRetriever;
+
 public class SongMetadataRetriever implements AutoCloseable {
     public static final String SONG_NAME_DEFAULT = "Unknown Name";
     public static final String SONG_ARTIST_DEFAULT = "Vibes Music";
     public static final String SONG_ALBUM_NAME_DEFAULT = "Vibes Music Album";
     public static final Bitmap SONG_IMAGE_DEFAULT = null;
 
-    private final MediaMetadataRetriever retriever;
+    private final FFmpegMediaMetadataRetriever retriever;
+    private final boolean wasRetrieved;
 
     /**
      *
@@ -27,8 +30,16 @@ public class SongMetadataRetriever implements AutoCloseable {
      * @param dataSource The data source of the element
      */
     public SongMetadataRetriever(@NonNull Context context, Uri dataSource) {
-        this.retriever = new MediaMetadataRetriever();
-        this.retriever.setDataSource(context, dataSource);
+        this.retriever = new FFmpegMediaMetadataRetriever();
+
+        boolean wasRetrieved;
+        try {
+            this.retriever.setDataSource(context, dataSource);
+            wasRetrieved = true;
+        } catch (RuntimeException e) {
+            wasRetrieved = false;
+        }
+        this.wasRetrieved = wasRetrieved;
     }
 
     /**
@@ -48,7 +59,7 @@ public class SongMetadataRetriever implements AutoCloseable {
      * @return The song artist if found. The default value if none found
      */
     public String getSongArtist(String defaultValue) {
-        String result = this.retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+        String result = this.retriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
         return this.ifNullDefault(result, defaultValue);
     }
 
@@ -57,7 +68,7 @@ public class SongMetadataRetriever implements AutoCloseable {
      * @return The name of the song. The default value if none found
      */
     public String getSongName(String defaultValue) {
-        String result = this.retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+        String result = this.retriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE);
         return this.ifNullDefault(result, defaultValue);
     }
 
@@ -66,7 +77,7 @@ public class SongMetadataRetriever implements AutoCloseable {
      * @return The name of the album this song belongs to. The default value if none found
      */
     public String getSongAlbumName(String defaultValue) {
-        String result = this.retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+        String result = this.retriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
         return this.ifNullDefault(result, defaultValue);
     }
 
@@ -89,7 +100,10 @@ public class SongMetadataRetriever implements AutoCloseable {
      * @return The duration of the song according to its metadata
      */
     public int getDuration() {
-        return Integer.parseInt(this.retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+        if(!this.wasRetrieved)
+            return 0;
+
+        return Integer.parseInt(this.retriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION));
     }
 
     /**
@@ -108,6 +122,6 @@ public class SongMetadataRetriever implements AutoCloseable {
      * @param <T> The type of the values
      */
     private <T> T ifNullDefault(T value, T defaultValue) {
-        return Objects.nonNull(value) ? value : defaultValue;
+        return Objects.nonNull(value) && this.wasRetrieved ? value : defaultValue;
     }
 }
