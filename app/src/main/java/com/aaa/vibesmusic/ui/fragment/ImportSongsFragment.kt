@@ -2,7 +2,6 @@ package com.aaa.vibesmusic.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +22,6 @@ import com.aaa.vibesmusic.ui.fragment.result.ImportSongsActivityResultContract
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.io.File
 import java.io.FileDescriptor
 import java.io.IOException
 import java.util.Objects
@@ -96,6 +94,7 @@ class ImportSongsFragment : Fragment() {
         val artist = metaData.artist
         val albumName = metaData.albumName
         val image = metaData.image
+        val duration = metaData.duration
 
         val songDao: SongDao = this.db!!.songDao()
         if (songDao.doesSongExist(name, artist, albumName)) {
@@ -127,7 +126,8 @@ class ImportSongsFragment : Fragment() {
             name,
             artist,
             albumName,
-            songImageLocation
+            songImageLocation,
+            duration
         )
     }
 

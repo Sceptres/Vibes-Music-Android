@@ -40,7 +40,7 @@ public class SongMetadataRetriever implements AutoCloseable {
         String artist = this.getSongArtist(SongMetadataRetriever.SONG_ARTIST_DEFAULT);
         String albumName = this.getSongAlbumName(SongMetadataRetriever.SONG_ALBUM_NAME_DEFAULT);
         Bitmap image = this.getSongPicture(SongMetadataRetriever.SONG_IMAGE_DEFAULT);
-        return SongMetaData.of(name, artist, albumName, image);
+        return SongMetaData.of(name, artist, albumName, image, this.getDuration());
     }
 
     /**
@@ -82,6 +82,14 @@ public class SongMetadataRetriever implements AutoCloseable {
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
         return this.ifNullDefault(bitmap, defaultValue);
+    }
+
+    /**
+     *
+     * @return The duration of the song according to its metadata
+     */
+    public int getDuration() {
+        return Integer.parseInt(this.retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
     }
 
     /**
