@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.TextView
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
@@ -45,6 +46,11 @@ class SongsArrayAdapter(private val c: Context, val data: MutableList<Song>) :
         songName.text = song.name
         artistAlbum.text = "${song.artist} · ${song.albumName}"
         songLength.text = song.duration
+
+        val options: ImageButton = currentView.findViewById(R.id.optionsBtn)
+        options.setOnClickListener {
+            Log.d("SONG", song.name)
+        }
 
         return currentView
     }
