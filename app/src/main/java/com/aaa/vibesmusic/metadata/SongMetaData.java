@@ -7,6 +7,7 @@ public class SongMetaData {
     private final String artist;
     private final String albumName;
     private final Bitmap image;
+    private final int duration;
 
     /**
      *
@@ -14,10 +15,11 @@ public class SongMetaData {
      * @param artist The artist of the song from the metadata
      * @param albumName The name of the album from the metadata
      * @param image The song cover image from the metadata
+     * @param duration The duration of the song in milliseconds
      * @return The {@link SongMetaData} instance with the given data
      */
-    public static SongMetaData of(String name, String artist, String albumName, Bitmap image) {
-        return new SongMetaData(name, artist, albumName, image);
+    public static SongMetaData of(String name, String artist, String albumName, Bitmap image, int duration) {
+        return new SongMetaData(name, artist, albumName, image, duration);
     }
 
     /**
@@ -26,12 +28,15 @@ public class SongMetaData {
      * @param artist The artist of the song from the metadata
      * @param albumName The name of the album from the metadata
      * @param image The song cover image from the metadata
+     * @param duration The duration of the song in milliseconds
      */
-    private SongMetaData(String name, String artist, String albumName, Bitmap image) {
+    private SongMetaData(String name, String artist, String albumName, Bitmap image, int duration) {
         this.name = name;
         this.artist = artist;
         this.albumName = albumName;
         this.image = image;
+        this.duration = duration;
+
     }
 
     /**
@@ -64,5 +69,13 @@ public class SongMetaData {
      */
     public Bitmap getImage() {
         return this.image;
+    }
+
+    /**
+     *
+     * @return The {@link SongMetaData#duration} of the song from its metadata
+     */
+    public int getDuration() {
+        return this.duration;
     }
 }
