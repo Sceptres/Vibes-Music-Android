@@ -90,7 +90,13 @@ class ImportSongsFragment : Fragment() {
      */
     @Throws(IOException::class, SongAlreadyExistsException::class)
     private fun parseUri(contentUri: Uri, metaData: SongMetaData): Song {
-        val name = metaData.name
+        val resolver = this.requireActivity().contentResolver
+        val fileName: String = StorageUtil.getFileName(resolver, contentUri)
+
+        val name = if(metaData.name.equals(SongMetadataRetriever.SONG_NAME_DEFAULT))
+            fileName
+        else
+            metaData.name
         val artist = metaData.artist
         val albumName = metaData.albumName
         val image = metaData.image
@@ -98,7 +104,6 @@ class ImportSongsFragment : Fragment() {
 
         val songDao: SongDao = this.db!!.songDao()
         if (songDao.doesSongExist(name, artist, albumName)) {
-            Log.d("SONG NAME", name)
             throw SongAlreadyExistsException()
         }
 
@@ -106,10 +111,8 @@ class ImportSongsFragment : Fragment() {
         var songImageLocation: String? = null
         var wasSongSaved: Boolean
 
-        val resolver = this.requireActivity().contentResolver
         resolver.openFileDescriptor(contentUri, "r").use { fd ->
             val fileDescriptor: FileDescriptor = fd!!.fileDescriptor
-            val fileName: String = StorageUtil.getFileName(resolver, contentUri)
             wasSongSaved = StorageUtil.saveSong(fileDescriptor, fileName)
             songLocation = StorageUtil.getSongPath(fileName)
         }
