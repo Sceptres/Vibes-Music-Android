@@ -1,6 +1,7 @@
 package com.aaa.vibesmusic.ui.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,13 +29,18 @@ class SongsArrayAdapter(private val c: Context, val data: MutableList<Song>) :
         val songName: TextView = currentView.findViewById(R.id.songName)
         val artistAlbum: TextView = currentView.findViewById(R.id.artistAlbum)
         val songLength: TextView = currentView.findViewById(R.id.songLength)
+        
+        val bitmapToLoad = if(Objects.nonNull(song.imageLocation) && StorageUtil.fileExists(song.imageLocation))
+            song.imageLocation
+        else
+            R.drawable.music_cover_image
 
-        if(Objects.nonNull(song.imageLocation) && StorageUtil.fileExists(song.imageLocation))
-            Glide.with(currentView)
-                .load(song.imageLocation)
-                .centerCrop()
-                .placeholder(R.drawable.music_cover_image)
-                .into(songCoverImage)
+
+        Glide.with(currentView)
+            .load(bitmapToLoad)
+            .centerCrop()
+            .placeholder(R.drawable.music_cover_image)
+            .into(songCoverImage)
 
         songName.text = song.name
         artistAlbum.text = "${song.artist} · ${song.albumName}"
