@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import java.util.Objects
 
-class SongsArrayAdapter(private val c: Context, val data: List<Song>) :
+class SongsArrayAdapter(private val c: Context, val data: MutableList<Song>) :
     ArrayAdapter<Song>(c, R.layout.song_list_card, data) {
 
     override fun getView(i: Int, view: View?, parent: ViewGroup): View {
