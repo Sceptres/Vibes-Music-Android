@@ -179,4 +179,16 @@ public class StorageUtil {
         File file = new File(path);
         return file.exists() && file.isFile();
     }
+
+    /**
+     *
+     * @param path The path of the file to delete
+     * @return True if the file was deleted. False otherwise.
+     */
+    public static boolean deleteFile(String path) {
+        File file = new File(path);
+        if(file.exists())
+            return file.delete();
+        return false;
+    }
 }
