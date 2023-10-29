@@ -11,4 +11,6 @@
     <color name="background_color">#131010</color>
     <color name="foreground_color">#0E0C0C</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="gray">#757575</color>
+    <color name="tan">#a4a4a4</color>
 </resources>
