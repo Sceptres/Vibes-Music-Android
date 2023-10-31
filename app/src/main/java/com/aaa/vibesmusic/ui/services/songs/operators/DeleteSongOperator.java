@@ -12,6 +12,8 @@ import com.aaa.vibesmusic.storage.StorageUtil;
 import com.aaa.vibesmusic.ui.services.songs.SongMenuOperator;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.Objects;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -30,7 +32,8 @@ public class DeleteSongOperator implements SongMenuOperator {
                 .setPositiveButton("Delete", (dialog, which) -> {
                     if (which == DialogInterface.BUTTON_POSITIVE) {
                         StorageUtil.deleteFile(song.getLocation());
-                        StorageUtil.deleteFile(song.getImageLocation());
+                        if(Objects.nonNull(song.getImageLocation()))
+                            StorageUtil.deleteFile(song.getImageLocation());
                         db.songDao()
                                 .deleteSong(song)
                                 .subscribeOn(Schedulers.io())
