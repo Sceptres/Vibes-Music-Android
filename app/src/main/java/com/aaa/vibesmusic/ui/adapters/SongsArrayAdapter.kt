@@ -1,7 +1,6 @@
 package com.aaa.vibesmusic.ui.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import android.widget.TextView
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.storage.StorageUtil
+import com.aaa.vibesmusic.ui.menu.SongDropdownMenu
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import java.util.Objects
@@ -49,7 +49,8 @@ class SongsArrayAdapter(private val c: Context, val data: MutableList<Song>) :
 
         val options: ImageButton = currentView.findViewById(R.id.optionsBtn)
         options.setOnClickListener {
-            Log.d("SONG", song.name)
+            val dropdown = SongDropdownMenu(context, options, song)
+            dropdown.show()
         }
 
         return currentView
