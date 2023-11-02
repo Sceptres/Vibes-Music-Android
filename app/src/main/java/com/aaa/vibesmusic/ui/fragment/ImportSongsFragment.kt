@@ -52,7 +52,6 @@ class ImportSongsFragment : Fragment() {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {
                                 UIUtil.showLongSnackBar(
-                                    requireView(),
                                     resources.getString(R.string.songs_imported_successfully),
                                     resources.getColor(R.color.foreground_color, null)
                                 )
@@ -179,7 +178,6 @@ class ImportSongsFragment : Fragment() {
                 resources.getString(R.string.failed_song, failedSongs.joinToString(", "))
 
             UIUtil.showLongSnackBar(
-                this.requireView(),
                 msg,
                 resources.getColor(R.color.foreground_color, null)
             )
@@ -198,7 +196,6 @@ class ImportSongsFragment : Fragment() {
                 resources.getString(R.string.song_exists, existingSongs.joinToString(", "))
 
             UIUtil.showLongSnackBar(
-                this.requireView(),
                 msg,
                 resources.getColor(R.color.foreground_color, null)
             )
