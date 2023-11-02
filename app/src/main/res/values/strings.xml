@@ -9,4 +9,6 @@
     <string name="songs_exist">The songs %1$s have already been imported!</string>
     <string name="song_exists">The song %1$s has already been imported!</string>
     <string name="songs_imported_successfully">Music imported successfully</string>
+    <string name="delete">Delete</string>
+    <string name="edit_song">Edit Song</string>
 </resources>

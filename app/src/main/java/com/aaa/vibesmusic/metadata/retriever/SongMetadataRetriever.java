@@ -13,8 +13,6 @@ import com.aaa.vibesmusic.metadata.SongMetaData;
 import java.io.IOException;
 import java.util.Objects;
 
-import wseemann.media.FFmpegMediaMetadataRetriever;
-
 public class SongMetadataRetriever implements AutoCloseable {
     public static final String SONG_NAME_DEFAULT = "Unknown Name";
     public static final String SONG_ARTIST_DEFAULT = "Vibes Music";

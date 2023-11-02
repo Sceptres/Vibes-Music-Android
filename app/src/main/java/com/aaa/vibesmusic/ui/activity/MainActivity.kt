@@ -2,6 +2,7 @@ package com.aaa.vibesmusic.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.aaa.vibesmusic.R
@@ -14,6 +15,10 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding
         get() = _binding!!
+
+    companion object {
+        var SNACK_BAR_VIEW: CoordinatorLayout? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,5 +36,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         bottomNav.setupWithNavController(navController)
+
+        SNACK_BAR_VIEW = binding.fragmentContainer
     }
 }

@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.database.data.music;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -15,13 +16,13 @@ import io.reactivex.rxjava3.core.Single;
 
 @Dao
 public interface SongDao {
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertSongs(Song... songs);
 
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertSongs(List<Song> songs);
 
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertSong(Song song);
 
     @Update
@@ -43,7 +44,7 @@ public interface SongDao {
     Completable deleteSong(Song song);
 
     @Query("SELECT * FROM Songs;")
-    Flowable<List<Song>> getSongs();
+    LiveData<List<Song>> getSongs();
 
     @Query("SELECT * FROM Songs WHERE id=:id")
     Single<Song> getSongById(int id);
