@@ -157,7 +157,9 @@ public class Song {
         Song song = (Song) o;
         return id == song.id && name.equals(song.name) && location.equals(song.location) &&
                 artist.equals(song.artist) && albumName.equals(song.albumName) &&
-                imageLocation.equals(song.imageLocation);
+                ((Objects.nonNull(imageLocation) && imageLocation.equals(song.imageLocation)) ||
+                        Objects.isNull(imageLocation) && Objects.isNull(song.imageLocation)) &&
+                duration.equals(song.duration);
     }
 
     @Override
