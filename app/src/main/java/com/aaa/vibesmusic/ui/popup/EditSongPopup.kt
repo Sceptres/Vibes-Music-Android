@@ -7,13 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.content.getSystemService
+import androidx.navigation.fragment.findNavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.ui.UIUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -51,12 +55,31 @@ class EditSongPopup(
         val alertDialog = mBuilder.show()
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            songNameEditText.clearFocus()
+            songArtistEditText.clearFocus()
+            songAlbumEditText.clearFocus()
+
+            val imm: InputMethodManager = this.c.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(songNameEditText.applicationWindowToken, 0)
+
+            val newSongName = songNameEditText.text.toString()
+            val newArtist = songArtistEditText.text.toString()
+            val newAlbum = songAlbumEditText.text.toString()
+
+            if(newSongName.isEmpty() || newArtist.isEmpty() || newAlbum.isEmpty()) {
+                UIUtil.showLongSnackBar(
+                    "Cannot have empty fields! Please try again",
+                    resources.getColor(R.color.foreground_color, null)
+                )
+                return@setOnClickListener
+            }
+
             val newSong = Song(
                 this.song.id,
-                songNameEditText.text.toString(),
+                newSongName,
                 song.location,
-                songArtistEditText.text.toString(),
-                songAlbumEditText.text.toString(),
+                newArtist,
+                newAlbum,
                 song.imageLocation,
                 song.duration
             )
