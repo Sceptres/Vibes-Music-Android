@@ -16,13 +16,13 @@ import io.reactivex.rxjava3.core.Single;
 
 @Dao
 public interface SongDao {
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertSongs(Song... songs);
 
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertSongs(List<Song> songs);
 
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertSong(Song song);
 
     @Update
