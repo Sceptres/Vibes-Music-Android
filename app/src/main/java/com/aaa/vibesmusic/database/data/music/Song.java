@@ -158,7 +158,8 @@ public class Song {
         return id == song.id && name.equals(song.name) && location.equals(song.location) &&
                 artist.equals(song.artist) && albumName.equals(song.albumName) &&
                 ((Objects.nonNull(imageLocation) && imageLocation.equals(song.imageLocation)) ||
-                        Objects.isNull(imageLocation) && Objects.isNull(song.imageLocation));
+                        Objects.isNull(imageLocation) && Objects.isNull(song.imageLocation)) &&
+                duration.equals(song.duration);
     }
 
     @Override
