@@ -171,10 +171,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
                 this.player.setVolume(1f, 1f);
                 this.play();
             }
-            case AudioManager.AUDIOFOCUS_LOSS, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                this.pause();
-                this.requestAudioFocus();
-            }
+            case AudioManager.AUDIOFOCUS_LOSS -> this.dispose();
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> this.pause();
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ->
                     this.player.setVolume(0.1f, 0.1f);
         }
