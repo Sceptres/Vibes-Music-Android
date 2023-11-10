@@ -6,6 +6,16 @@
     android:id="@+id/playSongActivityLayout"
     tools:context=".ui.activity.PlaySongActivity"
     android:background="@color/background_color">
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/songPlayerDropBtn"
+        android:scaleType="fitXY"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@color/transparent"
+        android:src="@drawable/down_arrow"
+        android:contentDescription="Back Button" />
     <ImageView
         android:layout_width="350dp"
         android:layout_height="350dp"
@@ -14,18 +24,18 @@
         android:src="@drawable/music_cover_image"
         android:clipToOutline="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
         android:contentDescription="Song cover image" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/songNamePlayer"
-        android:text="SONG NAME"
+        android:text="Not Playing"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="28sp"
         android:layout_below="@id/songCoverImageView"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:maxLines="1"
         android:ellipsize="end"/>
@@ -35,11 +45,11 @@
         android:id="@+id/songArtistAlbumPlayer"
         android:maxLines="1"
         android:ellipsize="end"
-        android:text="Artist"
+        android:text="No Artist"
+        android:layout_marginStart="10dp"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:layout_below="@id/songNamePlayer"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"/>
     <TextView
         android:layout_width="wrap_content"
@@ -82,17 +92,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/songTimeBarPlayer"
-        android:layout_marginTop="40dp">
+        android:id="@+id/playingFunctionality"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp">
         <ImageButton
+            android:id="@+id/songPlayModeBtn"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:id="@+id/songPlayModeBtn"
-            android:src="@drawable/repeat"
-            android:scaleType="fitXY"
-            android:background="@color/transparent"
             android:layout_marginStart="10dp"
-            android:layout_centerVertical="true"/>
+            android:background="@color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/repeat"
+            android:layout_centerVertical="true"
+            android:contentDescription="Play Mode Button" />
         <ImageButton
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -132,6 +144,7 @@
             android:background="@color/transparent"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:contentDescription="Shuffle Button" />
     </RelativeLayout>
 </RelativeLayout>
