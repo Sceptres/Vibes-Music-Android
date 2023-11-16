@@ -5,17 +5,20 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
-import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.databinding.FragmentSongLibraryBinding
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
+import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
 
 class SongLibraryFragment : Fragment(), ServiceConnection {
     private lateinit var viewModel: SongLibraryViewModel
@@ -47,6 +50,19 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
 
         binding.songsListView.setOnItemClickListener { parent, view, position, id ->
             this.mediaPlayerService.setSongs(songsAdapter.data, position)
+        }
+
+        binding.playingSongsActivityBtn.setOnClickListener {
+            val animation: Animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
+            val playSongsView = PlaySongViewGroup(this.context)
+            playSongsView.startAnimation(animation)
+            this.requireActivity().addContentView(
+                playSongsView,
+                RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT
+                )
+            )
         }
 
         return binding.root
