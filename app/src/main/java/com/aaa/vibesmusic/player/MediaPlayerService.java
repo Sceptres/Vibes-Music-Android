@@ -29,11 +29,13 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
     private final MediaPlayerServiceBinder binder;
     private MediaPlayer player;
     private AudioManager audioManager;
+    private final List<MediaPlayer.OnPreparedListener> preparedListeners;
 
     public MediaPlayerService() {
         this.songPlayer = new SongPlayer();
         this.binder = new MediaPlayerServiceBinder();
         this.player = null;
+        this.preparedListeners = new ArrayList<>();
     }
 
     /**
@@ -46,6 +48,22 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
         this.songPlayer.setSongs(songs, startIndex);
         Song currentSong = this.songPlayer.getCurrentSong();
         this.setSong(currentSong);
+    }
+
+    /**
+     *
+     * @param listener The {@link MediaPlayer.OnPreparedListener} to add to this {@link MediaPlayerService}
+     */
+    public void addPreparedListener(MediaPlayer.OnPreparedListener listener) {
+        this.preparedListeners.add(listener);
+    }
+
+    /**
+     *
+     * @param listener The {@link MediaPlayer.OnPreparedListener} to remove from this {@link MediaPlayerService}
+     */
+    public void removePreparedListener(MediaPlayer.OnPreparedListener listener) {
+        this.preparedListeners.remove(listener);
     }
 
     public Song getCurrentSong() {
@@ -153,6 +171,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
     @Override
     public void onPrepared(MediaPlayer mp) {
         this.play();
+        for(MediaPlayer.OnPreparedListener listener : this.preparedListeners)
+            listener.onPrepared(mp);
     }
 
     @Override
