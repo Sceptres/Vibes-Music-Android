@@ -121,7 +121,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
         if(!this.requestAudioFocus())
             this.stopSelf();
 
-        this.initMediaPlayer();
+        if(Objects.isNull(this.player))
+            this.initMediaPlayer();
         return super.onStartCommand(intent, flags, startId);
     }
 
