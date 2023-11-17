@@ -1,16 +1,19 @@
 package com.aaa.vibesmusic.player.song;
 
 import com.aaa.vibesmusic.database.data.music.Song;
+import com.aaa.vibesmusic.player.PlayStatus;
 import com.aaa.vibesmusic.player.mode.PlayMode;
+import com.aaa.vibesmusic.player.services.Playable;
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SongPlayer {
+public class SongPlayer implements Playable {
     private int currentSongIndex;
     private int pauseTime;
+    private PlayStatus playStatus;
     private PlayMode playMode;
     private ShuffleMode shuffleMode;
     private final List<Song> songs;
@@ -51,6 +54,14 @@ public class SongPlayer {
 
     /**
      *
+     * @return The current {@link PlayStatus} of this {@link SongPlayer}
+     */
+    public synchronized PlayStatus getPlayStatus() {
+        return this.playStatus;
+    }
+
+    /**
+     *
      * @param originalSongs Setter for {@link SongPlayer#originalSongs}
      */
     private synchronized void setOriginalSongs(List<Song> originalSongs) {
@@ -80,19 +91,33 @@ public class SongPlayer {
             this.currentSongIndex = this.songs.indexOf(currentSong);
     }
 
-    /**
-     *
-     * @param pauseTime Set the time at which the {@link Song} was paused
-     */
-    public synchronized void setPauseTime(int pauseTime) {
-        this.pauseTime = pauseTime;
+    @Override
+    public synchronized void play() {
+        this.playStatus = PlayStatus.PLAYING;
+    }
+
+    @Override
+    public synchronized void stop() {
+        this.pause();
+    }
+
+    @Override
+    public void pause() {
+        this.playStatus = PlayStatus.PAUSED;
     }
 
     /**
      *
-     * @return Get the time at which the {@link Song} was paused
+     * @param pauseTime Set the time at which the {@link Song} was paused
      */
-    public synchronized int getPauseTime() {
+    public synchronized void pause(int pauseTime) {
+        this.pauseTime = pauseTime;
+        this.pause();
+    }
+
+    @Override
+    public synchronized int resume() {
+        this.play();
         return this.pauseTime;
     }
 

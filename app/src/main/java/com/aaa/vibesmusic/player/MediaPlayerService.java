@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.aaa.vibesmusic.database.data.music.Song;
+import com.aaa.vibesmusic.player.services.Playable;
 import com.aaa.vibesmusic.player.song.SongPlayer;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 
 public class MediaPlayerService extends Service implements MediaPlayer.OnCompletionListener,
 MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
-MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable, Disposable {
+MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, Destroyable, Disposable {
 
     private final SongPlayer songPlayer;
     private final MediaPlayerServiceBinder binder;
@@ -99,29 +100,44 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
         }
     }
 
+    @Override
     public void play() {
-        if(!this.player.isPlaying())
-            this.player.start();
-    }
-
-    public void stop() {
-        if(Objects.nonNull(this.player) && this.player.isPlaying())
-            this.player.stop();
-    }
-
-    public void resume() {
         if(!this.player.isPlaying()) {
-            this.player.seekTo(this.songPlayer.getPauseTime());
             this.player.start();
+            this.songPlayer.play();
         }
     }
 
+    @Override
+    public void stop() {
+        if(Objects.nonNull(this.player) && this.player.isPlaying()) {
+            this.player.stop();
+            this.songPlayer.stop();
+        }
+    }
+
+    @Override
+    public int resume() {
+        if(!this.player.isPlaying()) {
+            int resumeTime = this.songPlayer.resume();
+            this.player.seekTo(resumeTime);
+            this.player.start();
+            return resumeTime;
+        }
+        return -1;
+    }
+
+    @Override
     public void pause() {
         if(this.player.isPlaying()) {
             this.player.pause();
             int pauseTime = this.player.getCurrentPosition();
-            this.songPlayer.setPauseTime(pauseTime);
+            this.songPlayer.pause(pauseTime);
         }
+    }
+
+    public PlayStatus getPlayStatus() {
+        return this.songPlayer.getPlayStatus();
     }
 
     public boolean isEmpty() {
