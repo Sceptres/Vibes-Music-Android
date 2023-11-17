@@ -22,7 +22,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.databinding.ActivitySongPlayerBinding
 import com.aaa.vibesmusic.player.MediaPlayerService
+import com.aaa.vibesmusic.player.PlayStatus
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.bumptech.glide.Glide
 import java.util.Objects
@@ -61,11 +63,30 @@ class PlaySongViewGroup @JvmOverloads constructor(
         this.playSongBtn = this.findViewById(R.id.playSongBtn)
         this.songSkipForwardBtn = this.findViewById(R.id.songSkipForwardBtn)
         this.songShuffleBtn = this.findViewById(R.id.songShuffleBtn)
+    }
 
+    /**
+     * Set the listeners of the views
+     */
+    private fun setListeners() {
+        // Close view listener
         this.songPlayerDropBtn.setOnClickListener {
             val animation: Animation = AnimationUtils.loadAnimation(this.context, R.anim.slide_down)
             animation.setAnimationListener(this)
             this.startAnimation(animation)
+        }
+
+        // Play and pause
+        this.playSongBtn.setOnClickListener {
+            val playStatus: PlayStatus = this.mediaPlayerService!!.playStatus
+
+            if(playStatus == PlayStatus.PLAYING) {
+                this.playSongBtn.setImageResource(R.drawable.play_arrow)
+                this.mediaPlayerService!!.pause()
+            } else if(playStatus == PlayStatus.PAUSED) {
+                this.playSongBtn.setImageResource(R.drawable.pause_button)
+                this.mediaPlayerService!!.resume()
+            }
         }
     }
 
@@ -109,11 +130,19 @@ class PlaySongViewGroup @JvmOverloads constructor(
             .centerCrop()
             .placeholder(R.drawable.music_cover_image)
             .into(this.songCoverImageView)
+
+        // Set the status of the play/pause button
+        if(this.mediaPlayerService!!.playStatus == PlayStatus.PLAYING)
+            this.playSongBtn.setImageResource(R.drawable.pause_button)
+        else if(this.mediaPlayerService!!.playStatus == PlayStatus.PAUSED)
+            this.playSongBtn.setImageResource(R.drawable.play_arrow)
     }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         val binder = service as MediaPlayerService.MediaPlayerServiceBinder
         this.mediaPlayerService = binder.mediaPlayerService
+
+        this.setListeners()
 
         this.mediaPlayerService!!.addPreparedListener(this)
         this.onPrepared(null)
