@@ -88,6 +88,14 @@ class PlaySongViewGroup @JvmOverloads constructor(
                 this.mediaPlayerService!!.resume()
             }
         }
+
+        this.songSkipForwardBtn.setOnClickListener {
+            this.mediaPlayerService!!.skipForward()
+        }
+
+        this.songSkipBackBtn.setOnClickListener {
+            this.mediaPlayerService!!.skipBackward()
+        }
     }
 
     override fun onAttachedToWindow() {
