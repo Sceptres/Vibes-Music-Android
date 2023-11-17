@@ -1,6 +1,12 @@
 package com.aaa.vibesmusic.ui.viewgroup
 
+import android.app.Application
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.media.MediaPlayer
+import android.os.IBinder
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,12 +19,20 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.aaa.vibesmusic.R
-import kotlinx.coroutines.awaitAll
+import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.player.MediaPlayerService
+import com.aaa.vibesmusic.storage.StorageUtil
+import com.bumptech.glide.Glide
+import java.util.Objects
 
-class PlaySongViewGroup @JvmOverloads constructor(private val c: Context?, attributeSet: AttributeSet? = null) :
-    RelativeLayout(c, attributeSet), AnimationListener {
+class PlaySongViewGroup @JvmOverloads constructor(
+    private val c: Context?,
+    attributeSet: AttributeSet? = null
+) : RelativeLayout(c, attributeSet), ServiceConnection, AnimationListener, MediaPlayer.OnPreparedListener {
 
+    private var mediaPlayerService: MediaPlayerService? = null
     private val songPlayerDropBtn: ImageButton
     private val songCoverImageView: ImageView
     private val songNamePlayer: TextView
@@ -55,6 +69,20 @@ class PlaySongViewGroup @JvmOverloads constructor(private val c: Context?, attri
         }
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        Log.d("Player", "ATTACHING")
+        val serviceIntent: Intent = Intent(this.context, MediaPlayerService::class.java)
+        val application: Application = this.context.applicationContext as Application
+        application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
+        application.startService(serviceIntent)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        this.mediaPlayerService!!.removePreparedListener(this)
+    }
+
     override fun onAnimationStart(animation: Animation?) {}
 
     override fun onAnimationEnd(animation: Animation?) {
@@ -63,4 +91,35 @@ class PlaySongViewGroup @JvmOverloads constructor(private val c: Context?, attri
     }
 
     override fun onAnimationRepeat(animation: Animation?) {}
+
+    override fun onPrepared(mp: MediaPlayer?) {
+        Log.d("Playing Songs", "CALLED")
+
+        val currentSong: Song = this.mediaPlayerService!!.currentSong
+
+        this.songNamePlayer.text = currentSong.name
+        this.songArtistAlbumPlayer.text = currentSong.artist
+
+        val bitmapToLoad = if(Objects.nonNull(currentSong.imageLocation) && StorageUtil.fileExists(currentSong.imageLocation))
+            currentSong.imageLocation
+        else
+            R.drawable.music_cover_image
+
+
+        Glide.with(this)
+            .load(bitmapToLoad)
+            .centerCrop()
+            .placeholder(R.drawable.music_cover_image)
+            .into(this.songCoverImageView)
+    }
+
+    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+        val binder = service as MediaPlayerService.MediaPlayerServiceBinder
+        this.mediaPlayerService = binder.mediaPlayerService
+
+        this.mediaPlayerService!!.addPreparedListener(this)
+        this.onPrepared(null)
+    }
+
+    override fun onServiceDisconnected(name: ComponentName?) {}
 }

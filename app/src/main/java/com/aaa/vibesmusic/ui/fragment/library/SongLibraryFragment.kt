@@ -50,22 +50,30 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
 
         binding.songsListView.setOnItemClickListener { parent, view, position, id ->
             this.mediaPlayerService.setSongs(songsAdapter.data, position)
+            this.openSongPlayer()
         }
 
         binding.playingSongsActivityBtn.setOnClickListener {
-            val animation: Animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
-            val playSongsView = PlaySongViewGroup(this.context)
-            playSongsView.startAnimation(animation)
-            this.requireActivity().addContentView(
-                playSongsView,
-                RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT
-                )
-            )
+            this.openSongPlayer()
         }
 
         return binding.root
+    }
+
+    /**
+     * Opens the song player view
+     */
+    private fun openSongPlayer() {
+        val animation: Animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
+        val playSongsView = PlaySongViewGroup(this.context)
+        playSongsView.startAnimation(animation)
+        this.requireActivity().addContentView(
+            playSongsView,
+            RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
+            )
+        )
     }
 
     override fun onStart() {
