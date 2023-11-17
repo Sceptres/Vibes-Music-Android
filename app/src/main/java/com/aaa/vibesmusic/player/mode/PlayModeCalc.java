@@ -9,7 +9,7 @@ public interface PlayModeCalc {
      *
      * @param songs The {@link List} of {@link Song}s to get the next song from
      * @param current The index of the current {@link Song}
-     * @return The next {@link Song} to play
+     * @return The index of the next {@link Song} to play
      */
-    Song getNextSong(List<Song> songs, int current);
+    int getNextSong(List<Song> songs, int current);
 }
