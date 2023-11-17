@@ -40,7 +40,7 @@ public class SongPlayer {
      * @param songs The {@link List} of {@link Song}s to add to this player
      * @param index The index of the {@link Song} to start playing
      */
-    public void setSongs(List<Song> songs, int index) {
+    public synchronized void setSongs(List<Song> songs, int index) {
         this.setOriginalSongs(songs);
         this.songs.clear();
         this.songs.addAll(songs);
@@ -53,7 +53,7 @@ public class SongPlayer {
      *
      * @param originalSongs Setter for {@link SongPlayer#originalSongs}
      */
-    private void setOriginalSongs(List<Song> originalSongs) {
+    private synchronized void setOriginalSongs(List<Song> originalSongs) {
         this.originalSongs.clear();
         this.originalSongs.addAll(originalSongs);
     }
@@ -62,7 +62,7 @@ public class SongPlayer {
      *
      * @param playMode Set the {@link PlayMode} of this player
      */
-    public void setPlayMode(PlayMode playMode) {
+    public synchronized void setPlayMode(PlayMode playMode) {
         this.playMode = playMode;
     }
 
@@ -70,7 +70,7 @@ public class SongPlayer {
      *
      * @param shuffleMode Set the {@link ShuffleMode} of this player
      */
-    public void setShuffleMode(ShuffleMode shuffleMode) {
+    public synchronized void setShuffleMode(ShuffleMode shuffleMode) {
         this.shuffleMode = shuffleMode;
         Song currentSong = null;
         if(!this.isEmpty())
@@ -84,7 +84,7 @@ public class SongPlayer {
      *
      * @param pauseTime Set the time at which the {@link Song} was paused
      */
-    public void setPauseTime(int pauseTime) {
+    public synchronized void setPauseTime(int pauseTime) {
         this.pauseTime = pauseTime;
     }
 
@@ -92,7 +92,7 @@ public class SongPlayer {
      *
      * @return Get the time at which the {@link Song} was paused
      */
-    public int getPauseTime() {
+    public synchronized int getPauseTime() {
         return this.pauseTime;
     }
 
@@ -100,7 +100,7 @@ public class SongPlayer {
      *
      * @return True if this player has no songs. False otherwise.
      */
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return this.songs.isEmpty();
     }
 
@@ -108,7 +108,7 @@ public class SongPlayer {
      *
      * @return The {@link List} of {@link Song}s in this player
      */
-    public List<Song> getSongs() {
+    public synchronized List<Song> getSongs() {
         return new ArrayList<>(this.songs);
     }
 
@@ -116,7 +116,7 @@ public class SongPlayer {
      *
      * @return The current {@link Song} being played
      */
-    public Song getCurrentSong() {
+    public synchronized Song getCurrentSong() {
         return this.songs.get(this.currentSongIndex);
     }
 
@@ -124,7 +124,7 @@ public class SongPlayer {
      *
      * @return Get the next {@link Song} to be played based on the {@link PlayMode} of this player
      */
-    public Song getNextSong() {
+    public synchronized Song getNextSong() {
         this.currentSongIndex = this.playMode.getCalc().getNextSong(this.songs, this.currentSongIndex);
         return this.songs.get(this.currentSongIndex);
     }
@@ -132,7 +132,7 @@ public class SongPlayer {
     /**
      * Apply the shuffle mode of the player to the {@link List} of {@link Songs}
      */
-    private void applyShuffleMode() {
+    private synchronized void applyShuffleMode() {
         switch (this.shuffleMode) {
             case SHUFFLED -> {
                 Collections.shuffle(this.songs);
@@ -156,7 +156,7 @@ public class SongPlayer {
     /**
      * Empty the player and reset
      */
-    public void reset() {
+    public synchronized void reset() {
         this.currentSongIndex = 0;
         this.playMode = PlayMode.REPEAT;
         this.shuffleMode = ShuffleMode.UNSHUFFLED;
