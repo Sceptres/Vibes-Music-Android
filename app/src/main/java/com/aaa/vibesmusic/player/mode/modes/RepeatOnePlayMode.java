@@ -7,7 +7,7 @@ import java.util.List;
 
 public class RepeatOnePlayMode implements PlayModeCalc {
     @Override
-    public Song getNextSong(List<Song> songs, int current) {
-        return songs.get(current);
+    public int getNextSong(List<Song> songs, int current) {
+        return current;
     }
 }
