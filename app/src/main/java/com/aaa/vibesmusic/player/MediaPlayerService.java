@@ -5,20 +5,18 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
-import android.os.IBinder;
 import android.util.Log;
-import android.util.Pair;
 
 import androidx.annotation.Nullable;
 
 import com.aaa.vibesmusic.database.data.music.Song;
+import com.aaa.vibesmusic.player.song.SongPlayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.security.auth.DestroyFailedException;
 import javax.security.auth.Destroyable;
 
 import io.reactivex.disposables.Disposable;
@@ -27,19 +25,15 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
 MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable, Disposable {
 
-    private int songIndex;
-    private int resumeTime;
+    private final SongPlayer songPlayer;
     private final MediaPlayerServiceBinder binder;
     private MediaPlayer player;
     private AudioManager audioManager;
-    private final List<Song> playingSongs;
 
     public MediaPlayerService() {
+        this.songPlayer = new SongPlayer();
         this.binder = new MediaPlayerServiceBinder();
         this.player = null;
-        this.songIndex = 0;
-        this.resumeTime = 0;
-        this.playingSongs = new ArrayList<>();
     }
 
     /**
@@ -49,14 +43,17 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
     public void setSongs(List<Song> songs, int startIndex) {
         this.stop();
         this.player.reset();
-        this.playingSongs.clear();
-        this.playingSongs.addAll(songs);
-        this.songIndex = startIndex;
-        this.setSong(this.playingSongs.get(this.songIndex));
+        this.songPlayer.setSongs(songs, startIndex);
+        Song currentSong = this.songPlayer.getCurrentSong();
+        this.setSong(currentSong);
+    }
+
+    public Song getCurrentSong() {
+        return this.songPlayer.getCurrentSong();
     }
 
     public List<Song> getSongs() {
-        return new ArrayList<>(this.playingSongs);
+        return new ArrayList<>(this.songPlayer.getSongs());
     }
 
     /**
@@ -96,7 +93,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
 
     public void resume() {
         if(!this.player.isPlaying()) {
-            this.player.seekTo(this.resumeTime);
+            this.player.seekTo(this.songPlayer.getPauseTime());
             this.player.start();
         }
     }
@@ -104,12 +101,13 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
     public void pause() {
         if(this.player.isPlaying()) {
             this.player.pause();
-            this.resumeTime = this.player.getCurrentPosition();
+            int pauseTime = this.player.getCurrentPosition();
+            this.songPlayer.setPauseTime(pauseTime);
         }
     }
 
-    public boolean hasNoSongs() {
-        return this.playingSongs.isEmpty();
+    public boolean isEmpty() {
+        return this.songPlayer.isEmpty();
     }
 
     @Nullable
@@ -129,8 +127,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Destroyable
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        this.songIndex = (this.songIndex+1) % this.playingSongs.size();
-        Song nextSong = this.playingSongs.get(this.songIndex);
+        Song nextSong = this.songPlayer.getNextSong();
         this.setSong(nextSong);
     }
 
