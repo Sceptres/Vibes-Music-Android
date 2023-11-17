@@ -93,8 +93,6 @@ class PlaySongViewGroup @JvmOverloads constructor(
     override fun onAnimationRepeat(animation: Animation?) {}
 
     override fun onPrepared(mp: MediaPlayer?) {
-        Log.d("Playing Songs", "CALLED")
-
         val currentSong: Song = this.mediaPlayerService!!.currentSong
 
         this.songNamePlayer.text = currentSong.name
