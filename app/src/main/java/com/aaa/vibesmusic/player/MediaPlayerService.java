@@ -136,6 +136,20 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         }
     }
 
+    @Override
+    public Song skipForward() {
+        Song nextSong = this.songPlayer.skipForward();
+        this.setSong(nextSong);
+        return nextSong;
+    }
+
+    @Override
+    public Song skipBackward() {
+        Song nextSong = this.songPlayer.skipBackward();
+        this.setSong(nextSong);
+        return nextSong;
+    }
+
     public PlayStatus getPlayStatus() {
         return this.songPlayer.getPlayStatus();
     }

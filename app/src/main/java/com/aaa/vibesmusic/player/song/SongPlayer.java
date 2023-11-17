@@ -121,6 +121,24 @@ public class SongPlayer implements Playable {
         return this.pauseTime;
     }
 
+    @Override
+    public synchronized Song skipForward() {
+        this.currentSongIndex = (this.currentSongIndex+1) % this.songs.size();
+        return this.songs.get(this.currentSongIndex);
+    }
+
+    @Override
+    public synchronized Song skipBackward() {
+        int nextIndex = this.currentSongIndex - 1;
+
+        if(nextIndex > -1)
+            this.currentSongIndex = nextIndex;
+        else
+            this.currentSongIndex = this.songs.size() + nextIndex;
+
+        return this.songs.get(this.currentSongIndex);
+    }
+
     /**
      *
      * @return True if this player has no songs. False otherwise.
