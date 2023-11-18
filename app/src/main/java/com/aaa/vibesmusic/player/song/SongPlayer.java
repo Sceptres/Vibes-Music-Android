@@ -9,6 +9,7 @@ import com.aaa.vibesmusic.player.shuffle.ShuffleMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SongPlayer implements Playable {
     private int currentSongIndex;
@@ -38,6 +39,11 @@ public class SongPlayer implements Playable {
         this.applyShuffleMode();
     }
 
+    private synchronized void setSongs(List<Song> songs) {
+        this.songs.clear();
+        this.songs.addAll(songs);
+    }
+
     /**
      *
      * @param songs The {@link List} of {@link Song}s to add to this player
@@ -45,11 +51,33 @@ public class SongPlayer implements Playable {
      */
     public synchronized void setSongs(List<Song> songs, int index) {
         this.setOriginalSongs(songs);
-        this.songs.clear();
-        this.songs.addAll(songs);
+        this.setSongs(songs);
         Song song = this.songs.get(index);
         this.applyShuffleMode();
         this.currentSongIndex = this.findSong(song);
+    }
+
+    /**
+     *
+     * @param songs The new {@link List} of {@link Song}s to update to
+     */
+    public synchronized void updateSongs(List<Song> songs) {
+        this.setOriginalSongs(songs);
+        List<Song> deletedSongs = this.songs.stream().filter(s -> !this.originalSongs.contains(s)).collect(Collectors.toList());
+
+        for(Song deletedSong : deletedSongs)
+            this.songs.remove(deletedSong);
+
+        for(int i=0; i < this.songs.size(); i++) {
+            Song currentSong = this.songs.get(i);
+            int songIndex = this.originalSongs.indexOf(currentSong);
+            Song newSong = this.originalSongs.get(songIndex);
+
+            if(!Song.isSameSong(currentSong, newSong)) {
+                this.songs.remove(i);
+                this.songs.add(i, newSong);
+            }
+        }
     }
 
     /**

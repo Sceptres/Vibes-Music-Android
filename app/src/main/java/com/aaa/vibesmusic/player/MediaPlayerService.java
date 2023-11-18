@@ -58,6 +58,15 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
     /**
      *
+     * @param songs The {@link List} of {@link Song}s to update to
+     */
+    public void updateSongs(List<Song> songs) {
+        this.songPlayer.updateSongs(songs);
+        this.runPreparedListener();
+    }
+
+    /**
+     *
      * @param listener The {@link MediaPlayer.OnPreparedListener} to add to this {@link MediaPlayerService}
      */
     public void setPreparedListener(MediaPlayer.OnPreparedListener listener) {
