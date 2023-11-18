@@ -97,14 +97,17 @@ class PlaySongViewGroup @JvmOverloads constructor(
             }
         }
 
+        // Skip forward
         this.songSkipForwardBtn.setOnClickListener {
             this.mediaPlayerService!!.skipForward()
         }
 
+        // Skip backward
         this.songSkipBackBtn.setOnClickListener {
             this.mediaPlayerService!!.skipBackward()
         }
 
+        // Play mode button
         this.songPlayModeBtn.setOnClickListener {
             val playMode: PlayMode = this.mediaPlayerService!!.playMode
 
@@ -117,6 +120,7 @@ class PlaySongViewGroup @JvmOverloads constructor(
             }
         }
 
+        // Shuffle button
         this.songShuffleBtn.setOnClickListener {
             val shuffleMode: ShuffleMode = this.mediaPlayerService!!.shuffleMode
 
