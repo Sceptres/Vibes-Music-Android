@@ -14,6 +14,7 @@ import com.aaa.vibesmusic.player.mode.PlayMode;
 import com.aaa.vibesmusic.player.services.Playable;
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode;
 import com.aaa.vibesmusic.player.song.SongPlayer;
+import com.aaa.vibesmusic.ui.listener.OnPlaySeekListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,12 +33,14 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     private final MediaPlayerServiceBinder binder;
     private MediaPlayer player;
     private AudioManager audioManager;
+    private MediaTimeThread timeThread;
     private final List<MediaPlayer.OnPreparedListener> preparedListeners;
 
     public MediaPlayerService() {
         this.songPlayer = new SongPlayer();
         this.binder = new MediaPlayerServiceBinder();
         this.player = null;
+        this.timeThread = null;
         this.preparedListeners = new ArrayList<>();
     }
 
@@ -71,6 +74,39 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
     /**
      *
+     * @param seekListener The {@link OnPlaySeekListener} of this player
+     */
+    public void setOnSeekListener(OnPlaySeekListener seekListener) {
+        if(Objects.nonNull(this.timeThread))
+            this.timeThread.setOnPlaySeekListener(seekListener);
+    }
+
+    /**
+     *
+     * @return The current position of the player in the song
+     */
+    public int getCurrentPosition() {
+        return this.player.getCurrentPosition();
+    }
+
+    /**
+     *
+     * @return True if the player is currently playing a song. False otherwise
+     */
+    public boolean isPlaying() {
+        return this.player.isPlaying();
+    }
+
+    /**
+     *
+     * @return The duration of the current {@link Song}
+     */
+    public int getCurrentSongDuration() {
+        return this.player.getDuration();
+    }
+
+    /**
+     *
      * @return The current {@link Song} being player
      */
     public Song getCurrentSong() {
@@ -98,6 +134,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
         this.player.reset();
         this.player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        this.timeThread = new MediaTimeThread(this.player);
     }
 
     /**
@@ -118,6 +156,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     public void play() {
         if(!this.player.isPlaying()) {
             this.player.start();
+            if(!this.timeThread.isAlive())
+                this.timeThread.start();
             this.songPlayer.play();
         }
     }
@@ -127,6 +167,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         if(Objects.nonNull(this.player) && this.player.isPlaying()) {
             this.player.stop();
             this.songPlayer.stop();
+            this.timeThread.interrupt();
         }
     }
 
@@ -136,6 +177,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             int resumeTime = this.songPlayer.resume();
             this.player.seekTo(resumeTime);
             this.player.start();
+            this.timeThread.unpause();
             return resumeTime;
         }
         return -1;
@@ -145,6 +187,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     public void pause() {
         if(this.player.isPlaying()) {
             this.player.pause();
+            this.timeThread.pause();
             int pauseTime = this.player.getCurrentPosition();
             this.songPlayer.pause(pauseTime);
         }
@@ -306,6 +349,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.stop();
             this.player.release();
             this.player = null;
+            this.timeThread.interrupt();
         }
     }
 

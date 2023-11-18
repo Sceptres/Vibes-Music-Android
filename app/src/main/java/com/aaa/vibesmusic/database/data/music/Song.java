@@ -7,10 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity(tableName = "Songs", indices = {@Index(value = "location", unique = true)})
@@ -76,7 +73,7 @@ public class Song {
      * @param duration The duration of the song in milliseconds
      * @return The string representation of the duration
      */
-    private static String calculateDuration(int duration) {
+    public static String calculateDuration(int duration) {
         int hours = duration / 3600000;
         int minutes = (duration - (3600000*hours)) / 60000;
         int seconds = (int) Math.ceil((duration - (60000*minutes)) / 1000f);

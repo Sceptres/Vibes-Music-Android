@@ -28,14 +28,17 @@ import com.aaa.vibesmusic.player.PlayStatus
 import com.aaa.vibesmusic.player.mode.PlayMode
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode
 import com.aaa.vibesmusic.storage.StorageUtil
+import com.aaa.vibesmusic.ui.activity.MainActivity
 import com.aaa.vibesmusic.ui.listener.OnCloseListener
+import com.aaa.vibesmusic.ui.listener.OnPlaySeekListener
 import com.bumptech.glide.Glide
 import java.util.Objects
+import java.util.concurrent.TimeUnit
 
 class PlaySongViewGroup @JvmOverloads constructor(
     private val c: Context?,
     attributeSet: AttributeSet? = null
-) : RelativeLayout(c, attributeSet), ServiceConnection, AnimationListener, MediaPlayer.OnPreparedListener {
+) : RelativeLayout(c, attributeSet), ServiceConnection, AnimationListener, MediaPlayer.OnPreparedListener, OnPlaySeekListener {
 
     private var mediaPlayerService: MediaPlayerService? = null
     private var onCloseListener: OnCloseListener? = null
@@ -166,40 +169,53 @@ class PlaySongViewGroup @JvmOverloads constructor(
     override fun onAnimationRepeat(animation: Animation?) {}
 
     override fun onPrepared(mp: MediaPlayer?) {
-        val currentSong: Song = this.mediaPlayerService!!.currentSong
+        if(!this.mediaPlayerService!!.isEmpty) {
+            val currentSong: Song = this.mediaPlayerService!!.currentSong
 
-        this.songNamePlayer.text = currentSong.name
-        this.songArtistAlbumPlayer.text = currentSong.artist
+            this.songNamePlayer.text = currentSong.name
+            this.songArtistAlbumPlayer.text = currentSong.artist
 
-        val bitmapToLoad = if(Objects.nonNull(currentSong.imageLocation) && StorageUtil.fileExists(currentSong.imageLocation))
-            currentSong.imageLocation
-        else
-            R.drawable.music_cover_image
+            val bitmapToLoad =
+                if (Objects.nonNull(currentSong.imageLocation) && StorageUtil.fileExists(currentSong.imageLocation))
+                    currentSong.imageLocation
+                else
+                    R.drawable.music_cover_image
 
 
-        Glide.with(this)
-            .load(bitmapToLoad)
-            .centerCrop()
-            .placeholder(R.drawable.music_cover_image)
-            .into(this.songCoverImageView)
+            Glide.with(this)
+                .load(bitmapToLoad)
+                .centerCrop()
+                .placeholder(R.drawable.music_cover_image)
+                .into(this.songCoverImageView)
+        }
 
         // Set the status of the play/pause button
-        if(this.mediaPlayerService!!.playStatus == PlayStatus.PLAYING)
+        if (this.mediaPlayerService!!.playStatus == PlayStatus.PLAYING)
             this.playSongBtn.setImageResource(R.drawable.pause_button)
-        else if(this.mediaPlayerService!!.playStatus == PlayStatus.PAUSED)
+        else if (this.mediaPlayerService!!.playStatus == PlayStatus.PAUSED)
             this.playSongBtn.setImageResource(R.drawable.play_arrow)
 
         // Set the status of the play mode button
-        if(this.mediaPlayerService!!.playMode == PlayMode.REPEAT)
+        if (this.mediaPlayerService!!.playMode == PlayMode.REPEAT)
             this.songPlayModeBtn.setImageResource(R.drawable.repeat)
-        else if(this.mediaPlayerService!!.playMode == PlayMode.REPEAT_ONE)
+        else if (this.mediaPlayerService!!.playMode == PlayMode.REPEAT_ONE)
             this.songPlayModeBtn.setImageResource(R.drawable.repeat_one)
 
         // Set status of shuffle music button
-        if(this.mediaPlayerService!!.shuffleMode == ShuffleMode.SHUFFLED)
+        if (this.mediaPlayerService!!.shuffleMode == ShuffleMode.SHUFFLED)
             this.songShuffleBtn.setImageResource(R.drawable.shuffle_on)
-        else if(this.mediaPlayerService!!.shuffleMode == ShuffleMode.UNSHUFFLED)
+        else if (this.mediaPlayerService!!.shuffleMode == ShuffleMode.UNSHUFFLED)
             this.songShuffleBtn.setImageResource(R.drawable.shuffle_off)
+
+        // Setup the song time seekbar
+        if (!this.mediaPlayerService!!.isEmpty && this.mediaPlayerService!!.isPlaying) {
+            this.songTimeBarPlayer.max = this.mediaPlayerService!!.currentSongDuration
+            this.songTimeBarPlayer.progress = this.mediaPlayerService!!.currentPosition
+            this.mediaPlayerService!!.setOnSeekListener(this)
+            this.songPlayerEndTime.text = this.mediaPlayerService!!.currentSong.duration
+        } else {
+            this.songTimeBarPlayer.progress = 0
+        }
     }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -213,4 +229,15 @@ class PlaySongViewGroup @JvmOverloads constructor(
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {}
+
+    override fun onPlaySeek(player: MediaPlayer?) {
+        if(Objects.nonNull(player)) {
+            val activity = this.context as MainActivity
+            activity.runOnUiThread{
+                val currentTime = player!!.currentPosition
+                this.songTimeBarPlayer.progress = currentTime
+                this.songPlayerCurrentTime.text = Song.calculateDuration(currentTime)
+            }
+        }
+    }
 }
