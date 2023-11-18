@@ -182,8 +182,11 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     public void play() {
         if(!this.player.isPlaying()) {
             this.player.start();
-            if(!this.timeThread.isAlive())
+            if(!this.timeThread.isAlive()) {
                 this.timeThread.start();
+            } else {
+                this.timeThread.unpause();
+            }
             this.songPlayer.play();
         }
     }
@@ -193,7 +196,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         if(Objects.nonNull(this.player) && this.player.isPlaying()) {
             this.player.stop();
             this.songPlayer.stop();
-            this.timeThread.interrupt();
+            this.timeThread.pause();
         }
     }
 
