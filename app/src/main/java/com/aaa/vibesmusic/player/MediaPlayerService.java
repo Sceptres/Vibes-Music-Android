@@ -61,8 +61,9 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
      * @param songs The {@link List} of {@link Song}s to update to
      */
     public void updateSongs(List<Song> songs) {
-        this.songPlayer.updateSongs(songs);
-        this.runPreparedListener();
+        boolean wasCurrentDeleted = this.songPlayer.updateSongs(songs);
+        if(wasCurrentDeleted)
+            this.setSong(this.getCurrentSong());
     }
 
     /**
