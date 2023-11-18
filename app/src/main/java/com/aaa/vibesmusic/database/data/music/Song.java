@@ -76,7 +76,7 @@ public class Song {
     public static String calculateDuration(int duration) {
         int hours = duration / 3600000;
         int minutes = (duration - (3600000*hours)) / 60000;
-        int seconds = (int) Math.ceil((duration - (60000*minutes)) / 1000f);
+        int seconds = (int) ((duration - (60000*minutes)) / 1000f);
 
         if(hours == 0) {
             return String.format(Locale.US, "%02d:%02d", minutes, seconds);
