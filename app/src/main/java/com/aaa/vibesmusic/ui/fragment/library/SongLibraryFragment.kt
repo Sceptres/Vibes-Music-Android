@@ -20,6 +20,7 @@ import com.aaa.vibesmusic.databinding.FragmentSongLibraryBinding
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
+import java.util.Objects
 
 class SongLibraryFragment : Fragment(), ServiceConnection {
     private lateinit var viewModel: SongLibraryViewModel
@@ -47,6 +48,9 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
             songsAdapter.data.clear()
             songsAdapter.data.addAll(it)
             songsAdapter.notifyDataSetChanged()
+
+            if(this::mediaPlayerService.isInitialized)
+                this.mediaPlayerService.updateSongs(songsAdapter.data)
         }
 
         binding.songsListView.setOnItemClickListener { parent, view, position, id ->
