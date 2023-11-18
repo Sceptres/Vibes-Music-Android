@@ -151,6 +151,11 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         this.timeThread = new MediaTimeThread(this.player);
     }
 
+    private void runPreparedListener() {
+        if(Objects.nonNull(this.preparedListener))
+            this.preparedListener.onPrepared(this.player);
+    }
+
     /**
      *
      * @param song The {@link Song} to start playing
@@ -187,6 +192,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
                 this.timeThread.unpause();
             }
             this.songPlayer.play();
+            this.runPreparedListener();
         }
     }
 
@@ -196,6 +202,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.player.stop();
             this.songPlayer.stop();
             this.timeThread.pause();
+            this.runPreparedListener();
         }
     }
 
@@ -206,6 +213,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.player.seekTo(resumeTime);
             this.player.start();
             this.timeThread.unpause();
+            this.runPreparedListener();
             return resumeTime;
         }
         return -1;
@@ -218,6 +226,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.timeThread.pause();
             int pauseTime = this.player.getCurrentPosition();
             this.songPlayer.pause(pauseTime);
+            this.runPreparedListener();
         }
     }
 
@@ -241,6 +250,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
      */
     public void setPlayMode(PlayMode mode) {
         this.songPlayer.setPlayMode(mode);
+        this.runPreparedListener();
     }
 
     /**
@@ -257,6 +267,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
      */
     public void setShuffleMode(ShuffleMode mode) {
         this.songPlayer.setShuffleMode(mode);
+        this.runPreparedListener();
     }
 
     /**
@@ -326,8 +337,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     @Override
     public void onPrepared(MediaPlayer mp) {
         this.play();
-        if(Objects.nonNull(this.preparedListener))
-            this.preparedListener.onPrepared(mp);
+        this.runPreparedListener();
     }
 
     @Override
