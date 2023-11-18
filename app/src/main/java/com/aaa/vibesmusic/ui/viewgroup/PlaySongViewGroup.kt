@@ -87,50 +87,58 @@ class PlaySongViewGroup @JvmOverloads constructor(
 
         // Play and pause
         this.playSongBtn.setOnClickListener {
-            val playStatus: PlayStatus = this.mediaPlayerService!!.playStatus
+            if(!this.mediaPlayerService!!.isEmpty) {
+                val playStatus: PlayStatus = this.mediaPlayerService!!.playStatus
 
-            if(playStatus == PlayStatus.PLAYING) {
-                this.playSongBtn.setImageResource(R.drawable.play_arrow)
-                this.mediaPlayerService!!.pause()
-            } else if(playStatus == PlayStatus.PAUSED) {
-                this.playSongBtn.setImageResource(R.drawable.pause_button)
-                this.mediaPlayerService!!.resume()
+                if (playStatus == PlayStatus.PLAYING) {
+                    this.playSongBtn.setImageResource(R.drawable.play_arrow)
+                    this.mediaPlayerService!!.pause()
+                } else if (playStatus == PlayStatus.PAUSED) {
+                    this.playSongBtn.setImageResource(R.drawable.pause_button)
+                    this.mediaPlayerService!!.resume()
+                }
             }
         }
 
         // Skip forward
         this.songSkipForwardBtn.setOnClickListener {
-            this.mediaPlayerService!!.skipForward()
+            if(!this.mediaPlayerService!!.isEmpty)
+                this.mediaPlayerService!!.skipForward()
         }
 
         // Skip backward
         this.songSkipBackBtn.setOnClickListener {
-            this.mediaPlayerService!!.skipBackward()
+            if(!this.mediaPlayerService!!.isEmpty)
+                this.mediaPlayerService!!.skipBackward()
         }
 
         // Play mode button
         this.songPlayModeBtn.setOnClickListener {
-            val playMode: PlayMode = this.mediaPlayerService!!.playMode
+            if(!this.mediaPlayerService!!.isEmpty) {
+                val playMode: PlayMode = this.mediaPlayerService!!.playMode
 
-            if(playMode == PlayMode.REPEAT) {
-                this.songPlayModeBtn.setImageResource(R.drawable.repeat_one)
-                this.mediaPlayerService!!.playMode = PlayMode.REPEAT_ONE
-            } else if(playMode == PlayMode.REPEAT_ONE) {
-                this.songPlayModeBtn.setImageResource(R.drawable.repeat)
-                this.mediaPlayerService!!.playMode = PlayMode.REPEAT
+                if (playMode == PlayMode.REPEAT) {
+                    this.songPlayModeBtn.setImageResource(R.drawable.repeat_one)
+                    this.mediaPlayerService!!.playMode = PlayMode.REPEAT_ONE
+                } else if (playMode == PlayMode.REPEAT_ONE) {
+                    this.songPlayModeBtn.setImageResource(R.drawable.repeat)
+                    this.mediaPlayerService!!.playMode = PlayMode.REPEAT
+                }
             }
         }
 
         // Shuffle button
         this.songShuffleBtn.setOnClickListener {
-            val shuffleMode: ShuffleMode = this.mediaPlayerService!!.shuffleMode
+            if(!this.mediaPlayerService!!.isEmpty) {
+                val shuffleMode: ShuffleMode = this.mediaPlayerService!!.shuffleMode
 
-            if(shuffleMode == ShuffleMode.SHUFFLED) {
-                this.songShuffleBtn.setImageResource(R.drawable.shuffle_off)
-                this.mediaPlayerService!!.shuffleMode = ShuffleMode.UNSHUFFLED
-            } else if(shuffleMode == ShuffleMode.UNSHUFFLED) {
-                this.songShuffleBtn.setImageResource(R.drawable.shuffle_on)
-                this.mediaPlayerService!!.shuffleMode = ShuffleMode.SHUFFLED
+                if (shuffleMode == ShuffleMode.SHUFFLED) {
+                    this.songShuffleBtn.setImageResource(R.drawable.shuffle_off)
+                    this.mediaPlayerService!!.shuffleMode = ShuffleMode.UNSHUFFLED
+                } else if (shuffleMode == ShuffleMode.UNSHUFFLED) {
+                    this.songShuffleBtn.setImageResource(R.drawable.shuffle_on)
+                    this.mediaPlayerService!!.shuffleMode = ShuffleMode.SHUFFLED
+                }
             }
         }
 
