@@ -34,6 +34,7 @@ import com.aaa.vibesmusic.ui.listener.OnPlaySeekListener
 import com.bumptech.glide.Glide
 import java.util.Objects
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 class PlaySongViewGroup @JvmOverloads constructor(
     private val c: Context?,
@@ -132,6 +133,33 @@ class PlaySongViewGroup @JvmOverloads constructor(
                 this.mediaPlayerService!!.shuffleMode = ShuffleMode.SHUFFLED
             }
         }
+
+        this.songTimeBarPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            var currentPosition: Int = 0
+            val marginOfError = 1000
+
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                songPlayerCurrentTime.text = Song.calculateDuration(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                if(Objects.nonNull(mediaPlayerService) && mediaPlayerService!!.isPlaying) {
+                    this.currentPosition = seekBar.progress
+                    mediaPlayerService!!.pauseSeekListener()
+                }
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                if(Objects.nonNull(mediaPlayerService) && mediaPlayerService!!.isPlaying) {
+                    val seekBarCurrentPos = seekBar.progress
+                    if(abs(this.currentPosition - seekBarCurrentPos) > this.marginOfError)
+                        mediaPlayerService!!.seekTo(seekBarCurrentPos)
+                    else
+                        mediaPlayerService!!.resumeSeekListener()
+                }
+            }
+
+        })
     }
 
     /**
@@ -244,7 +272,6 @@ class PlaySongViewGroup @JvmOverloads constructor(
             activity.runOnUiThread{
                 val currentTime = player!!.currentPosition
                 this.songTimeBarPlayer.progress = currentTime
-                this.songPlayerCurrentTime.text = Song.calculateDuration(currentTime)
             }
         }
     }

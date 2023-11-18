@@ -82,6 +82,20 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     }
 
     /**
+     * Pause the {@link MediaTimeThread}
+     */
+    public void pauseSeekListener() {
+        this.timeThread.pause();
+    }
+
+    /**
+     * Resume the {@link MediaTimeThread}
+     */
+    public void resumeSeekListener() {
+        this.timeThread.unpause();
+    }
+
+    /**
      *
      * @return The current position of the player in the song
      */
@@ -150,6 +164,18 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         } catch (IOException e) {
             this.stopSelf();
         }
+    }
+
+    /**
+     *
+     * @param time The time in milliseconds to seek to in the {@link Song}
+     */
+    public void seekTo(int time) {
+        this.player.pause();
+        this.timeThread.pause();
+        this.player.seekTo(time);
+        this.player.start();
+        this.timeThread.unpause();
     }
 
     @Override
