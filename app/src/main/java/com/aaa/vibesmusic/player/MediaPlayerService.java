@@ -161,6 +161,9 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         this.timeThread = new MediaTimeThread(this.player);
     }
 
+    /**
+     * Run {@link MediaPlayerService#preparedListener}
+     */
     private void runPreparedListener() {
         if(Objects.nonNull(this.preparedListener))
             this.preparedListener.onPrepared(this.player);
