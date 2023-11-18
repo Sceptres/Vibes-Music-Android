@@ -79,6 +79,14 @@ public class SongPlayer implements Playable {
 
     /**
      *
+     * @return The {@link PlayMode} of this player
+     */
+    public synchronized PlayMode getPlayMode() {
+        return this.playMode;
+    }
+
+    /**
+     *
      * @param shuffleMode Set the {@link ShuffleMode} of this player
      */
     public synchronized void setShuffleMode(ShuffleMode shuffleMode) {

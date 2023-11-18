@@ -25,6 +25,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.PlayStatus
+import com.aaa.vibesmusic.player.mode.PlayMode
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.listener.OnCloseListener
@@ -101,6 +102,18 @@ class PlaySongViewGroup @JvmOverloads constructor(
             this.mediaPlayerService!!.skipBackward()
         }
 
+        this.songPlayModeBtn.setOnClickListener {
+            val playMode: PlayMode = this.mediaPlayerService!!.playMode
+
+            if(playMode == PlayMode.REPEAT) {
+                this.songPlayModeBtn.setImageResource(R.drawable.repeat_one)
+                this.mediaPlayerService!!.playMode = PlayMode.REPEAT_ONE
+            } else if(playMode == PlayMode.REPEAT_ONE) {
+                this.songPlayModeBtn.setImageResource(R.drawable.repeat)
+                this.mediaPlayerService!!.playMode = PlayMode.REPEAT
+            }
+        }
+
         this.songShuffleBtn.setOnClickListener {
             val shuffleMode: ShuffleMode = this.mediaPlayerService!!.shuffleMode
 
@@ -175,6 +188,12 @@ class PlaySongViewGroup @JvmOverloads constructor(
             this.playSongBtn.setImageResource(R.drawable.pause_button)
         else if(this.mediaPlayerService!!.playStatus == PlayStatus.PAUSED)
             this.playSongBtn.setImageResource(R.drawable.play_arrow)
+
+        // Set the status of the play mode button
+        if(this.mediaPlayerService!!.playMode == PlayMode.REPEAT)
+            this.songPlayModeBtn.setImageResource(R.drawable.repeat)
+        else if(this.mediaPlayerService!!.playMode == PlayMode.REPEAT_ONE)
+            this.songPlayModeBtn.setImageResource(R.drawable.repeat_one)
 
         // Set status of shuffle music button
         if(this.mediaPlayerService!!.shuffleMode == ShuffleMode.SHUFFLED)
