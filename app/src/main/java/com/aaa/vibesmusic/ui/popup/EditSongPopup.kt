@@ -84,7 +84,7 @@ class EditSongPopup(
                 song.duration
             )
 
-            if(this.song != newSong) {
+            if(!Song.isSameSong(this.song, newSong)) {
                 updateDisposable = this.db.songDao().updateSong(newSong)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

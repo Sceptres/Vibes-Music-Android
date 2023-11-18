@@ -87,6 +87,18 @@ public class Song {
 
     /**
      *
+     * @param song1 The first {@link Song} to compare
+     * @param song2 The second {@link Song} to compare
+     * @return True if both songs have the same data. False otherwise.
+     */
+    public static boolean isSameSong(Song song1, Song song2) {
+        return song1.name.equals(song2.name) && song1.artist.equals(song2.artist) && song1.albumName.equals(song2.albumName) &&
+                ((Objects.nonNull(song1.imageLocation) && Objects.equals(song1.imageLocation, song2.imageLocation)) ||
+                        Objects.isNull(song1.imageLocation) && Objects.isNull(song2.imageLocation));
+    }
+
+    /**
+     *
      * @return The id of the song in the database
      */
     public int getId() {
@@ -152,11 +164,7 @@ public class Song {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Song song = (Song) o;
-        return id == song.id && name.equals(song.name) && location.equals(song.location) &&
-                artist.equals(song.artist) && albumName.equals(song.albumName) &&
-                ((Objects.nonNull(imageLocation) && imageLocation.equals(song.imageLocation)) ||
-                        Objects.isNull(imageLocation) && Objects.isNull(song.imageLocation)) &&
-                duration.equals(song.duration);
+        return id == song.id && location.equals(song.location);
     }
 
     @Override
