@@ -34,14 +34,14 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     private MediaPlayer player;
     private AudioManager audioManager;
     private MediaTimeThread timeThread;
-    private final List<MediaPlayer.OnPreparedListener> preparedListeners;
+    private MediaPlayer.OnPreparedListener preparedListener;
 
     public MediaPlayerService() {
         this.songPlayer = new SongPlayer();
         this.binder = new MediaPlayerServiceBinder();
         this.player = null;
         this.timeThread = null;
-        this.preparedListeners = new ArrayList<>();
+        this.preparedListener = null;
     }
 
     /**
@@ -60,16 +60,15 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
      *
      * @param listener The {@link MediaPlayer.OnPreparedListener} to add to this {@link MediaPlayerService}
      */
-    public void addPreparedListener(MediaPlayer.OnPreparedListener listener) {
-        this.preparedListeners.add(listener);
+    public void setPreparedListener(MediaPlayer.OnPreparedListener listener) {
+        this.preparedListener = listener;
     }
 
     /**
-     *
-     * @param listener The {@link MediaPlayer.OnPreparedListener} to remove from this {@link MediaPlayerService}
+     * Removes the {@link MediaPlayerService#preparedListener}
      */
-    public void removePreparedListener(MediaPlayer.OnPreparedListener listener) {
-        this.preparedListeners.remove(listener);
+    public void removePreparedListener() {
+        this.preparedListener = null;
     }
 
     /**
@@ -327,8 +326,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     @Override
     public void onPrepared(MediaPlayer mp) {
         this.play();
-        for(MediaPlayer.OnPreparedListener listener : this.preparedListeners)
-            listener.onPrepared(mp);
+        if(Objects.nonNull(this.preparedListener))
+            this.preparedListener.onPrepared(mp);
     }
 
     @Override
