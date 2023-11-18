@@ -69,10 +69,18 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         this.preparedListeners.remove(listener);
     }
 
+    /**
+     *
+     * @return The current {@link Song} being player
+     */
     public Song getCurrentSong() {
         return this.songPlayer.getCurrentSong();
     }
 
+    /**
+     *
+     * @return The {@link List} of {@link Song}s in this player
+     */
     public List<Song> getSongs() {
         return new ArrayList<>(this.songPlayer.getSongs());
     }
@@ -92,6 +100,10 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         this.player.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
+    /**
+     *
+     * @param song The {@link Song} to start playing
+     */
     private void setSong(Song song) {
         try {
             this.player.reset();
@@ -152,26 +164,50 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         return nextSong;
     }
 
+    /**
+     *
+     * @param mode The new {@link PlayMode} of this player
+     */
     public void setPlayMode(PlayMode mode) {
         this.songPlayer.setPlayMode(mode);
     }
 
+    /**
+     *
+     * @return The current {@link PlayMode} of this player
+     */
     public PlayMode getPlayMode() {
         return this.songPlayer.getPlayMode();
     }
 
+    /**
+     *
+     * @param mode The new {@link ShuffleMode} of this player
+     */
     public void setShuffleMode(ShuffleMode mode) {
         this.songPlayer.setShuffleMode(mode);
     }
 
+    /**
+     *
+     * @return The current {@link ShuffleMode} of this player
+     */
     public ShuffleMode getShuffleMode() {
         return this.songPlayer.getShuffleMode();
     }
 
+    /**
+     *
+     * @return The current {@link PlayStatus} of this player
+     */
     public PlayStatus getPlayStatus() {
         return this.songPlayer.getPlayStatus();
     }
 
+    /**
+     *
+     * @return True if no {@link Song}s are currently in this player. False otherwise
+     */
     public boolean isEmpty() {
         return this.songPlayer.isEmpty();
     }
@@ -287,6 +323,10 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     }
 
     public class MediaPlayerServiceBinder extends Binder {
+        /**
+         *
+         * @return The {@link MediaPlayerService}
+         */
         public MediaPlayerService getMediaPlayerService() {
             return MediaPlayerService.this;
         }
