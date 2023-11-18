@@ -22,9 +22,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
-import com.aaa.vibesmusic.databinding.ActivitySongPlayerBinding
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.PlayStatus
+import com.aaa.vibesmusic.player.shuffle.ShuffleMode
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.bumptech.glide.Glide
 import java.util.Objects
@@ -96,6 +96,18 @@ class PlaySongViewGroup @JvmOverloads constructor(
         this.songSkipBackBtn.setOnClickListener {
             this.mediaPlayerService!!.skipBackward()
         }
+
+        this.songShuffleBtn.setOnClickListener {
+            val shuffleMode: ShuffleMode = this.mediaPlayerService!!.shuffleMode
+
+            if(shuffleMode == ShuffleMode.SHUFFLED) {
+                this.songShuffleBtn.setImageResource(R.drawable.shuffle_off)
+                this.mediaPlayerService!!.shuffleMode = ShuffleMode.UNSHUFFLED
+            } else if(shuffleMode == ShuffleMode.UNSHUFFLED) {
+                this.songShuffleBtn.setImageResource(R.drawable.shuffle_on)
+                this.mediaPlayerService!!.shuffleMode = ShuffleMode.SHUFFLED
+            }
+        }
     }
 
     override fun onAttachedToWindow() {
@@ -144,6 +156,12 @@ class PlaySongViewGroup @JvmOverloads constructor(
             this.playSongBtn.setImageResource(R.drawable.pause_button)
         else if(this.mediaPlayerService!!.playStatus == PlayStatus.PAUSED)
             this.playSongBtn.setImageResource(R.drawable.play_arrow)
+
+        // Set status of shuffle music button
+        if(this.mediaPlayerService!!.shuffleMode == ShuffleMode.SHUFFLED)
+            this.songShuffleBtn.setImageResource(R.drawable.shuffle_on)
+        else if(this.mediaPlayerService!!.shuffleMode == ShuffleMode.UNSHUFFLED)
+            this.songShuffleBtn.setImageResource(R.drawable.shuffle_off)
     }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
