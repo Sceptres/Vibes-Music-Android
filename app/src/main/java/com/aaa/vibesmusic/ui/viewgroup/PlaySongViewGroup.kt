@@ -10,6 +10,7 @@ import android.os.IBinder
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
@@ -26,6 +27,7 @@ import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.PlayStatus
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode
 import com.aaa.vibesmusic.storage.StorageUtil
+import com.aaa.vibesmusic.ui.listener.OnCloseListener
 import com.bumptech.glide.Glide
 import java.util.Objects
 
@@ -35,6 +37,7 @@ class PlaySongViewGroup @JvmOverloads constructor(
 ) : RelativeLayout(c, attributeSet), ServiceConnection, AnimationListener, MediaPlayer.OnPreparedListener {
 
     private var mediaPlayerService: MediaPlayerService? = null
+    private var onCloseListener: OnCloseListener? = null
     private val songPlayerDropBtn: ImageButton
     private val songCoverImageView: ImageView
     private val songNamePlayer: TextView
@@ -71,6 +74,7 @@ class PlaySongViewGroup @JvmOverloads constructor(
     private fun setListeners() {
         // Close view listener
         this.songPlayerDropBtn.setOnClickListener {
+            this.closeView()
             val animation: Animation = AnimationUtils.loadAnimation(this.context, R.anim.slide_down)
             animation.setAnimationListener(this)
             this.startAnimation(animation)
@@ -110,6 +114,13 @@ class PlaySongViewGroup @JvmOverloads constructor(
         }
     }
 
+    /**
+     * The [OnCloseListener] of this view
+     */
+    fun setOnCloseListener(listener: OnCloseListener) {
+        this.onCloseListener = listener
+    }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         Log.d("Player", "ATTACHING")
@@ -122,6 +133,14 @@ class PlaySongViewGroup @JvmOverloads constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         this.mediaPlayerService!!.removePreparedListener(this)
+    }
+
+    /**
+     * Close the view and run the [OnCloseListener] of this [View]
+     */
+    private fun closeView() {
+        if(Objects.nonNull(this.onCloseListener))
+            this.onCloseListener!!.onClose()
     }
 
     override fun onAnimationStart(animation: Animation?) {}
