@@ -215,6 +215,10 @@ class PlaySongViewGroup @JvmOverloads constructor(
             this.songPlayerEndTime.text = this.mediaPlayerService!!.currentSong.duration
         } else {
             this.songTimeBarPlayer.progress = 0
+
+            val zeroTime = Song.calculateDuration(0)
+            this.songPlayerCurrentTime.text = zeroTime
+            this.songPlayerEndTime.text = zeroTime
         }
     }
 
