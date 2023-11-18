@@ -90,10 +90,8 @@ class PlaySongViewGroup @JvmOverloads constructor(
                 val playStatus: PlayStatus = this.mediaPlayerService!!.playStatus
 
                 if (playStatus == PlayStatus.PLAYING) {
-                    this.playSongBtn.setImageResource(R.drawable.play_arrow)
                     this.mediaPlayerService!!.pause()
                 } else if (playStatus == PlayStatus.PAUSED) {
-                    this.playSongBtn.setImageResource(R.drawable.pause_button)
                     this.mediaPlayerService!!.resume()
                 }
             }
@@ -117,10 +115,8 @@ class PlaySongViewGroup @JvmOverloads constructor(
                 val playMode: PlayMode = this.mediaPlayerService!!.playMode
 
                 if (playMode == PlayMode.REPEAT) {
-                    this.songPlayModeBtn.setImageResource(R.drawable.repeat_one)
                     this.mediaPlayerService!!.playMode = PlayMode.REPEAT_ONE
                 } else if (playMode == PlayMode.REPEAT_ONE) {
-                    this.songPlayModeBtn.setImageResource(R.drawable.repeat)
                     this.mediaPlayerService!!.playMode = PlayMode.REPEAT
                 }
             }
@@ -132,10 +128,8 @@ class PlaySongViewGroup @JvmOverloads constructor(
                 val shuffleMode: ShuffleMode = this.mediaPlayerService!!.shuffleMode
 
                 if (shuffleMode == ShuffleMode.SHUFFLED) {
-                    this.songShuffleBtn.setImageResource(R.drawable.shuffle_off)
                     this.mediaPlayerService!!.shuffleMode = ShuffleMode.UNSHUFFLED
                 } else if (shuffleMode == ShuffleMode.UNSHUFFLED) {
-                    this.songShuffleBtn.setImageResource(R.drawable.shuffle_on)
                     this.mediaPlayerService!!.shuffleMode = ShuffleMode.SHUFFLED
                 }
             }
@@ -248,7 +242,8 @@ class PlaySongViewGroup @JvmOverloads constructor(
             this.songShuffleBtn.setImageResource(R.drawable.shuffle_off)
 
         // Setup the song time seekbar
-        if (!this.mediaPlayerService!!.isEmpty && this.mediaPlayerService!!.isPlaying) {
+        if (!this.mediaPlayerService!!.isEmpty &&
+            (this.mediaPlayerService!!.isPlaying || this.mediaPlayerService!!.playStatus == PlayStatus.PAUSED)) {
             this.songTimeBarPlayer.max = this.mediaPlayerService!!.currentSongDuration
             this.songTimeBarPlayer.progress = this.mediaPlayerService!!.currentPosition
             this.mediaPlayerService!!.setOnSeekListener(this)
