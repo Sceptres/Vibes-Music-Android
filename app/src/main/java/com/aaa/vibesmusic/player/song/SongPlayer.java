@@ -91,6 +91,14 @@ public class SongPlayer implements Playable {
             this.currentSongIndex = this.songs.indexOf(currentSong);
     }
 
+    /**
+     *
+     * @return The {@link ShuffleMode} of the player
+     */
+    public synchronized ShuffleMode getShuffleMode() {
+        return this.shuffleMode;
+    }
+
     @Override
     public synchronized void play() {
         this.playStatus = PlayStatus.PLAYING;
@@ -173,7 +181,7 @@ public class SongPlayer implements Playable {
     }
 
     /**
-     * Apply the shuffle mode of the player to the {@link List} of {@link Songs}
+     * Apply the shuffle mode of the player to the {@link List} of {@link Song}s
      */
     private synchronized void applyShuffleMode() {
         switch (this.shuffleMode) {

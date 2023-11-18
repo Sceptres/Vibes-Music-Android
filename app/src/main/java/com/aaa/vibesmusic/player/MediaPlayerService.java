@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.aaa.vibesmusic.database.data.music.Song;
 import com.aaa.vibesmusic.player.services.Playable;
+import com.aaa.vibesmusic.player.shuffle.ShuffleMode;
 import com.aaa.vibesmusic.player.song.SongPlayer;
 
 import java.io.IOException;
@@ -148,6 +149,14 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         Song nextSong = this.songPlayer.skipBackward();
         this.setSong(nextSong);
         return nextSong;
+    }
+
+    public void setShuffleMode(ShuffleMode mode) {
+        this.songPlayer.setShuffleMode(mode);
+    }
+
+    public ShuffleMode getShuffleMode() {
+        return this.songPlayer.getShuffleMode();
     }
 
     public PlayStatus getPlayStatus() {
