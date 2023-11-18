@@ -60,13 +60,19 @@ public class SongPlayer implements Playable {
     /**
      *
      * @param songs The new {@link List} of {@link Song}s to update to
+     * @return True if the current song was deleted. False otherwise.
      */
-    public synchronized void updateSongs(List<Song> songs) {
+    public synchronized boolean updateSongs(List<Song> songs) {
+        boolean wasCurrentDeleted = false;
+
         this.setOriginalSongs(songs);
         List<Song> deletedSongs = this.songs.stream().filter(s -> !this.originalSongs.contains(s)).collect(Collectors.toList());
 
-        for(Song deletedSong : deletedSongs)
+        for(Song deletedSong : deletedSongs) {
+            if(deletedSong.equals(this.getCurrentSong()))
+                wasCurrentDeleted = true;
             this.songs.remove(deletedSong);
+        }
 
         for(int i=0; i < this.songs.size(); i++) {
             Song currentSong = this.songs.get(i);
@@ -78,6 +84,8 @@ public class SongPlayer implements Playable {
                 this.songs.add(i, newSong);
             }
         }
+
+        return wasCurrentDeleted;
     }
 
     /**
