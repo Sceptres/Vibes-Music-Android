@@ -33,7 +33,6 @@ import com.aaa.vibesmusic.ui.listener.OnCloseListener
 import com.aaa.vibesmusic.ui.listener.OnPlaySeekListener
 import com.bumptech.glide.Glide
 import java.util.Objects
-import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 class PlaySongViewGroup @JvmOverloads constructor(
@@ -189,7 +188,7 @@ class PlaySongViewGroup @JvmOverloads constructor(
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        this.mediaPlayerService!!.removePreparedListener(this)
+        this.mediaPlayerService!!.removePreparedListener()
     }
 
     /**
@@ -269,7 +268,7 @@ class PlaySongViewGroup @JvmOverloads constructor(
 
         this.setListeners()
 
-        this.mediaPlayerService!!.addPreparedListener(this)
+        this.mediaPlayerService!!.setPreparedListener(this)
         this.onPrepared(null)
     }
 
