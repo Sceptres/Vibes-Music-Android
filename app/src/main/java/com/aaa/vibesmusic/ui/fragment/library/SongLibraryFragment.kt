@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
+import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.databinding.FragmentSongLibraryBinding
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
@@ -49,7 +50,8 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
         }
 
         binding.songsListView.setOnItemClickListener { parent, view, position, id ->
-            this.mediaPlayerService.setSongs(songsAdapter.data, position)
+            val list: List<Song> = songsAdapter.data
+            this.mediaPlayerService.setSongs(list, position)
             this.openSongPlayer()
         }
 
@@ -66,6 +68,7 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
     private fun openSongPlayer() {
         val animation: Animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
         val playSongsView = PlaySongViewGroup(this.context)
+        playSongsView.setOnCloseListener{binding.root.visibility = View.VISIBLE}
         playSongsView.startAnimation(animation)
         this.requireActivity().addContentView(
             playSongsView,
@@ -74,6 +77,7 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
                 RelativeLayout.LayoutParams.MATCH_PARENT
             )
         )
+        binding.root.postDelayed({ binding.root.visibility = View.GONE }, animation.duration)
     }
 
     override fun onStart() {
