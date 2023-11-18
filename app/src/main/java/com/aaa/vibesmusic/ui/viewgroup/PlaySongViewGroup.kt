@@ -134,6 +134,7 @@ class PlaySongViewGroup @JvmOverloads constructor(
             }
         }
 
+        // Song time seekbar listener
         this.songTimeBarPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             var currentPosition: Int = 0
             val marginOfError = 1000
