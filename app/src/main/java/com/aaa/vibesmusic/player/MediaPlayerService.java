@@ -347,7 +347,6 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     @Override
     public void onPrepared(MediaPlayer mp) {
         this.play();
-        this.runPreparedListener();
     }
 
     @Override
