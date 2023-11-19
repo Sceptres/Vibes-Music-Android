@@ -7,10 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity(tableName = "Songs", indices = {@Index(value = "location", unique = true)})
@@ -76,16 +73,28 @@ public class Song {
      * @param duration The duration of the song in milliseconds
      * @return The string representation of the duration
      */
-    private static String calculateDuration(int duration) {
+    public static String calculateDuration(int duration) {
         int hours = duration / 3600000;
         int minutes = (duration - (3600000*hours)) / 60000;
-        int seconds = (int) Math.ceil((duration - (60000*minutes)) / 1000f);
+        int seconds = (int) ((duration - (60000*minutes)) / 1000f);
 
         if(hours == 0) {
             return String.format(Locale.US, "%02d:%02d", minutes, seconds);
         } else {
             return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
         }
+    }
+
+    /**
+     *
+     * @param song1 The first {@link Song} to compare
+     * @param song2 The second {@link Song} to compare
+     * @return True if both songs have the same data. False otherwise.
+     */
+    public static boolean isSameSong(Song song1, Song song2) {
+        return song1.name.equals(song2.name) && song1.artist.equals(song2.artist) && song1.albumName.equals(song2.albumName) &&
+                ((Objects.nonNull(song1.imageLocation) && Objects.equals(song1.imageLocation, song2.imageLocation)) ||
+                        Objects.isNull(song1.imageLocation) && Objects.isNull(song2.imageLocation));
     }
 
     /**
@@ -155,11 +164,7 @@ public class Song {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Song song = (Song) o;
-        return id == song.id && name.equals(song.name) && location.equals(song.location) &&
-                artist.equals(song.artist) && albumName.equals(song.albumName) &&
-                ((Objects.nonNull(imageLocation) && imageLocation.equals(song.imageLocation)) ||
-                        Objects.isNull(imageLocation) && Objects.isNull(song.imageLocation)) &&
-                duration.equals(song.duration);
+        return id == song.id && location.equals(song.location);
     }
 
     @Override
