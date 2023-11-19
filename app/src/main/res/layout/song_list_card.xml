@@ -2,7 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability = "blocksDescendants">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,7 +14,10 @@
             android:layout_height="60dp"
             android:padding="5dp"
             android:id="@+id/songCoverImage"
-            android:src="@drawable/music_cover_image"/>
+            android:src="@drawable/music_cover_image"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
         <TextView
             android:layout_width="240dp"
             android:layout_height="34dp"
@@ -28,7 +32,10 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
+            android:paddingEnd="20dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
         <TextView
             android:layout_width="100dp"
             android:layout_height="25dp"
@@ -44,7 +51,10 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
+            android:paddingEnd="20dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
         <TextView
             android:layout_width="100dp"
             android:layout_height="60dp"
@@ -59,16 +69,22 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
+            android:paddingEnd="20dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
         <ImageButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:id="@+id/optionsBtn"
             android:src="@drawable/options_btn"
             android:background="@color/transparent"
-            android:layout_centerVertical="true"
+            android:foregroundGravity="center"
             android:layout_alignParentEnd="true"
-            android:contentDescription="Options" />
+            android:contentDescription="Options"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
