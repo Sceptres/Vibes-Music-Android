@@ -93,7 +93,8 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
 
     override fun onDestroy() {
         super.onDestroy()
-        this.mediaPlayerService.onDestroy()
+        if(this::mediaPlayerService.isInitialized)
+            this.mediaPlayerService.onDestroy()
         this.requireActivity().application.unbindService(this)
     }
 
