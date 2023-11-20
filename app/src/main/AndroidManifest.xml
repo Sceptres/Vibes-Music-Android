@@ -17,6 +17,9 @@
         android:theme="@style/Theme.VibesMusic"
         tools:targetApi="34"
         android:enableOnBackInvokedCallback="true">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="***REMOVED***"/>
         <service android:name=".player.MediaPlayerService"/>
         <activity
             android:name=".ui.activity.MainActivity"
