@@ -20,7 +20,6 @@ import com.aaa.vibesmusic.databinding.FragmentSongLibraryBinding
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
-import java.util.Objects
 
 class SongLibraryFragment : Fragment(), ServiceConnection {
     private lateinit var viewModel: SongLibraryViewModel
@@ -89,13 +88,6 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
         val serviceIntent: Intent = Intent(this.requireContext(), MediaPlayerService::class.java)
         this.requireActivity().application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
         this.requireActivity().application.startService(serviceIntent)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if(this::mediaPlayerService.isInitialized)
-            this.mediaPlayerService.onDestroy()
-        this.requireActivity().application.unbindService(this)
     }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
