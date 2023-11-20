@@ -17,6 +17,9 @@
         android:theme="@style/Theme.VibesMusic"
         tools:targetApi="34"
         android:enableOnBackInvokedCallback="true">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1417462071241776~6452970545"/>
         <service android:name=".player.MediaPlayerService"/>
         <activity
             android:name=".ui.activity.MainActivity"
