@@ -56,7 +56,8 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
-        this.unbindService(this);
+        if(Objects.nonNull(this.mediaPlayerService))
+            this.unbindService(this);
     }
 
     @Override
