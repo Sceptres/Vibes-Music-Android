@@ -11,7 +11,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 public class Ads {
-    private static final String INTERSTITIAL_ID = "ca-app-pub-3940256099942544/8691691433";
+    private static final String INTERSTITIAL_ID = "***REMOVED***";
     public static final long IMPORT_AD_TIME_DIFF = 600000; // 10 minutes
 
     /**
