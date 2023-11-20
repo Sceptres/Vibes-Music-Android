@@ -325,8 +325,10 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Song nextSong = this.songPlayer.getNextSong();
-        this.setSong(nextSong);
+        if(!this.isEmpty()) {
+            Song nextSong = this.songPlayer.getNextSong();
+            this.setSong(nextSong);
+        }
     }
 
     @Override

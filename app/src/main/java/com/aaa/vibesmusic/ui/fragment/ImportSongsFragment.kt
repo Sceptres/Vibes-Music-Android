@@ -2,7 +2,6 @@ package com.aaa.vibesmusic.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,20 +15,28 @@ import com.aaa.vibesmusic.databinding.FragmentImportSongsBinding
 import com.aaa.vibesmusic.exceptions.SongAlreadyExistsException
 import com.aaa.vibesmusic.metadata.SongMetaData
 import com.aaa.vibesmusic.metadata.retriever.SongMetadataRetriever
+import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.fragment.result.ImportSongsActivityResultContract
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.io.FileDescriptor
 import java.io.IOException
+import java.util.Date
 import java.util.Objects
 
 class ImportSongsFragment : Fragment() {
     private var importSongsLauncher: ActivityResultLauncher<Void>? = null
     private val mDisposable: CompositeDisposable = CompositeDisposable()
     private var db: VibesMusicDatabase? = null
+    private var lastShownAd: Long = 0
 
     private var _binding: FragmentImportSongsBinding? = null
     private val binding: FragmentImportSongsBinding
@@ -69,7 +76,35 @@ class ImportSongsFragment : Fragment() {
         _binding = FragmentImportSongsBinding.inflate(inflater)
 
         binding.importLocalFiles.setOnClickListener {
-            this.importSongsLauncher?.launch(null)
+            val currentTime = Date().time
+
+            if(currentTime - lastShownAd >= Ads.IMPORT_AD_TIME_DIFF) {
+                Ads.loadInterstitial(this.requireActivity(), object : InterstitialAdLoadCallback() {
+                    override fun onAdLoaded(p0: InterstitialAd) {
+                        super.onAdLoaded(p0)
+                        lastShownAd = currentTime
+                        p0.fullScreenContentCallback = object : FullScreenContentCallback() {
+                            override fun onAdDismissedFullScreenContent() {
+                                super.onAdDismissedFullScreenContent()
+                                importSongsLauncher?.launch(null)
+                            }
+
+                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                                super.onAdFailedToShowFullScreenContent(p0)
+                                importSongsLauncher?.launch(null)
+                            }
+                        }
+                        p0.show(requireActivity())
+                    }
+
+                    override fun onAdFailedToLoad(p0: LoadAdError) {
+                        super.onAdFailedToLoad(p0)
+                        importSongsLauncher?.launch(null)
+                    }
+                })
+            } else {
+                this.importSongsLauncher?.launch(null)
+            }
         }
 
         return binding.root
