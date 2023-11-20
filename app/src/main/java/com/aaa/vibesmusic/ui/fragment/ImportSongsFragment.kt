@@ -2,6 +2,7 @@ package com.aaa.vibesmusic.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +77,7 @@ class ImportSongsFragment : Fragment() {
         _binding = FragmentImportSongsBinding.inflate(inflater)
 
         binding.importLocalFiles.setOnClickListener {
+            binding.importLocalFiles.isClickable = false
             val currentTime = Date().time
 
             if(currentTime - lastShownAd >= Ads.IMPORT_AD_TIME_DIFF) {
@@ -87,11 +89,13 @@ class ImportSongsFragment : Fragment() {
                             override fun onAdDismissedFullScreenContent() {
                                 super.onAdDismissedFullScreenContent()
                                 importSongsLauncher?.launch(null)
+                                binding.importLocalFiles.isClickable = true
                             }
 
                             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                                 super.onAdFailedToShowFullScreenContent(p0)
                                 importSongsLauncher?.launch(null)
+                                binding.importLocalFiles.isClickable = true
                             }
                         }
                         p0.show(requireActivity())
@@ -100,10 +104,12 @@ class ImportSongsFragment : Fragment() {
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         super.onAdFailedToLoad(p0)
                         importSongsLauncher?.launch(null)
+                        binding.importLocalFiles.isClickable = true
                     }
                 })
             } else {
                 this.importSongsLauncher?.launch(null)
+                binding.importLocalFiles.isClickable = true
             }
         }
 
