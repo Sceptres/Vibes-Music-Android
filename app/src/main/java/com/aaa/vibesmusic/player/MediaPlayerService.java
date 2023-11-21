@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.aaa.vibesmusic.database.data.music.Song;
 import com.aaa.vibesmusic.player.mode.PlayMode;
 import com.aaa.vibesmusic.player.services.Playable;
+import com.aaa.vibesmusic.player.services.SongsPlayedListener;
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode;
 import com.aaa.vibesmusic.player.song.SongPlayer;
 import com.aaa.vibesmusic.ui.listener.OnPlaySeekListener;
@@ -35,6 +36,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     private AudioManager audioManager;
     private MediaTimeThread timeThread;
     private MediaPlayer.OnPreparedListener preparedListener;
+    private SongsPlayedListener songsPlayedListener;
 
     public MediaPlayerService() {
         this.songPlayer = new SongPlayer();
@@ -42,6 +44,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         this.player = null;
         this.timeThread = null;
         this.preparedListener = null;
+        this.songsPlayedListener = null;
     }
 
     /**
@@ -79,6 +82,21 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
      */
     public void removePreparedListener() {
         this.preparedListener = null;
+    }
+
+    /**
+     *
+     * @param listener The {@link SongsPlayedListener} to add to the player
+     */
+    public void setSongsPlayedListener(SongsPlayedListener listener) {
+        this.songsPlayedListener = listener;
+    }
+
+    /**
+     * Remove the {@link SongsPlayedListener}
+     */
+    public void removeSongsPlayedListener() {
+        this.songsPlayedListener = null;
     }
 
     /**
@@ -328,6 +346,10 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         if(!this.isEmpty()) {
             Song nextSong = this.songPlayer.getNextSong();
             this.setSong(nextSong);
+
+            if(Objects.nonNull(this.songsPlayedListener))
+                this.songsPlayedListener.onSongPlayed(this.songPlayer.getNumSongsPlayed());
+            this.songPlayer.songCompleted();
         }
     }
 
