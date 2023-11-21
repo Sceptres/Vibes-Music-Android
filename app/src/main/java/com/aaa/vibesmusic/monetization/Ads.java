@@ -11,7 +11,8 @@ import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 public class Ads {
-    private static final String INTERSTITIAL_ID = "***REMOVED***";
+    public static final String IMPORT_MUSIC_AD_ID = "***REMOVED***";
+    public static final String OPEN_APP_AD_ID = "***REMOVED***";
     public static final long IMPORT_AD_TIME_DIFF = 600000; // 10 minutes
 
     /**
@@ -28,10 +29,11 @@ public class Ads {
     /**
      *
      * @param context The {@link Context} to load the interstitial ad on
+     * @param adId The AD ID of the interstitial ad to load.
      * @param callback The {@link InterstitialAdLoadCallback} to use when loading the add
      */
-    public static void loadInterstitial(@NonNull Context context, InterstitialAdLoadCallback callback) {
+    public static void loadInterstitial(@NonNull Context context, String adId, InterstitialAdLoadCallback callback) {
         AdRequest request = new AdRequest.Builder().build();
-        InterstitialAd.load(context, Ads.INTERSTITIAL_ID, request, callback);
+        InterstitialAd.load(context, Ads.IMPORT_MUSIC_AD_ID, request, callback);
     }
 }

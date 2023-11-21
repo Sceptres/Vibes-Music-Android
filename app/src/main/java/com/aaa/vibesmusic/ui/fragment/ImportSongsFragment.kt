@@ -2,7 +2,6 @@ package com.aaa.vibesmusic.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,7 +80,7 @@ class ImportSongsFragment : Fragment() {
             val currentTime = Date().time
 
             if(currentTime - lastShownAd >= Ads.IMPORT_AD_TIME_DIFF) {
-                Ads.loadInterstitial(this.requireActivity(), object : InterstitialAdLoadCallback() {
+                Ads.loadInterstitial(this.requireActivity(), Ads.IMPORT_MUSIC_AD_ID, object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(p0: InterstitialAd) {
                         super.onAdLoaded(p0)
                         lastShownAd = currentTime
