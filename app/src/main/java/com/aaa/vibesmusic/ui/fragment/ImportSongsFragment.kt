@@ -210,9 +210,9 @@ class ImportSongsFragment : Fragment() {
     private fun handleFailedSongs(failedSongs: List<String>) {
         if (failedSongs.isNotEmpty()) {
             val msg: String = if(failedSongs.size > 1)
-                resources.getString(R.string.failed_songs, failedSongs.joinToString(", "))
+                resources.getString(R.string.failed_songs)
             else
-                resources.getString(R.string.failed_song, failedSongs.joinToString(", "))
+                resources.getString(R.string.failed_song)
 
             UIUtil.showLongSnackBar(
                 msg,
@@ -228,9 +228,9 @@ class ImportSongsFragment : Fragment() {
     private fun handleExistingSongs(existingSongs: List<String>) {
         if (existingSongs.isNotEmpty()) {
             val msg: String = if(existingSongs.size > 1) // Has more than one element?
-                resources.getString(R.string.songs_exist, existingSongs.joinToString(", "))
+                resources.getString(R.string.songs_exist)
             else
-                resources.getString(R.string.song_exists, existingSongs.joinToString(", "))
+                resources.getString(R.string.song_exists)
 
             UIUtil.showLongSnackBar(
                 msg,

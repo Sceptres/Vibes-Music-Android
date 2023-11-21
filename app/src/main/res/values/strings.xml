@@ -4,10 +4,10 @@
     <string name="import_music">Import Music</string>
     <string name="local">Local</string>
     <string name="local_files">Local Files</string>
-    <string name="failed_songs">Unable to import the songs %1$s! Please try again!</string>
-    <string name="failed_song">Unable to import the song %1$s! Please try again!</string>
-    <string name="songs_exist">The songs %1$s have already been imported!</string>
-    <string name="song_exists">The song %1$s has already been imported!</string>
+    <string name="failed_songs">Unable to import all the songs! Please try again!</string>
+    <string name="failed_song">Unable to import this song! Please try again!</string>
+    <string name="songs_exist">Some of these songs have already been imported! Only added new songs.</string>
+    <string name="song_exists">This song has already been imported!</string>
     <string name="songs_imported_successfully">Music imported successfully</string>
     <string name="delete">Delete</string>
     <string name="edit_song">Edit Song</string>
