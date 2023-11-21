@@ -17,6 +17,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.databinding.FragmentSongLibraryBinding
+import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
@@ -61,6 +62,8 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
         binding.playingSongsActivityBtn.setOnClickListener {
             this.openSongPlayer()
         }
+
+        Ads.loadBanner(binding.musicLibraryBanner, this.requireContext())
 
         return binding.root
     }

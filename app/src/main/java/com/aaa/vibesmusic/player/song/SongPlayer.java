@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SongPlayer implements Playable {
+    private int numSongsPlayed;
     private int currentSongIndex;
     private int pauseTime;
     private PlayStatus playStatus;
@@ -21,6 +22,7 @@ public class SongPlayer implements Playable {
     private final List<Song> originalSongs;
 
     public SongPlayer() {
+        this.numSongsPlayed = 0;
         this.currentSongIndex = 0;
         this.originalSongs = new ArrayList<>();
         this.songs = new ArrayList<>();
@@ -86,6 +88,21 @@ public class SongPlayer implements Playable {
         }
 
         return wasCurrentDeleted;
+    }
+
+    /**
+     * A song has finished playing
+     */
+    public void songCompleted() {
+        this.numSongsPlayed += 1;
+    }
+
+    /**
+     *
+     * @return The number of {@link Song}s played by the user
+     */
+    public int getNumSongsPlayed() {
+        return this.numSongsPlayed;
     }
 
     /**

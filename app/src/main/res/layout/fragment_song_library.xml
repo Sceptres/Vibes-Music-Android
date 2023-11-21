@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.library.SongLibraryFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_above="@id/musicLibraryBanner">
 
         <TextView
             android:id="@+id/music_library_title"
@@ -48,8 +50,17 @@
         android:backgroundTint="@color/blue_selected"
         app:borderWidth="0dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/musicLibraryBanner"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:contentDescription="Playing songs page" />
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/musicLibraryBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:fitsSystemWindows="true"
+        ads:adUnitId="***REMOVED***"
+        ads:adSize="BANNER"/>
 </RelativeLayout>

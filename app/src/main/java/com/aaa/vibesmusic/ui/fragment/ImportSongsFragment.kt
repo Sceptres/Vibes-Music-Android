@@ -2,7 +2,6 @@ package com.aaa.vibesmusic.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,20 +15,28 @@ import com.aaa.vibesmusic.databinding.FragmentImportSongsBinding
 import com.aaa.vibesmusic.exceptions.SongAlreadyExistsException
 import com.aaa.vibesmusic.metadata.SongMetaData
 import com.aaa.vibesmusic.metadata.retriever.SongMetadataRetriever
+import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.fragment.result.ImportSongsActivityResultContract
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.io.FileDescriptor
 import java.io.IOException
+import java.util.Date
 import java.util.Objects
 
 class ImportSongsFragment : Fragment() {
     private var importSongsLauncher: ActivityResultLauncher<Void>? = null
     private val mDisposable: CompositeDisposable = CompositeDisposable()
     private var db: VibesMusicDatabase? = null
+    private var lastShownAd: Long = 0
 
     private var _binding: FragmentImportSongsBinding? = null
     private val binding: FragmentImportSongsBinding
@@ -42,21 +49,29 @@ class ImportSongsFragment : Fragment() {
         // Setup the import songs activity result launcher
         this.importSongsLauncher = registerForActivityResult(ImportSongsActivityResultContract()) {
             if(it.isNotEmpty()) {
-                val importedSongs: List<Song> = this.importSongsFromUris(it)
+                val currentTime = Date().time
 
-                // Were there any songs imported to be added to the database?
-                if (importedSongs.isNotEmpty()) {
-                    mDisposable.add(
-                        this.db!!.songDao().insertSongs(importedSongs)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe {
-                                UIUtil.showLongSnackBar(
-                                    resources.getString(R.string.songs_imported_successfully),
-                                    resources.getColor(R.color.foreground_color, null)
-                                )
+                if(currentTime - lastShownAd >= Ads.IMPORT_AD_TIME_DIFF) {
+                    Ads.loadInterstitial(this.requireActivity(), Ads.IMPORT_MUSIC_AD_ID, object : InterstitialAdLoadCallback() {
+                        override fun onAdLoaded(p0: InterstitialAd) {
+                            super.onAdLoaded(p0)
+                            lastShownAd = currentTime
+                            p0.fullScreenContentCallback = object : FullScreenContentCallback() {
+                                override fun onAdDismissedFullScreenContent() {
+                                    super.onAdDismissedFullScreenContent()
+                                    importSongs(it)
+                                }
                             }
-                    )
+                            p0.show(requireActivity())
+                        }
+
+                        override fun onAdFailedToLoad(p0: LoadAdError) {
+                            super.onAdFailedToLoad(p0)
+                            importSongs(it)
+                        }
+                    })
+                } else {
+                    importSongs(it)
                 }
             }
         }
@@ -78,6 +93,28 @@ class ImportSongsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         this.mDisposable.clear()
+    }
+
+    /**
+     * @param songs The [List] of [Song]s to import into the app
+     */
+    private fun importSongs(songs: List<Uri>) {
+        val importedSongs: List<Song> = importSongsFromUris(songs)
+
+        // Were there any songs imported to be added to the database?
+        if (importedSongs.isNotEmpty()) {
+            mDisposable.add(
+                db!!.songDao().insertSongs(importedSongs)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        UIUtil.showLongSnackBar(
+                            resources.getString(R.string.songs_imported_successfully),
+                            resources.getColor(R.color.foreground_color, null)
+                        )
+                    }
+            )
+        }
     }
 
     /**
