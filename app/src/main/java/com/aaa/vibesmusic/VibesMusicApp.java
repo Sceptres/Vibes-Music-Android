@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.aaa.vibesmusic.monetization.Ads;
 import com.aaa.vibesmusic.player.MediaPlayerService;
+import com.aaa.vibesmusic.player.services.SongsPlayedListener;
 import com.aaa.vibesmusic.preferences.PreferencesManager;
 import com.aaa.vibesmusic.ui.activity.MainActivity;
 import com.google.android.gms.ads.AdError;
@@ -27,14 +28,21 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.util.Objects;
 
-public class VibesMusicApp extends Application implements Application.ActivityLifecycleCallbacks, ServiceConnection {
+public class VibesMusicApp extends Application implements Application.ActivityLifecycleCallbacks, ServiceConnection,
+        SongsPlayedListener {
     private MediaPlayerService mediaPlayerService;
+    private boolean shouldLoadAd;
+    private boolean isAppInBackground;
+    private Activity currentActivity;
     private PreferencesManager manager;
     private final ViewTreeObserver.OnPreDrawListener waitListener;
 
     public VibesMusicApp() {
         super();
         this.mediaPlayerService = null;
+        this.shouldLoadAd = false;
+        this.currentActivity = null;
+        this.isAppInBackground = false;
         this.manager = null;
         this.waitListener = () -> false;
     }
@@ -50,6 +58,7 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
         if(activity instanceof MainActivity) {
+            this.currentActivity = activity;
             if(!this.manager.isFirstAppUse()) {
                 final View content = activity.findViewById(android.R.id.content);
                 content.getViewTreeObserver().addOnPreDrawListener(this.waitListener);
@@ -97,10 +106,16 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
     public void onActivityStarted(@NonNull Activity activity) {}
 
     @Override
-    public void onActivityResumed(@NonNull Activity activity) {}
+    public void onActivityResumed(@NonNull Activity activity) {
+        if(this.shouldLoadAd)
+            this.loadMusicPlayedAd(activity);
+        this.isAppInBackground = false;
+    }
 
     @Override
-    public void onActivityPaused(@NonNull Activity activity) {}
+    public void onActivityPaused(@NonNull Activity activity) {
+        this.isAppInBackground = true;
+    }
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {}
@@ -120,6 +135,7 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
     public void onServiceConnected(ComponentName name, IBinder service) {
         MediaPlayerService.MediaPlayerServiceBinder binder = (MediaPlayerService.MediaPlayerServiceBinder) service;
         this.mediaPlayerService = binder.getMediaPlayerService();
+        this.mediaPlayerService.setSongsPlayedListener(this);
     }
 
     @Override
@@ -128,5 +144,36 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
             this.mediaPlayerService.onDestroy();
             this.mediaPlayerService = null;
         }
+    }
+
+    @Override
+    public void onSongPlayed(int numSongs) {
+        if(numSongs != 0 && numSongs % 20 == 0)
+            this.shouldLoadAd = true;
+
+        if(!this.isAppInBackground && this.shouldLoadAd)
+            this.loadMusicPlayedAd(currentActivity);
+    }
+
+    /**
+     *
+     * @param activity The {@link Activity} to load the ad on
+     */
+    private void loadMusicPlayedAd(Activity activity) {
+        shouldLoadAd = false;
+        Ads.loadInterstitial(this.getApplicationContext(), Ads.MUSIC_PLAYED_AD_ID, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                super.onAdLoaded(interstitialAd);
+                interstitialAd.show(activity);
+                shouldLoadAd = false;
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                shouldLoadAd = true;
+            }
+        });
     }
 }

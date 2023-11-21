@@ -13,6 +13,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 public class Ads {
     public static final String IMPORT_MUSIC_AD_ID = "***REMOVED***";
     public static final String OPEN_APP_AD_ID = "***REMOVED***";
+    public static final String MUSIC_PLAYED_AD_ID = "***REMOVED***";
     public static final long IMPORT_AD_TIME_DIFF = 600000; // 10 minutes
 
     /**
