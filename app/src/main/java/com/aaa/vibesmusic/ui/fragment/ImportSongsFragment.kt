@@ -49,21 +49,29 @@ class ImportSongsFragment : Fragment() {
         // Setup the import songs activity result launcher
         this.importSongsLauncher = registerForActivityResult(ImportSongsActivityResultContract()) {
             if(it.isNotEmpty()) {
-                val importedSongs: List<Song> = this.importSongsFromUris(it)
+                val currentTime = Date().time
 
-                // Were there any songs imported to be added to the database?
-                if (importedSongs.isNotEmpty()) {
-                    mDisposable.add(
-                        this.db!!.songDao().insertSongs(importedSongs)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe {
-                                UIUtil.showLongSnackBar(
-                                    resources.getString(R.string.songs_imported_successfully),
-                                    resources.getColor(R.color.foreground_color, null)
-                                )
+                if(currentTime - lastShownAd >= Ads.IMPORT_AD_TIME_DIFF) {
+                    Ads.loadInterstitial(this.requireActivity(), Ads.IMPORT_MUSIC_AD_ID, object : InterstitialAdLoadCallback() {
+                        override fun onAdLoaded(p0: InterstitialAd) {
+                            super.onAdLoaded(p0)
+                            lastShownAd = currentTime
+                            p0.fullScreenContentCallback = object : FullScreenContentCallback() {
+                                override fun onAdDismissedFullScreenContent() {
+                                    super.onAdDismissedFullScreenContent()
+                                    importSongs(it)
+                                }
                             }
-                    )
+                            p0.show(requireActivity())
+                        }
+
+                        override fun onAdFailedToLoad(p0: LoadAdError) {
+                            super.onAdFailedToLoad(p0)
+                            importSongs(it)
+                        }
+                    })
+                } else {
+                    importSongs(it)
                 }
             }
         }
@@ -76,40 +84,7 @@ class ImportSongsFragment : Fragment() {
         _binding = FragmentImportSongsBinding.inflate(inflater)
 
         binding.importLocalFiles.setOnClickListener {
-            binding.importLocalFiles.isClickable = false
-            val currentTime = Date().time
-
-            if(currentTime - lastShownAd >= Ads.IMPORT_AD_TIME_DIFF) {
-                Ads.loadInterstitial(this.requireActivity(), Ads.IMPORT_MUSIC_AD_ID, object : InterstitialAdLoadCallback() {
-                    override fun onAdLoaded(p0: InterstitialAd) {
-                        super.onAdLoaded(p0)
-                        lastShownAd = currentTime
-                        p0.fullScreenContentCallback = object : FullScreenContentCallback() {
-                            override fun onAdDismissedFullScreenContent() {
-                                super.onAdDismissedFullScreenContent()
-                                importSongsLauncher?.launch(null)
-                                binding.importLocalFiles.isClickable = true
-                            }
-
-                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                                super.onAdFailedToShowFullScreenContent(p0)
-                                importSongsLauncher?.launch(null)
-                                binding.importLocalFiles.isClickable = true
-                            }
-                        }
-                        p0.show(requireActivity())
-                    }
-
-                    override fun onAdFailedToLoad(p0: LoadAdError) {
-                        super.onAdFailedToLoad(p0)
-                        importSongsLauncher?.launch(null)
-                        binding.importLocalFiles.isClickable = true
-                    }
-                })
-            } else {
-                this.importSongsLauncher?.launch(null)
-                binding.importLocalFiles.isClickable = true
-            }
+            this.importSongsLauncher?.launch(null)
         }
 
         return binding.root
@@ -118,6 +93,28 @@ class ImportSongsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         this.mDisposable.clear()
+    }
+
+    /**
+     * @param songs The [List] of [Song]s to import into the app
+     */
+    private fun importSongs(songs: List<Uri>) {
+        val importedSongs: List<Song> = importSongsFromUris(songs)
+
+        // Were there any songs imported to be added to the database?
+        if (importedSongs.isNotEmpty()) {
+            mDisposable.add(
+                db!!.songDao().insertSongs(importedSongs)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        UIUtil.showLongSnackBar(
+                            resources.getString(R.string.songs_imported_successfully),
+                            resources.getColor(R.color.foreground_color, null)
+                        )
+                    }
+            )
+        }
     }
 
     /**
