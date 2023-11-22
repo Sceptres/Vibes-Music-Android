@@ -388,10 +388,12 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
                 if (Objects.isNull(this.player))
                     this.initMediaPlayer();
                 this.player.setVolume(1f, 1f);
-                this.play();
+                if(this.songPlayer.getPlayStatus() == PlayStatus.PAUSED)
+                    this.resume();
+                else
+                    this.play();
             }
-            case AudioManager.AUDIOFOCUS_LOSS -> this.dispose();
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> this.pause();
+            case AudioManager.AUDIOFOCUS_LOSS, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> this.pause();
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ->
                     this.player.setVolume(0.1f, 0.1f);
         }
