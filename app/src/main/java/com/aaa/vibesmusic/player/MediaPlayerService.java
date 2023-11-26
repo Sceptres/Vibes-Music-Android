@@ -5,14 +5,19 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.aaa.vibesmusic.database.data.music.Song;
 import com.aaa.vibesmusic.player.mode.PlayMode;
+import com.aaa.vibesmusic.player.notification.MediaControlNotification;
 import com.aaa.vibesmusic.player.services.Playable;
 import com.aaa.vibesmusic.player.services.SongsPlayedListener;
+import com.aaa.vibesmusic.player.session.MediaSessionHolder;
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode;
 import com.aaa.vibesmusic.player.song.SongPlayer;
 import com.aaa.vibesmusic.ui.listener.OnPlaySeekListener;
@@ -32,17 +37,21 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
     private final SongPlayer songPlayer;
     private final MediaPlayerServiceBinder binder;
+    private MediaSessionHolder session;
     private MediaPlayer player;
     private AudioManager audioManager;
     private MediaTimeThread timeThread;
+    private MediaControlNotification notification;
     private MediaPlayer.OnPreparedListener preparedListener;
     private SongsPlayedListener songsPlayedListener;
 
     public MediaPlayerService() {
         this.songPlayer = new SongPlayer();
         this.binder = new MediaPlayerServiceBinder();
+        this.session = null;
         this.player = null;
         this.timeThread = null;
+        this.notification = null;
         this.preparedListener = null;
         this.songsPlayedListener = null;
     }
@@ -177,6 +186,25 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         this.player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         this.timeThread = new MediaTimeThread(this.player);
+
+        this.session = new MediaSessionHolder(this.getApplicationContext(), this);
+        this.session.setActive(true);
+    }
+
+    /**
+     *
+     * @return Get the {@link MediaMetadataCompat} of the {@link MediaSessionHolder}
+     */
+    public MediaMetadataCompat getMetadata() {
+        return this.session.getMetadata();
+    }
+
+    /**
+     *
+     * @return The {@link MediaSessionCompat.Token} of the {@link MediaSessionHolder}
+     */
+    public MediaSessionCompat.Token getSessionToken() {
+        return this.session.getSessionToken();
     }
 
     /**
@@ -224,6 +252,11 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             }
             this.songPlayer.play();
             this.runPreparedListener();
+
+            if(Objects.nonNull(this.notification) && !this.notification.isNotified())
+                this.notification.show();
+            if(Objects.nonNull(this.session))
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
         }
     }
 
@@ -233,6 +266,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.player.stop();
             this.songPlayer.stop();
             this.timeThread.pause();
+            if(Objects.nonNull(this.session))
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_STOPPED);
             this.runPreparedListener();
         }
     }
@@ -244,6 +279,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.player.seekTo(resumeTime);
             this.player.start();
             this.timeThread.unpause();
+            if(Objects.nonNull(this.session))
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
             this.runPreparedListener();
             return resumeTime;
         }
@@ -257,6 +294,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.timeThread.pause();
             int pauseTime = this.player.getCurrentPosition();
             this.songPlayer.pause(pauseTime);
+            if(Objects.nonNull(this.session))
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
             this.runPreparedListener();
         }
     }
@@ -338,6 +377,9 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
         if(Objects.isNull(this.player))
             this.initMediaPlayer();
+
+        this.notification = new MediaControlNotification(this.getApplicationContext(), this);
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -374,6 +416,14 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     @Override
     public void onPrepared(MediaPlayer mp) {
         this.play();
+
+        Song currentSong = this.songPlayer.getCurrentSong();
+        if(Objects.nonNull(this.session)) {
+            this.session.setSong(currentSong);
+            this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+        }
+        if(Objects.nonNull(this.notification))
+            this.notification.updateNotification();
     }
 
     @Override
@@ -426,6 +476,10 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.player.release();
             this.player = null;
             this.timeThread.interrupt();
+            if(Objects.nonNull(this.session))
+                this.session.release();
+            if(Objects.nonNull(this.notification))
+                this.notification.close();
         }
     }
 
