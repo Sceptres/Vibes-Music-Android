@@ -12,6 +12,7 @@ import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.databinding.FragmentImportSongsBinding
 import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.ui.fragment.result.ImportSongsActivityResultContract
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -85,6 +86,11 @@ class ImportSongsFragment : Fragment() {
                 p0.fullScreenContentCallback = object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         super.onAdDismissedFullScreenContent()
+                        importSongs(it)
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                        super.onAdFailedToShowFullScreenContent(p0)
                         importSongs(it)
                     }
                 }

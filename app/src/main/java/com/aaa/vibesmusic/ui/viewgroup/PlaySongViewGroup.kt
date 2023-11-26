@@ -244,10 +244,10 @@ class PlaySongViewGroup @JvmOverloads constructor(
         // Setup the song time seekbar
         if (!this.mediaPlayerService!!.isEmpty &&
             (this.mediaPlayerService!!.isPlaying || this.mediaPlayerService!!.playStatus == PlayStatus.PAUSED)) {
-            this.songTimeBarPlayer.max = this.mediaPlayerService!!.currentSongDuration
+            this.songTimeBarPlayer.max = this.mediaPlayerService!!.currentSong.duration
             this.songTimeBarPlayer.progress = this.mediaPlayerService!!.currentPosition
             this.mediaPlayerService!!.setOnSeekListener(this)
-            this.songPlayerEndTime.text = this.mediaPlayerService!!.currentSong.duration
+            this.songPlayerEndTime.text = Song.calculateDuration(this.mediaPlayerService!!.currentSong.duration)
         } else {
             this.songTimeBarPlayer.progress = 0
 

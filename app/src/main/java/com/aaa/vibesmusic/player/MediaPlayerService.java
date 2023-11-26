@@ -149,14 +149,6 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
     /**
      *
-     * @return The duration of the current {@link Song}
-     */
-    public int getCurrentSongDuration() {
-        return this.player.getDuration();
-    }
-
-    /**
-     *
      * @return The current {@link Song} being player
      */
     public Song getCurrentSong() {
