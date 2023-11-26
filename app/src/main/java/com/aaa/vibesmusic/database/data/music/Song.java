@@ -34,9 +34,8 @@ public class Song {
     @ColumnInfo(name="image_location")
     private final String imageLocation;
 
-    @NonNull
     @ColumnInfo(name="duration")
-    private final String duration;
+    private final int duration;
 
     public Song(
             int id,
@@ -45,7 +44,7 @@ public class Song {
             @NonNull String artist,
             @NonNull  String albumName,
             String imageLocation,
-            @NonNull String duration
+            int duration
     ) {
         this.id = id;
         this.name = name;
@@ -65,7 +64,7 @@ public class Song {
             String imageLocation,
             int duration
     ) {
-        this(0, name, location, artist, albumName, imageLocation, Song.calculateDuration(duration));
+        this(0, name, location, artist, albumName, imageLocation, duration);
     }
 
     /**
@@ -152,10 +151,9 @@ public class Song {
 
     /**
      *
-     * @return The duration of this song
+     * @return The duration of this song in milliseconds
      */
-    @NonNull
-    public String getDuration() {
+    public int getDuration() {
         return this.duration;
     }
 

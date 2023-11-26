@@ -45,7 +45,7 @@ class SongsArrayAdapter(private val c: Context, val data: MutableList<Song>) :
 
         songName.text = song.name
         artistAlbum.text = "${song.artist} · ${song.albumName}"
-        songLength.text = song.duration
+        songLength.text = Song.calculateDuration(song.duration)
 
         val options: ImageButton = currentView.findViewById(R.id.optionsBtn)
         options.setOnClickListener {
