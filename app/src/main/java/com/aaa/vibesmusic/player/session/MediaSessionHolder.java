@@ -122,8 +122,7 @@ public class MediaSessionHolder {
         else
             actions = PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY;
         actions |= PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SEEK_TO |
-                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_SEEK_TO |
-                PlaybackStateCompat.ACTION_STOP;
+                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_STOP;
         playBackStateBuilder.setActions(actions);
         playBackStateBuilder.setState(state, 0, 1);
         this.session.setPlaybackState(playBackStateBuilder.build());
