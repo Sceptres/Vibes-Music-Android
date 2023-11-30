@@ -106,6 +106,7 @@ public class MediaSessionHolder {
         metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, song.getName());
         metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, song.getArtist());
         metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, artUri);
+        metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, song.getDuration());
         this.session.setMetadata(metadataBuilder.build());
     }
 
