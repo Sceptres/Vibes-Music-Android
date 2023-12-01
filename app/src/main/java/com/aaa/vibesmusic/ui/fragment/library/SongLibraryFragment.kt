@@ -74,7 +74,10 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
     private fun openSongPlayer() {
         val animation: Animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
         val playSongsView = PlaySongViewGroup(this.context)
-        playSongsView.setOnCloseListener{binding.root.visibility = View.VISIBLE}
+        playSongsView.setOnCloseListener{
+            binding.root.visibility = View.VISIBLE
+            binding.root.removeView(playSongsView)
+        }
         playSongsView.startAnimation(animation)
         this.requireActivity().addContentView(
             playSongsView,
