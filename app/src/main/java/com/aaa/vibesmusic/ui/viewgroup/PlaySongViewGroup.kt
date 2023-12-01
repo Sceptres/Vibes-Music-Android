@@ -8,7 +8,6 @@ import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.IBinder
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -173,7 +172,6 @@ class PlaySongViewGroup @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        Log.d("Player", "ATTACHING")
         val serviceIntent: Intent = Intent(this.context, MediaPlayerService::class.java)
         val application: Application = this.context.applicationContext as Application
         application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
