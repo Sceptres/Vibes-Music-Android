@@ -113,8 +113,28 @@ public class MediaSessionHolder {
     /**
      *
      * @param state The new state of the {@link MediaSessionCompat}
+     * @param pos The position of the current {@link Song}
      */
-    public void setMediaPlaybackState(int state) {
+    public void setMediaPlaybackState(int state, int pos) {
+        PlaybackStateCompat.Builder builder = this.generatePlayStateBuilder(state);
+        builder.setState(state, pos, 1);
+        this.session.setPlaybackState(builder.build());
+    }
+
+    /**
+     *
+     * @return The current state of the media session
+     */
+    public int getState() {
+        return this.session.getController().getPlaybackState().getState();
+    }
+
+    /**
+     *
+     * @param state The state to set the {@link MediaSessionCompat} to
+     * @return The {@link PlaybackStateCompat.Builder}
+     */
+    private PlaybackStateCompat.Builder generatePlayStateBuilder(int state) {
         long actions;
         PlaybackStateCompat.Builder playBackStateBuilder = new PlaybackStateCompat.Builder();
         if( state == PlaybackStateCompat.STATE_PLAYING )
@@ -124,8 +144,7 @@ public class MediaSessionHolder {
         actions |= PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SEEK_TO |
                 PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_STOP;
         playBackStateBuilder.setActions(actions);
-        playBackStateBuilder.setState(state, 0, 1);
-        this.session.setPlaybackState(playBackStateBuilder.build());
+        return playBackStateBuilder;
     }
 
     /**

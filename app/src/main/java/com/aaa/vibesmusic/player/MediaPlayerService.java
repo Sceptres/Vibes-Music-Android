@@ -1,7 +1,9 @@
 package com.aaa.vibesmusic.player;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -11,6 +13,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 import com.aaa.vibesmusic.database.data.music.Song;
 import com.aaa.vibesmusic.player.mode.PlayMode;
@@ -231,6 +234,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         this.player.seekTo(time);
         this.player.start();
         this.timeThread.unpause();
+        if(Objects.nonNull(this.session))
+            this.session.setMediaPlaybackState(this.session.getState(), time);
     }
 
     @Override
@@ -248,7 +253,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             if(Objects.nonNull(this.notification) && !this.notification.isNotified())
                 this.notification.show();
             if(Objects.nonNull(this.session))
-                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.player.getCurrentPosition());
         }
     }
 
@@ -259,7 +264,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.songPlayer.stop();
             this.timeThread.pause();
             if(Objects.nonNull(this.session))
-                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_STOPPED);
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_STOPPED, this.player.getCurrentPosition());
             this.runPreparedListener();
         }
     }
@@ -272,7 +277,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.player.start();
             this.timeThread.unpause();
             if(Objects.nonNull(this.session))
-                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.player.getCurrentPosition());
             this.runPreparedListener();
             return resumeTime;
         }
@@ -287,7 +292,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             int pauseTime = this.player.getCurrentPosition();
             this.songPlayer.pause(pauseTime);
             if(Objects.nonNull(this.session))
-                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, this.player.getCurrentPosition());
             this.runPreparedListener();
         }
     }
@@ -370,7 +375,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         if(Objects.isNull(this.player))
             this.initMediaPlayer();
 
-        this.notification = new MediaControlNotification(this.getApplicationContext(), this);
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
+            this.notification = new MediaControlNotification(this.getApplicationContext(), this);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -412,7 +418,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         Song currentSong = this.songPlayer.getCurrentSong();
         if(Objects.nonNull(this.session)) {
             this.session.setSong(currentSong);
-            this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+            this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.player.getCurrentPosition());
         }
         if(Objects.nonNull(this.notification))
             this.notification.updateNotification();
