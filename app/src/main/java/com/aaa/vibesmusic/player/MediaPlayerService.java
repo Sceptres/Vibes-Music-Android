@@ -3,7 +3,6 @@ package com.aaa.vibesmusic.player;
 import android.Manifest;
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -13,9 +12,9 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 
 import com.aaa.vibesmusic.database.data.music.Song;
+import com.aaa.vibesmusic.perms.PermissionsUtil;
 import com.aaa.vibesmusic.player.mode.PlayMode;
 import com.aaa.vibesmusic.player.notification.MediaControlNotification;
 import com.aaa.vibesmusic.player.services.Playable;
@@ -375,7 +374,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         if(Objects.isNull(this.player))
             this.initMediaPlayer();
 
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
+        if(PermissionsUtil.hasPermission(this, Manifest.permission.POST_NOTIFICATIONS))
             this.notification = new MediaControlNotification(this.getApplicationContext(), this);
 
         return super.onStartCommand(intent, flags, startId);

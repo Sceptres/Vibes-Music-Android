@@ -1,11 +1,11 @@
 package com.aaa.vibesmusic.player.notification;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -13,7 +13,6 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
@@ -21,6 +20,7 @@ import androidx.media.app.NotificationCompat.MediaStyle;
 import androidx.media.session.MediaButtonReceiver;
 
 import com.aaa.vibesmusic.R;
+import com.aaa.vibesmusic.perms.PermissionsUtil;
 import com.aaa.vibesmusic.player.MediaPlayerService;
 import com.aaa.vibesmusic.player.PlayStatus;
 
@@ -106,9 +106,10 @@ public class MediaControlNotification {
     /**
      * Show the notification
      */
+    @SuppressLint("MissingPermission")
     public void show() {
         this.isNotified = true;
-        if (ActivityCompat.checkSelfPermission(this.service, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+        if (PermissionsUtil.hasPermission(this.service, Manifest.permission.POST_NOTIFICATIONS)) {
             NotificationManagerCompat.from(this.service).notify(NOTIFICATION_ID, this.notificationBuilder.build());
         }
     }
@@ -118,7 +119,7 @@ public class MediaControlNotification {
      */
     public void close() {
         this.isNotified = false;
-        if (ActivityCompat.checkSelfPermission(this.service, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+        if (PermissionsUtil.hasPermission(this.service, Manifest.permission.POST_NOTIFICATIONS)) {
             NotificationManagerCompat.from(this.service).cancel(NOTIFICATION_ID);
         }
     }
