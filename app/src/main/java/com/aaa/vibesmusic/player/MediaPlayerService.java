@@ -470,10 +470,11 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     @Override
     public void dispose() {
         if(Objects.nonNull(this.player)) {
+            this.removePreparedListener();
+            this.timeThread.interrupt();
             this.stop();
             this.player.release();
             this.player = null;
-            this.timeThread.interrupt();
             if(Objects.nonNull(this.session))
                 this.session.release();
             if(Objects.nonNull(this.notification))
