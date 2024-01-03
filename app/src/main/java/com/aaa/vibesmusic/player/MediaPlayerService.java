@@ -2,7 +2,10 @@ package com.aaa.vibesmusic.player;
 
 import android.Manifest;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -43,6 +46,14 @@ import io.reactivex.disposables.Disposable;
 public class MediaPlayerService extends MediaBrowserServiceCompat implements MediaPlayer.OnCompletionListener,
 MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
 MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, Destroyable, Disposable {
+
+    private final BroadcastReceiver noisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(Objects.nonNull(player) && isPlaying())
+                pause();
+        }
+    };
 
     private final SongPlayer songPlayer;
     private final MediaPlayerServiceBinder binder;
@@ -191,6 +202,9 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         this.session = new MediaSessionHolder(this.getApplicationContext(), this);
         this.session.setActive(true);
         this.setSessionToken(this.session.getSessionToken());
+
+        IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        this.registerReceiver(this.noisyReceiver, filter);
     }
 
     /**
@@ -505,6 +519,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
                 this.session.release();
             if(Objects.nonNull(this.notification))
                 this.notification.close();
+            this.unregisterReceiver(this.noisyReceiver);
         }
     }
 
