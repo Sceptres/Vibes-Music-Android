@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 public class PermissionsUtil {
+    public static final int POST_NOTIF_CODE = 505;
+
     /**
      *
      * @param context The {@link Context} to use in checking the permission
