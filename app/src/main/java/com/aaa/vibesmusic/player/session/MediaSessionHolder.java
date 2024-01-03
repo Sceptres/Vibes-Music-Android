@@ -72,6 +72,14 @@ public class MediaSessionHolder {
 
     /**
      *
+     * @return The {@link MediaSessionCompat} held within this object
+     */
+    public MediaSessionCompat getSession() {
+        return this.session;
+    }
+
+    /**
+     *
      * @return The {@link MediaSessionCompat.Token} of the {@link MediaSessionCompat}
      */
     public MediaSessionCompat.Token getSessionToken() {
