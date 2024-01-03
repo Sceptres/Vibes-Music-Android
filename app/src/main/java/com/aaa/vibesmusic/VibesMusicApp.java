@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
 import android.content.ComponentName;
@@ -15,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.aaa.vibesmusic.monetization.Ads;
+import com.aaa.vibesmusic.perms.PermissionsUtil;
 import com.aaa.vibesmusic.player.MediaPlayerService;
 import com.aaa.vibesmusic.player.services.SongsPlayedListener;
 import com.aaa.vibesmusic.preferences.PreferencesManager;
@@ -93,6 +95,7 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
                     }
                 });
             } else {
+                activity.requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, PermissionsUtil.POST_NOTIF_CODE);
                 this.manager.setIsFirstAppUse(false);
             }
 

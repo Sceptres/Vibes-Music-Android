@@ -405,6 +405,13 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         result.sendResult(null);
     }
 
+    public void showNotification() {
+        if(PermissionsUtil.hasPermission(this, Manifest.permission.POST_NOTIFICATIONS)) {
+            this.notification = new MediaControlNotification(this.getApplicationContext(), this);
+            this.notification.show();
+        }
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(!this.requestAudioFocus())
