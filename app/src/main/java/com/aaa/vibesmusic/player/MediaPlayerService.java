@@ -6,13 +6,20 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
+import android.os.Bundle;
+import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.media.MediaBrowserServiceCompat;
+import androidx.media.session.MediaButtonReceiver;
 
+import com.aaa.vibesmusic.R;
 import com.aaa.vibesmusic.database.data.music.Song;
 import com.aaa.vibesmusic.perms.PermissionsUtil;
 import com.aaa.vibesmusic.player.mode.PlayMode;
@@ -33,7 +40,7 @@ import javax.security.auth.Destroyable;
 
 import io.reactivex.disposables.Disposable;
 
-public class MediaPlayerService extends Service implements MediaPlayer.OnCompletionListener,
+public class MediaPlayerService extends MediaBrowserServiceCompat implements MediaPlayer.OnCompletionListener,
 MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
 MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, Destroyable, Disposable {
 
@@ -183,6 +190,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
         this.session = new MediaSessionHolder(this.getApplicationContext(), this);
         this.session.setActive(true);
+        this.setSessionToken(this.session.getSessionToken());
     }
 
     /**
@@ -278,6 +286,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             if(Objects.nonNull(this.session))
                 this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.player.getCurrentPosition());
             this.runPreparedListener();
+            this.notification.updateNotification();
             return resumeTime;
         }
         return -1;
@@ -293,6 +302,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             if(Objects.nonNull(this.session))
                 this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, this.player.getCurrentPosition());
             this.runPreparedListener();
+            this.notification.updateNotification();
         }
     }
 
@@ -366,6 +376,21 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         return this.binder;
     }
 
+    @Nullable
+    @Override
+    public BrowserRoot onGetRoot(@NonNull String clientPackageName, int clientUid, @Nullable Bundle rootHints) {
+        if(TextUtils.equals(clientPackageName, getPackageName())) {
+            return new BrowserRoot(getString(R.string.app_name), null);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void onLoadChildren(@NonNull String parentId, @NonNull Result<List<MediaBrowserCompat.MediaItem>> result) {
+        result.sendResult(null);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(!this.requestAudioFocus())
@@ -373,6 +398,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
         if(Objects.isNull(this.player))
             this.initMediaPlayer();
+
+        MediaButtonReceiver.handleIntent(this.session.getSession(), intent);
 
         if(PermissionsUtil.hasPermission(this, Manifest.permission.POST_NOTIFICATIONS))
             this.notification = new MediaControlNotification(this.getApplicationContext(), this);
