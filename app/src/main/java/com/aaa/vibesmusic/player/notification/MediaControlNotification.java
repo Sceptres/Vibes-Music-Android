@@ -148,10 +148,10 @@ public class MediaControlNotification {
 
 
         if(this.service.getPlayStatus() == PlayStatus.PLAYING) {
-            PendingIntent pausePendingIntent = this.createPendingIntent(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PAUSE);
+            PendingIntent pausePendingIntent = this.createPendingIntent(PlaybackStateCompat.ACTION_PAUSE);
             builder.addAction(R.drawable.pause_button, "Pause", pausePendingIntent);
         } else {
-            PendingIntent playPendingIntent = this.createPendingIntent(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY);
+            PendingIntent playPendingIntent = this.createPendingIntent(PlaybackStateCompat.ACTION_PLAY);
             builder.addAction(R.drawable.play_arrow, "Play", playPendingIntent);
         }
 
