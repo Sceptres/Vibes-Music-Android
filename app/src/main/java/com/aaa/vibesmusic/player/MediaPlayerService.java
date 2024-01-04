@@ -300,7 +300,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             if(Objects.nonNull(this.session))
                 this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.player.getCurrentPosition());
             this.runPreparedListener();
-            this.notification.updateNotification();
+            if(Objects.nonNull(this.notification))
+                this.notification.updateNotification();
             return resumeTime;
         }
         return -1;
@@ -316,7 +317,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             if(Objects.nonNull(this.session))
                 this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, this.player.getCurrentPosition());
             this.runPreparedListener();
-            this.notification.updateNotification();
+            if(Objects.nonNull(this.notification))
+                this.notification.updateNotification();
         }
     }
 
