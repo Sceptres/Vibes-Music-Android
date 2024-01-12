@@ -1,150 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/playSongActivityLayout"
-    tools:context=".ui.activity.PlaySongActivity"
     android:background="@color/background_color">
+
     <ImageButton
+        android:id="@+id/songPlayerDropBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/songPlayerDropBtn"
-        android:scaleType="fitXY"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:background="@color/transparent"
+        android:contentDescription="Back Button"
+        android:scaleType="fitXY"
         android:src="@drawable/down_arrow"
-        android:contentDescription="Back Button" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:layout_width="350dp"
-        android:layout_height="350dp"
         android:id="@+id/songCoverImageView"
-        android:background="@drawable/song_image_rounded_corner"
-        android:src="@drawable/music_cover_image"
-        android:clipToOutline="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@id/songPlayerDropBtn"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:contentDescription="Song cover image" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:adjustViewBounds="false"
+        android:background="@drawable/song_image_rounded_corner"
+        android:clipToOutline="true"
+        android:contentDescription="Song cover image"
+        android:scaleType="centerCrop"
+        android:src="@drawable/music_cover_image"
+        app:layout_constraintBottom_toTopOf="@+id/songNamePlayer"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/songPlayerDropBtn" />
+
     <TextView
+        android:id="@+id/songNamePlayer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/songNamePlayer"
+        android:layout_below="@id/songCoverImageView"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="5dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
         android:text="Not Playing"
         android:textColor="@color/white"
         android:textSize="28sp"
-        android:layout_below="@id/songCoverImageView"
-        android:gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:maxLines="1"
-        android:ellipsize="end"/>
+        app:layout_constraintBottom_toTopOf="@+id/songArtistAlbumPlayer"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
+        android:id="@+id/songArtistAlbumPlayer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/songArtistAlbumPlayer"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:text="No Artist"
+        android:layout_below="@id/songNamePlayer"
         android:layout_marginStart="10dp"
+        android:layout_marginBottom="50dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="No Artist"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:layout_below="@id/songNamePlayer"
-        android:layout_marginTop="5dp"/>
+        app:layout_constraintBottom_toTopOf="@+id/songTimeBarPlayer"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
+        android:id="@+id/songPlayerCurrentTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/songPlayerCurrentTime"
+        android:layout_below="@id/songArtistAlbumPlayer"
+        android:layout_alignBottom="@id/songTimeBarPlayer"
+        android:layout_marginStart="20dp"
+        android:gravity="center"
         android:maxLines="1"
         android:text="02:40"
         android:textColor="@color/white"
         android:textSize="13sp"
-        android:gravity="center"
-        android:layout_below="@id/songArtistAlbumPlayer"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_alignBottom="@id/songTimeBarPlayer"/>
+        app:layout_constraintBottom_toBottomOf="@+id/songTimeBarPlayer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/songTimeBarPlayer" />
+
     <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/songTimeBarPlayer"
         style="@style/SongPlayerSeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/songArtistAlbumPlayer"
-        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
         android:layout_toStartOf="@id/songPlayerEndTime"
         android:layout_toEndOf="@id/songPlayerCurrentTime"
+        android:max="100"
         android:progress="50"
-        android:max="100"/>
+        app:layout_constraintBottom_toTopOf="@+id/playingFunctionality"
+        app:layout_constraintEnd_toStartOf="@+id/songPlayerEndTime"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/songPlayerCurrentTime" />
+
     <TextView
+        android:id="@+id/songPlayerEndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/songPlayerEndTime"
-        android:maxLines="1"
+        android:layout_below="@id/songArtistAlbumPlayer"
+        android:layout_alignBottom="@id/songTimeBarPlayer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
         android:gravity="center"
+        android:maxLines="1"
         android:text="03:40"
         android:textColor="@color/white"
         android:textSize="13sp"
-        android:layout_below="@id/songArtistAlbumPlayer"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="20dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/songTimeBarPlayer"/>
-    <RelativeLayout
+        app:layout_constraintBottom_toBottomOf="@+id/songTimeBarPlayer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/songTimeBarPlayer" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/playingFunctionality"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/playingFunctionality"
+        android:layout_below="@id/songTimeBarPlayer"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp">
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
         <ImageButton
             android:id="@+id/songPlayModeBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="10dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
             android:background="@color/transparent"
+            android:contentDescription="Play Mode Button"
             android:scaleType="fitXY"
             android:src="@drawable/repeat"
-            android:layout_centerVertical="true"
-            android:contentDescription="Play Mode Button" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="70dp"
             android:id="@+id/songSkipBackBtn"
-            android:src="@drawable/skip_previous_btn"
-            android:scaleType="fitXY"
-            android:background="@color/transparent"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
             android:layout_toStartOf="@id/playSongBtn"
-            android:layout_marginEnd="20dp"
-            android:contentDescription="Skip to previous" />
+            android:background="@color/transparent"
+            android:contentDescription="Skip to previous"
+            android:scaleType="fitXY"
+            android:src="@drawable/skip_previous_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/playSongBtn"
+            app:layout_constraintStart_toEndOf="@+id/songPlayModeBtn"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/playSongBtn"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:background="@color/transparent"
             android:contentDescription="Play/Pause Button"
             android:scaleType="fitXY"
-            android:src="@drawable/play_arrow" />
+            android:src="@drawable/play_arrow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="70dp"
             android:id="@+id/songSkipForwardBtn"
-            android:src="@drawable/skip_forward_btn"
-            android:background="@color/transparent"
-            android:scaleType="fitXY"
-            android:layout_toEndOf="@id/playSongBtn"
-            android:layout_marginStart="20dp"
-            android:contentDescription="Skip to next"/>
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/songShuffleBtn"
-            android:src="@drawable/shuffle_off"
-            android:scaleType="fitXY"
-            android:background="@color/transparent"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_centerVertical="true"
-            android:contentDescription="Shuffle Button" />
-    </RelativeLayout>
-</RelativeLayout>
+            android:layout_toEndOf="@id/playSongBtn"
+            android:background="@color/transparent"
+            android:contentDescription="Skip to next"
+            android:scaleType="fitXY"
+            android:src="@drawable/skip_forward_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/songShuffleBtn"
+            app:layout_constraintStart_toEndOf="@+id/playSongBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/songShuffleBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@color/transparent"
+            android:contentDescription="Shuffle Button"
+            android:scaleType="fitXY"
+            android:src="@drawable/shuffle_off"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
