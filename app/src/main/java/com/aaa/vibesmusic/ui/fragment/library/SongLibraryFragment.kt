@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.fragment.library
 
+import android.Manifest
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -18,6 +19,7 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.databinding.FragmentSongLibraryBinding
 import com.aaa.vibesmusic.monetization.Ads
+import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
@@ -54,6 +56,8 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
         }
 
         binding.songsListView.setOnItemClickListener { parent, view, position, id ->
+            if(!PermissionsUtil.hasPermission(this.requireContext(), Manifest.permission.POST_NOTIFICATIONS))
+                requireActivity().requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), PermissionsUtil.POST_NOTIF_CODE)
             val list: List<Song> = songsAdapter.data
             this.mediaPlayerService.setSongs(list, position)
             this.openSongPlayer()
@@ -74,7 +78,10 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
     private fun openSongPlayer() {
         val animation: Animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
         val playSongsView = PlaySongViewGroup(this.context)
-        playSongsView.setOnCloseListener{binding.root.visibility = View.VISIBLE}
+        playSongsView.setOnCloseListener{
+            binding.root.visibility = View.VISIBLE
+            binding.root.removeView(playSongsView)
+        }
         playSongsView.startAnimation(animation)
         this.requireActivity().addContentView(
             playSongsView,
