@@ -4,11 +4,12 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.aaa.vibesmusic.R
@@ -37,10 +38,11 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         _binding = ActivityMainBinding.inflate(this.layoutInflater)
-
         setContentView(binding.root)
 
         VibesMusicDatabase.getInstance(applicationContext)
