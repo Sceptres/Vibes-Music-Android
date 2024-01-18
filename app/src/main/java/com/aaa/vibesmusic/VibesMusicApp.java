@@ -67,31 +67,18 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
 
                 Ads.loadInterstitial(this.getApplicationContext(), Ads.OPEN_APP_AD_ID, new InterstitialAdLoadCallback() {
                     @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        super.onAdFailedToLoad(loadAdError);
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        super.onAdLoaded(interstitialAd);
+                        interstitialAd.show(activity);
                         content.getViewTreeObserver().removeOnPreDrawListener(waitListener);
                         content.getViewTreeObserver().addOnPreDrawListener(() -> true);
                     }
 
                     @Override
-                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                        super.onAdLoaded(interstitialAd);
-                        interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                            @Override
-                            public void onAdDismissedFullScreenContent() {
-                                super.onAdDismissedFullScreenContent();
-                                content.getViewTreeObserver().removeOnPreDrawListener(waitListener);
-                                content.getViewTreeObserver().addOnPreDrawListener(() -> true);
-                            }
-
-                            @Override
-                            public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                                super.onAdFailedToShowFullScreenContent(adError);
-                                content.getViewTreeObserver().removeOnPreDrawListener(waitListener);
-                                content.getViewTreeObserver().addOnPreDrawListener(() -> true);
-                            }
-                        });
-                        interstitialAd.show(activity);
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        super.onAdFailedToLoad(loadAdError);
+                        content.getViewTreeObserver().removeOnPreDrawListener(waitListener);
+                        content.getViewTreeObserver().addOnPreDrawListener(() -> true);
                     }
                 });
             } else {
