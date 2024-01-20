@@ -26,6 +26,7 @@ import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
+import java.util.Objects
 
 class SongLibraryFragment : Fragment(), ServiceConnection {
     private lateinit var viewModel: SongLibraryViewModel
@@ -110,9 +111,11 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
 
     override fun onStart() {
         super.onStart()
-        val serviceIntent: Intent = Intent(this.requireContext(), MediaPlayerService::class.java)
-        this.requireActivity().application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
-        this.requireActivity().application.startService(serviceIntent)
+        if(!this::mediaPlayerService.isInitialized) {
+            val serviceIntent: Intent = Intent(this.requireContext(), MediaPlayerService::class.java)
+            this.requireActivity().application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
+            this.requireActivity().application.startService(serviceIntent)
+        }
     }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
