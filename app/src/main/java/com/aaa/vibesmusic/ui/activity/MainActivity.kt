@@ -19,6 +19,7 @@ import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.Objects
 
 class MainActivity : AppCompatActivity(), ServiceConnection {
     private lateinit var mediaPlayerService: MediaPlayerService
@@ -32,9 +33,11 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
     override fun onStart() {
         super.onStart()
-        val serviceIntent: Intent = Intent(this.applicationContext, MediaPlayerService::class.java)
-        this.application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
-        this.application.startService(serviceIntent)
+        if(!this::mediaPlayerService.isInitialized) {
+            val serviceIntent: Intent = Intent(this.applicationContext, MediaPlayerService::class.java)
+            this.application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
+            this.application.startService(serviceIntent)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -86,9 +86,11 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
                 this.manager.setIsFirstAppUse(false);
             }
 
-            Intent serviceIntent = new Intent(this.getApplicationContext(), MediaPlayerService.class);
-            this.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE);
-            this.startService(serviceIntent);
+            if(Objects.isNull(this.mediaPlayerService)) {
+                Intent serviceIntent = new Intent(this.getApplicationContext(), MediaPlayerService.class);
+                this.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE);
+                this.startService(serviceIntent);
+            }
         }
     }
 
