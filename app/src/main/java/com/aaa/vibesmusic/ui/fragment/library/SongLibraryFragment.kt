@@ -82,7 +82,7 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
                     playSongsView.closeView()
                 } else {
                     isEnabled = false
-                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                    requireActivity().moveTaskToBack(true)
                 }
             }
         })
