@@ -44,33 +44,38 @@
 
     <TextView
         android:id="@+id/songNamePlayer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/songCoverImageView"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
         android:ellipsize="end"
-        android:gravity="center"
+        android:gravity="start"
         android:maxLines="1"
         android:text="Not Playing"
         android:textColor="@color/white"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/songArtistAlbumPlayer"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/songArtistAlbumPlayer"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/songNamePlayer"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="50dp"
         android:ellipsize="end"
+        android:gravity="start"
         android:maxLines="1"
         android:text="No Artist"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/songTimeBarPlayer"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
