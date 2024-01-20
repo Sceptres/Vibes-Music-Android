@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
@@ -32,9 +31,11 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
     override fun onStart() {
         super.onStart()
-        val serviceIntent: Intent = Intent(this.applicationContext, MediaPlayerService::class.java)
-        this.application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
-        this.application.startService(serviceIntent)
+        if(!this::mediaPlayerService.isInitialized) {
+            val serviceIntent: Intent = Intent(this.applicationContext, MediaPlayerService::class.java)
+            this.application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
+            this.application.startService(serviceIntent)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -78,9 +78,6 @@ class PlaySongViewGroup @JvmOverloads constructor(
         // Close view listener
         this.songPlayerDropBtn.setOnClickListener {
             this.closeView()
-            val animation: Animation = AnimationUtils.loadAnimation(this.context, R.anim.slide_down)
-            animation.setAnimationListener(this)
-            this.startAnimation(animation)
         }
 
         // Play and pause
@@ -172,9 +169,16 @@ class PlaySongViewGroup @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        val serviceIntent: Intent = Intent(this.context, MediaPlayerService::class.java)
-        val application: Application = this.context.applicationContext as Application
-        application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
+        if(Objects.isNull(this.mediaPlayerService)) {
+            val serviceIntent: Intent = Intent(this.context, MediaPlayerService::class.java)
+            val application: Application = this.context.applicationContext as Application
+            application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
+        }
+
+        if(Objects.nonNull(this.mediaPlayerService)) {
+            this.mediaPlayerService!!.setPreparedListener(this)
+            this.mediaPlayerService!!.resumeSeekListener()
+        }
     }
 
     override fun onDetachedFromWindow() {
@@ -185,15 +189,19 @@ class PlaySongViewGroup @JvmOverloads constructor(
     /**
      * Close the view and run the [OnCloseListener] of this [View]
      */
-    private fun closeView() {
+    fun closeView() {
         if(Objects.nonNull(this.onCloseListener))
             this.onCloseListener!!.onClose()
+        if(Objects.nonNull(this.mediaPlayerService))
+            this.mediaPlayerService!!.pauseSeekListener();
+        val animation: Animation = AnimationUtils.loadAnimation(this.context, R.anim.slide_down)
+        animation.setAnimationListener(this)
+        this.startAnimation(animation)
     }
 
     override fun onAnimationStart(animation: Animation?) {}
 
     override fun onAnimationEnd(animation: Animation?) {
-        this.removeAllViews()
         (this.parent as ViewGroup).removeView(this)
     }
 
