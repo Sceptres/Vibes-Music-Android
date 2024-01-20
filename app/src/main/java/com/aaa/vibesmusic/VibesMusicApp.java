@@ -21,8 +21,6 @@ import com.aaa.vibesmusic.player.MediaPlayerService;
 import com.aaa.vibesmusic.player.services.SongsPlayedListener;
 import com.aaa.vibesmusic.preferences.PreferencesManager;
 import com.aaa.vibesmusic.ui.activity.MainActivity;
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
