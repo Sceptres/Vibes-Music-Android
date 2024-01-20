@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.aaa.vibesmusic.R
@@ -26,6 +27,7 @@ import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
 
 class SongLibraryFragment : Fragment(), ServiceConnection {
     private lateinit var viewModel: SongLibraryViewModel
+    private lateinit var playSongsView: PlaySongViewGroup
     private lateinit var mediaPlayerService: MediaPlayerService
 
     private var _binding: FragmentSongLibraryBinding? = null
@@ -37,6 +39,8 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSongLibraryBinding.inflate(inflater)
+
+        this.playSongsView = PlaySongViewGroup(this.requireContext())
 
         val songsAdapter: SongsArrayAdapter = SongsArrayAdapter(requireContext(), ArrayList())
         binding.songsListView.adapter = songsAdapter
@@ -69,6 +73,17 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
 
         Ads.loadBanner(binding.musicLibraryBanner, this.requireContext())
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(playSongsView.isShown) {
+                    playSongsView.closeView()
+                } else {
+                    isEnabled = false
+                    requireActivity().moveTaskToBack(true)
+                }
+            }
+        })
+
         return binding.root
     }
 
@@ -77,10 +92,8 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
      */
     private fun openSongPlayer() {
         val animation: Animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
-        val playSongsView = PlaySongViewGroup(this.context)
         playSongsView.setOnCloseListener{
             binding.root.visibility = View.VISIBLE
-            binding.root.removeView(playSongsView)
         }
         playSongsView.startAnimation(animation)
         this.requireActivity().addContentView(
@@ -95,9 +108,11 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
 
     override fun onStart() {
         super.onStart()
-        val serviceIntent: Intent = Intent(this.requireContext(), MediaPlayerService::class.java)
-        this.requireActivity().application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
-        this.requireActivity().application.startService(serviceIntent)
+        if(!this::mediaPlayerService.isInitialized) {
+            val serviceIntent: Intent = Intent(this.requireContext(), MediaPlayerService::class.java)
+            this.requireActivity().application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
+            this.requireActivity().application.startService(serviceIntent)
+        }
     }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
