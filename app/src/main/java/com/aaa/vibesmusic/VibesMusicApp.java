@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
@@ -86,8 +87,13 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
 
             if(Objects.isNull(this.mediaPlayerService)) {
                 Intent serviceIntent = new Intent(this.getApplicationContext(), MediaPlayerService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    this.startForegroundService(serviceIntent);
+                } else {
+                    this.startService(serviceIntent);
+                }
+
                 this.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE);
-                this.startService(serviceIntent);
             }
         }
     }
