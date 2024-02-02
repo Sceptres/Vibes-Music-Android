@@ -13,7 +13,8 @@ import java.util.Objects;
 @Entity(tableName = "Songs", indices = {@Index(value = "location", unique = true)})
 public class Song {
     @PrimaryKey(autoGenerate = true)
-    private final int id;
+    @ColumnInfo(name = "songId")
+    private final int songId;
 
     @NonNull
     @ColumnInfo(name="name")
@@ -38,7 +39,7 @@ public class Song {
     private final int duration;
 
     public Song(
-            int id,
+            int songId,
             @NonNull String name,
             @NonNull String location,
             @NonNull String artist,
@@ -46,7 +47,7 @@ public class Song {
             String imageLocation,
             int duration
     ) {
-        this.id = id;
+        this.songId = songId;
         this.name = name;
         this.location = location;
         this.imageLocation = imageLocation;
@@ -100,8 +101,8 @@ public class Song {
      *
      * @return The id of the song in the database
      */
-    public int getId() {
-        return this.id;
+    public int getSongId() {
+        return this.songId;
     }
 
     /**
@@ -162,11 +163,11 @@ public class Song {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Song song = (Song) o;
-        return id == song.id && location.equals(song.location);
+        return songId == song.songId && location.equals(song.location);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, location);
+        return Objects.hash(songId, location);
     }
 }

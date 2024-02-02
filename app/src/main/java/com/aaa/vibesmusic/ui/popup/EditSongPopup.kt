@@ -75,7 +75,7 @@ class EditSongPopup(
             }
 
             val newSong = Song(
-                this.song.id,
+                this.song.songId,
                 newSongName,
                 song.location,
                 newArtist,

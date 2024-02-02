@@ -2,16 +2,25 @@ package com.aaa.vibesmusic.database;
 
 import android.content.Context;
 
+import androidx.room.AutoMigration;
 import androidx.room.Database;
+import androidx.room.RenameColumn;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.AutoMigrationSpec;
 
 import com.aaa.vibesmusic.database.data.music.Song;
 import com.aaa.vibesmusic.database.data.music.SongDao;
 
 import java.util.Objects;
 
-@Database(entities = {Song.class}, version = 1, exportSchema = false)
+@Database(
+        entities = {Song.class},
+        version = 2,
+        autoMigrations = {
+                @AutoMigration(from = 1, to = 2, spec = VibesMusicDatabase.SongTableRenameIdColumnMigration.class)
+        }
+)
 public abstract class VibesMusicDatabase extends RoomDatabase {
     private static VibesMusicDatabase INSTANCE = null;
 
@@ -47,4 +56,7 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
     protected VibesMusicDatabase() {}
 
     public abstract SongDao songDao();
+
+    @RenameColumn(tableName = "Songs", fromColumnName = "id", toColumnName = "songId")
+    static class SongTableRenameIdColumnMigration implements AutoMigrationSpec {}
 }
