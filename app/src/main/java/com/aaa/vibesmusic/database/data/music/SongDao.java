@@ -46,7 +46,7 @@ public interface SongDao {
     @Query("SELECT * FROM Songs;")
     LiveData<List<Song>> getSongs();
 
-    @Query("SELECT * FROM Songs WHERE id=:id")
+    @Query("SELECT * FROM Songs WHERE songId=:id")
     Single<Song> getSongById(int id);
 
     @Query("SELECT * FROM Songs where location=:location")
@@ -55,7 +55,7 @@ public interface SongDao {
     @Query(
         """
         SELECT EXISTS(
-        SELECT id FROM Songs
+        SELECT songId FROM Songs
         WHERE name=:name
         AND artist=:artist
         AND albumName=:albumName

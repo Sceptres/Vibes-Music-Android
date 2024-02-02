@@ -1,11 +1,16 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'androidx.room'
 }
 
 android {
     namespace 'com.aaa.vibesmusic'
     compileSdk 34
+
+    room {
+        schemaDirectory "$projectDir/schemas"
+    }
 
     defaultConfig {
         applicationId "com.aaa.vibesmusic"
