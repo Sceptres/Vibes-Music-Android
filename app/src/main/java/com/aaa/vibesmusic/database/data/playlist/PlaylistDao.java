@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.database.data.playlist;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Query;
@@ -30,9 +31,12 @@ public interface PlaylistDao {
     @Delete
     Completable deletePlaylist(Playlist Playlist);
 
+    @Query("SELECT * FROM Playlists;")
+    LiveData<List<Playlist>> getPlaylists();
+
     @Transaction
     @Query("SELECT * FROM Playlists")
-    List<PlaylistSongs> getPlaylistsSongs();
+    LiveData<List<PlaylistSongs>> getPlaylistsSongs();
 
 
 }
