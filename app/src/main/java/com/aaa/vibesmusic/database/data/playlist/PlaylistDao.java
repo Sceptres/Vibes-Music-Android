@@ -20,6 +20,9 @@ public interface PlaylistDao {
     Completable upsertPlaylists(List<Playlist> Playlists);
 
     @Upsert
+    void upsertPlaylistSingle(Playlist playlist);
+
+    @Upsert
     Completable upsertPlaylist(Playlist Playlist);
 
     @Delete
@@ -30,6 +33,9 @@ public interface PlaylistDao {
 
     @Delete
     Completable deletePlaylist(Playlist Playlist);
+
+    @Delete
+    void deletePlaylistSingle(Playlist playlist);
 
     @Query("SELECT * FROM Playlists;")
     LiveData<List<Playlist>> getPlaylists();
