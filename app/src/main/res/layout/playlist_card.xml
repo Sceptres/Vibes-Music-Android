@@ -20,6 +20,20 @@
         android:clipToOutline="true"
         android:background="@drawable/song_image_rounded_corner"
         app:srcCompat="@drawable/music_cover_image" />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:id="@+id/playlistOptionsBtn"
+        android:src="@drawable/options_btn"
+        android:background="@color/transparent"
+        android:foregroundGravity="center"
+        android:layout_alignEnd="@id/playlistCoverImageView"
+        android:layout_alignBottom="@id/playlistCoverImageView"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="Options"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
     <TextView
         android:id="@+id/playlistName"
         android:layout_width="wrap_content"

@@ -39,17 +39,11 @@ public class DatabaseUtil {
     @Transaction
     private static void upsertPlaylistSongHelper(VibesMusicDatabase db, PlaylistSongs playlistSongs) {
         PlaylistDao playlistDao = db.playlistDao();
-        playlistDao.upsertPlaylist(playlistSongs.getPlaylist())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        playlistDao.upsertPlaylistSingle(playlistSongs.getPlaylist());
 
         List<PlaylistSongRelationship> songRelationships = DatabaseUtil.convertPlaylistSongs(playlistSongs);
         PlaylistSongRelationshipDao songRelationshipDao = db.playlistSongRelationshipDao();
-        songRelationshipDao.upsertPlaylistSongRelationships(songRelationships)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        songRelationshipDao.upsertPlaylistSongRelationshipsSingle(songRelationships);
     }
 
     /**
@@ -60,6 +54,32 @@ public class DatabaseUtil {
      */
     public static Completable upsertPlaylistSong(VibesMusicDatabase db, PlaylistSongs playlistSongs) {
         return Completable.fromAction(() -> DatabaseUtil.upsertPlaylistSongHelper(db, playlistSongs))
+                .subscribeOn(Schedulers.from(db.getQueryExecutor()));
+    }
+
+    /**
+     *
+     * @param db The {@link VibesMusicDatabase} instance to delete the {@link PlaylistSongs} from
+     * @param playlistSongs The {@link PlaylistSongs} to delete
+     */
+    @Transaction
+    private static void deletePlaylistSongHelper(VibesMusicDatabase db, PlaylistSongs playlistSongs) {
+        PlaylistSongRelationshipDao playlistSongRelationshipDao = db.playlistSongRelationshipDao();
+        List<PlaylistSongRelationship> playlistSongRelationships = DatabaseUtil.convertPlaylistSongs(playlistSongs);
+        playlistSongRelationshipDao.deletePlaylistSongRelationshipSingle(playlistSongRelationships);
+
+        PlaylistDao playlistDao = db.playlistDao();
+        playlistDao.deletePlaylistSingle(playlistSongs.getPlaylist());
+    }
+
+    /**
+     *
+     * @param db The {@link VibesMusicDatabase} instance to delete the {@link PlaylistSongs} from
+     * @param playlistSongs The {@link PlaylistSongs} to delete
+     * @return The {@link Completable} of the {@link Transaction} to delete the {@link PlaylistSongs}
+     */
+    public static Completable deletePlaylistSong(VibesMusicDatabase db, PlaylistSongs playlistSongs) {
+        return Completable.fromAction(() -> DatabaseUtil.deletePlaylistSongHelper(db, playlistSongs))
                 .subscribeOn(Schedulers.from(db.getQueryExecutor()));
     }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/playlistNameTitle"
+        android:text="Playlist"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:paddingStart="13dp"
+        android:paddingEnd="13dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playlistNameText"
+        android:text="Playlist Name:"
+        android:textSize="15sp"
+        android:layout_below="@id/playlistNameTitle"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="10dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/playlistNameEditText"
+        android:layout_below="@+id/playlistNameText"
+        android:backgroundTint="@color/blue_selected"
+        android:textSize="13sp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:hint="Playlist Name"
+        android:textCursorDrawable="@null"
+        android:autofillHints="Playlist Name"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColorHighlight="@color/blue_selected"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="9dp"/>
+</RelativeLayout>

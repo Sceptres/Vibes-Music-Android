@@ -2,8 +2,6 @@ package com.aaa.vibesmusic.database.data.relationships.playlist;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.Update;
 import androidx.room.Upsert;
 
 import java.util.List;
@@ -19,6 +17,9 @@ public interface PlaylistSongRelationshipDao {
     Completable upsertPlaylistSongRelationships(List<PlaylistSongRelationship> playlistSongRelationship);
 
     @Upsert
+    void upsertPlaylistSongRelationshipsSingle(List<PlaylistSongRelationship> playlistSongRelationships);
+
+    @Upsert
     Completable upsertPlaylistSongRelationship(PlaylistSongRelationship playlistSongRelationship);
 
     @Delete
@@ -29,4 +30,7 @@ public interface PlaylistSongRelationshipDao {
 
     @Delete
     Completable deletePlaylistSongRelationship(PlaylistSongRelationship Playlist);
+
+    @Delete
+    void deletePlaylistSongRelationshipSingle(List<PlaylistSongRelationship> playlistSongRelationships);
 }

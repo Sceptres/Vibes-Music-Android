@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.aaa.vibesmusic.R
@@ -13,6 +14,7 @@ import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.storage.StorageUtil
+import com.aaa.vibesmusic.ui.menu.PlaylistDropdownMenu
 import com.bumptech.glide.Glide
 import java.util.Objects
 
@@ -47,6 +49,12 @@ class PlaylistGridAdapter(private val c: Context, val data: MutableList<Playlist
             .centerCrop()
             .placeholder(R.drawable.music_cover_image)
             .into(playlistCoverImage)
+
+        val options: ImageButton = currentView.findViewById(R.id.playlistOptionsBtn)
+        options.setOnClickListener {
+            val dropdown = PlaylistDropdownMenu(context, options, playlistSong)
+            dropdown.show()
+        }
 
         return currentView
     }

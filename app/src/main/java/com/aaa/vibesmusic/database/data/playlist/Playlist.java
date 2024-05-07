@@ -42,6 +42,17 @@ public class Playlist {
         this(0, name, coverImageLocation);
     }
 
+    /**
+     *
+     * @param playlist1 The first {@link Playlist} to compare
+     * @param playlist2 The second {@link Playlist} to compare
+     * @return True if both {@link Playlist} objects have the same {@link Playlist#name} and {@link Playlist#coverImageLocation}
+     */
+    public static boolean isSamePlaylist(Playlist playlist1, Playlist playlist2) {
+        return (playlist1.getName().equals(playlist2.getName())) &&
+                (playlist1.getCoverImageLocation().equals(playlist2.getCoverImageLocation()));
+    }
+
     public int getPlaylistId() {
         return this.playlistId;
     }
