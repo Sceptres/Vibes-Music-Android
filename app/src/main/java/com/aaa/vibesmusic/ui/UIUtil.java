@@ -1,12 +1,19 @@
 package com.aaa.vibesmusic.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.viewbinding.ViewBinding;
 
+import com.aaa.vibesmusic.R;
 import com.aaa.vibesmusic.ui.activity.MainActivity;
+import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
@@ -34,5 +41,26 @@ public class UIUtil {
         );
         snackbar.getView().setBackgroundColor(backgroundColor);
         snackbar.show();
+    }
+
+    /**
+     *
+     * @param context The {@link Context} of the {@link View} that will contain the {@link PlaySongViewGroup}
+     * @param playSongsView The {@link PlaySongViewGroup} instance to open
+     * @param binding The {@link ViewBinding} of the {@link View} that will contain the {@link PlaySongViewGroup}
+     * @param activity The {@link Activity} that will contain the {@link PlaySongViewGroup}
+     */
+    public static void openSongPlayer(Context context, PlaySongViewGroup playSongsView, ViewBinding binding, Activity activity) {
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_up);
+        playSongsView.setOnCloseListener(() -> binding.getRoot().setVisibility(View.VISIBLE));
+        playSongsView.startAnimation(animation);
+        activity.addContentView(
+                playSongsView,
+                new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.MATCH_PARENT
+                )
+        );
+        binding.getRoot().postDelayed(() -> binding.getRoot().setVisibility(View.GONE), animation.getDuration());
     }
 }

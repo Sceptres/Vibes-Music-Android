@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +19,18 @@ import androidx.fragment.app.Fragment
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.database.data.playlist.Playlist
+import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
+import com.aaa.vibesmusic.database.util.DatabaseUtil
 import com.aaa.vibesmusic.databinding.FragmentSongLibraryBinding
 import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
+import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class SongLibraryFragment : Fragment(), ServiceConnection {
     private lateinit var viewModel: SongLibraryViewModel
@@ -64,11 +71,11 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
                 requireActivity().requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), PermissionsUtil.POST_NOTIF_CODE)
             val list: List<Song> = songsAdapter.data
             this.mediaPlayerService.setSongs(list, position)
-            this.openSongPlayer()
+            UIUtil.openSongPlayer(this.requireContext(), this.playSongsView, this.binding, this.requireActivity())
         }
 
         binding.playingSongsActivityBtn.setOnClickListener {
-            this.openSongPlayer()
+            UIUtil.openSongPlayer(this.requireContext(), this.playSongsView, this.binding, this.requireActivity())
         }
 
         Ads.loadBanner(binding.musicLibraryBanner, this.requireContext())
@@ -85,25 +92,6 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
         })
 
         return binding.root
-    }
-
-    /**
-     * Opens the song player view
-     */
-    private fun openSongPlayer() {
-        val animation: Animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
-        playSongsView.setOnCloseListener{
-            binding.root.visibility = View.VISIBLE
-        }
-        playSongsView.startAnimation(animation)
-        this.requireActivity().addContentView(
-            playSongsView,
-            RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT
-            )
-        )
-        binding.root.postDelayed({ binding.root.visibility = View.GONE }, animation.duration)
     }
 
     override fun onStart() {
