@@ -21,6 +21,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Objects;
 
 public class UIUtil {
+    public static final String PLAYLISTSONGS_KEY = "PLAYLISTSONGS";
+
     /**
      *
      * @param context The {@link Context} to display the {@link Toast} on

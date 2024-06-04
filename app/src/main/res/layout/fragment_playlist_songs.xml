@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragment.playlists.songs.PlaylistSongsFragment">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@id/playlistLibraryBanner">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/playlistSongsBanner"
+            android:background="@color/foreground_color"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/playlistsBackBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:contentDescription="Back Button"
+                android:scaleType="fitXY"
+                android:background="@color/transparent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/back_arrow" />
+
+            <TextView
+                android:id="@+id/playlistViewTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@id/playlistsBackBtn"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="70dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/playlistSongsListView"
+            android:text="@string/local"
+            android:textSize="30sp"
+            tools:listitem="@layout/song_list_card"
+            android:dividerHeight="5dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:scrollbars="none"
+            android:layout_marginEnd="10dp"
+            android:layout_below="@+id/import_songs_title"
+            android:fontFamily="sans-serif-light" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playingSongsPlaylistBtn"
+        android:foreground="@drawable/play_arrow"
+        android:backgroundTint="@color/blue_selected"
+        app:borderWidth="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/playlistLibraryBanner"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="Playing songs page" />
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/playlistLibraryBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:fitsSystemWindows="true"
+        ads:adUnitId="***REMOVED***"
+        ads:adSize="BANNER"/>
+</RelativeLayout>
