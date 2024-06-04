@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playlistsFragments"
+    app:startDestination="@id/playlistFragment">
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.aaa.vibesmusic.ui.fragment.playlists.PlaylistsFragment"
+        android:label="fragment_playlists"
+        tools:layout="@layout/fragment_playlists" >
+        <action
+            android:id="@+id/playlistFragmentToPlaylistSongsFragment"
+            app:destination="@id/playlistSongsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playlistSongsFragment"
+        android:name="com.aaa.vibesmusic.ui.fragment.playlists.songs.PlaylistSongsFragment"
+        android:label="fragment_playlist_view"
+        tools:layout="@layout/fragment_playlist_songs" >
+        <action
+            android:id="@+id/playlistSongsFragmentToPlaylistFragment"
+            app:destination="@id/playlistFragment" />
+    </fragment>
+</navigation>

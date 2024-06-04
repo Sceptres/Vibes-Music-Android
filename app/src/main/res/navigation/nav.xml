@@ -16,9 +16,5 @@
         android:name="com.aaa.vibesmusic.ui.fragment.ImportSongsFragment"
         android:label="fragment_import_songs"
         tools:layout="@layout/fragment_import_songs" />
-    <fragment
-        android:id="@+id/playlistFragment"
-        android:name="com.aaa.vibesmusic.ui.fragment.playlists.PlaylistsFragment"
-        android:label="fragment_playlists"
-        tools:layout="@layout/fragment_playlists" />
+    <include app:graph="@navigation/playlist_nav"/>
 </navigation>

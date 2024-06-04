@@ -1,21 +1,16 @@
 package com.aaa.vibesmusic.ui.fragment.playlists
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
-import com.aaa.vibesmusic.database.data.playlist.Playlist
-import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
-import com.aaa.vibesmusic.database.util.DatabaseUtil
 import com.aaa.vibesmusic.databinding.FragmentPlaylistsBinding
+import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.adapters.PlaylistGridAdapter
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class PlaylistsFragment : Fragment() {
     private lateinit var viewModel: PlaylistViewModel
@@ -42,6 +37,19 @@ class PlaylistsFragment : Fragment() {
             playlistAdapter.notifyDataSetChanged()
         }
 
+        this.binding.playlistGridView.setOnItemClickListener { _, _, position, _ ->
+            val bundle: Bundle = Bundle()
+            bundle.putInt(UIUtil.PLAYLISTSONGS_KEY, playlistAdapter.data[position].playlist.playlistId)
+
+            this.requireActivity().findNavController(R.id.nav_host_fragment)
+                .navigate(R.id.playlistFragmentToPlaylistSongsFragment, bundle)
+        }
+
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        this._binding = null
     }
 }
