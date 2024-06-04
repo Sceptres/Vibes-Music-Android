@@ -3,6 +3,8 @@ package com.aaa.vibesmusic.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
@@ -62,5 +64,17 @@ public class UIUtil {
                 )
         );
         binding.getRoot().postDelayed(() -> binding.getRoot().setVisibility(View.GONE), animation.getDuration());
+    }
+
+    /**
+     *
+     * @param activity The {@link Activity} to change whose status bar color will be changed
+     * @param color The color resource to change the status bar to
+     */
+    public static void setStatusBarColor(@NonNull Activity activity, int color) {
+        Window window = activity.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(activity.getResources().getColor(color, null));
     }
 }
