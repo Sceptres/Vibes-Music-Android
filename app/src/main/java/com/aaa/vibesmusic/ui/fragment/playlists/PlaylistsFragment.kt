@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.databinding.FragmentPlaylistsBinding
+import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.adapters.PlaylistGridAdapter
 
@@ -44,6 +45,8 @@ class PlaylistsFragment : Fragment() {
             this.requireActivity().findNavController(R.id.nav_host_fragment)
                 .navigate(R.id.playlistFragmentToPlaylistSongsFragment, bundle)
         }
+
+        Ads.loadBanner(this.binding.playlistBanner, this.requireContext())
 
         return binding.root
     }
