@@ -26,6 +26,7 @@ import com.aaa.vibesmusic.databinding.FragmentSongLibraryBinding
 import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
+import com.aaa.vibesmusic.player.ServiceUtil
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
@@ -97,9 +98,7 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
     override fun onStart() {
         super.onStart()
         if(!this::mediaPlayerService.isInitialized) {
-            val serviceIntent: Intent = Intent(this.requireContext(), MediaPlayerService::class.java)
-            this.requireActivity().application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
-            this.requireActivity().application.startService(serviceIntent)
+            ServiceUtil.connectMediaPlayerService(this.requireContext(), this.requireActivity().application, this)
         }
     }
 
