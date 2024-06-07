@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.viewgroup
 
+import android.app.Activity
 import android.app.Application
 import android.content.ComponentName
 import android.content.Context
@@ -27,18 +28,21 @@ import com.aaa.vibesmusic.player.PlayStatus
 import com.aaa.vibesmusic.player.mode.PlayMode
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode
 import com.aaa.vibesmusic.storage.StorageUtil
+import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.activity.MainActivity
 import com.aaa.vibesmusic.ui.listener.OnCloseListener
 import com.aaa.vibesmusic.ui.listener.OnPlaySeekListener
 import com.bumptech.glide.Glide
 import java.util.Objects
 import kotlin.math.abs
+import kotlin.properties.Delegates
 
 class PlaySongViewGroup @JvmOverloads constructor(
     private val c: Context?,
     attributeSet: AttributeSet? = null
 ) : RelativeLayout(c, attributeSet), ServiceConnection, AnimationListener, MediaPlayer.OnPreparedListener, OnPlaySeekListener {
 
+    private var oldStatusBarColor by Delegates.notNull<Int>()
     private var mediaPlayerService: MediaPlayerService? = null
     private var onCloseListener: OnCloseListener? = null
     private val songPlayerDropBtn: ImageButton
@@ -179,6 +183,10 @@ class PlaySongViewGroup @JvmOverloads constructor(
             this.mediaPlayerService!!.setPreparedListener(this)
             this.mediaPlayerService!!.resumeSeekListener()
         }
+
+        // Store the old color of the status bar to reset after closing the view group
+        val activity = this.context as Activity
+        this.oldStatusBarColor = activity.window.statusBarColor
     }
 
     override fun onDetachedFromWindow() {
@@ -199,7 +207,11 @@ class PlaySongViewGroup @JvmOverloads constructor(
         this.startAnimation(animation)
     }
 
-    override fun onAnimationStart(animation: Animation?) {}
+    // When closing the view group, reset the status bar color
+    override fun onAnimationStart(animation: Animation?) {
+        val activity = this.context as Activity
+        UIUtil.setStatusBarColor(activity, this.oldStatusBarColor)
+    }
 
     override fun onAnimationEnd(animation: Animation?) {
         (this.parent as ViewGroup).removeView(this)

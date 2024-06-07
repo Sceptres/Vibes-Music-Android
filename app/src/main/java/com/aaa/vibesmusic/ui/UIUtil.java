@@ -56,6 +56,18 @@ public class UIUtil {
      */
     public static void openSongPlayer(Context context, PlaySongViewGroup playSongsView, ViewBinding binding, Activity activity) {
         Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_up);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                UIUtil.setStatusBarColorResource(activity, R.color.background_color);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
         playSongsView.setOnCloseListener(() -> binding.getRoot().setVisibility(View.VISIBLE));
         playSongsView.startAnimation(animation);
         activity.addContentView(
@@ -73,10 +85,19 @@ public class UIUtil {
      * @param activity The {@link Activity} to change whose status bar color will be changed
      * @param color The color resource to change the status bar to
      */
+    public static void setStatusBarColorResource(@NonNull Activity activity, int color) {
+        UIUtil.setStatusBarColor(activity, activity.getResources().getColor(color, null));
+    }
+
+    /**
+     *
+     * @param activity The {@link Activity} to change whose status bar color will be changed
+     * @param color The color to change the status bar to
+     */
     public static void setStatusBarColor(@NonNull Activity activity, int color) {
         Window window = activity.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(activity.getResources().getColor(color, null));
+        window.setStatusBarColor(color);
     }
 }
