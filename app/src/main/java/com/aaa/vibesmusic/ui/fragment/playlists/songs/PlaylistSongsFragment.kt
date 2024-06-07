@@ -2,16 +2,12 @@ package com.aaa.vibesmusic.ui.fragment.playlists.songs
 
 import android.Manifest
 import android.content.ComponentName
-import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.findNavController
@@ -25,7 +21,7 @@ import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.ServiceUtil
 import com.aaa.vibesmusic.ui.UIUtil
-import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
+import com.aaa.vibesmusic.ui.adapters.PlaylistSongsAdapter
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
 
 
@@ -56,12 +52,13 @@ class PlaylistSongsFragment : Fragment(), ServiceConnection {
         this._binding = FragmentPlaylistSongsBinding.inflate(inflater)
         this.playSongsView = PlaySongViewGroup(this.requireContext())
 
-        val songsAdapter: SongsArrayAdapter = SongsArrayAdapter(requireContext(), ArrayList())
+        val songsAdapter: PlaylistSongsAdapter = PlaylistSongsAdapter(requireContext(), null, ArrayList())
         this.binding.playlistSongsListView.adapter = songsAdapter
 
         this.playlistSongs.observe(viewLifecycleOwner){
             this.binding.playlistViewTitle.text = it.playlist.name
 
+            songsAdapter.playlistSongs = it
             songsAdapter.data.clear()
             songsAdapter.data.addAll(it.songs)
             songsAdapter.notifyDataSetChanged()
