@@ -81,7 +81,7 @@ class PlaylistSongsFragment : Fragment(), ServiceConnection {
 
         this.binding.playlistsBackBtn.setOnClickListener {
             this.requireActivity().findNavController(R.id.nav_host_fragment)
-                .navigate(com.aaa.vibesmusic.R.id.playlistSongsFragmentToPlaylistFragment)
+                .navigate(R.id.playlistSongsFragmentToPlaylistFragment)
         }
 
         Ads.loadBanner(this.binding.playlistLibraryBanner, this.requireContext())
