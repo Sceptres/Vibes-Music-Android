@@ -95,12 +95,12 @@ class PlaylistSongsFragment : Fragment(), ServiceConnection {
 
     override fun onResume() {
         super.onResume()
-        UIUtil.setStatusBarColor(this.requireActivity(), R.color.foreground_color)
+        UIUtil.setStatusBarColorResource(this.requireActivity(), R.color.foreground_color)
     }
 
     override fun onPause() {
         super.onPause()
-        UIUtil.setStatusBarColor(this.requireActivity(), R.color.background_color)
+        UIUtil.setStatusBarColorResource(this.requireActivity(), R.color.background_color)
     }
 
     override fun onDestroy() {
