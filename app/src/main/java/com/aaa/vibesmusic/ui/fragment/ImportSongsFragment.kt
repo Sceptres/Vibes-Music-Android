@@ -40,7 +40,7 @@ class ImportSongsFragment : Fragment() {
                 val currentTime = Date().time
 
                 if(currentTime - lastShownAd >= Ads.IMPORT_AD_TIME_DIFF) {
-                    this.showImportSongAd(it, currentTime);
+                    this.showImportSongAd(it, currentTime)
                 } else {
                     importSongs(it)
                 }

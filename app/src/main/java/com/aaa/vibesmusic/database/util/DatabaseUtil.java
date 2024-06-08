@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class DatabaseUtil {

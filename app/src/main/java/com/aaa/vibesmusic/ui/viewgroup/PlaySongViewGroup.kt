@@ -201,7 +201,7 @@ class PlaySongViewGroup @JvmOverloads constructor(
         if(Objects.nonNull(this.onCloseListener))
             this.onCloseListener!!.onClose()
         if(Objects.nonNull(this.mediaPlayerService))
-            this.mediaPlayerService!!.pauseSeekListener();
+            this.mediaPlayerService!!.pauseSeekListener()
         val animation: Animation = AnimationUtils.loadAnimation(this.context, R.anim.slide_down)
         animation.setAnimationListener(this)
         this.startAnimation(animation)

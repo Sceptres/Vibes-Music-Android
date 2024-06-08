@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
         super.onStart()
         if(!this::mediaPlayerService.isInitialized) {
             val serviceIntent: Intent = Intent(this.applicationContext, MediaPlayerService::class.java)
-            this.application.bindService(serviceIntent, this, AppCompatActivity.BIND_AUTO_CREATE)
+            this.application.bindService(serviceIntent, this, BIND_AUTO_CREATE)
             this.application.startService(serviceIntent)
         }
     }

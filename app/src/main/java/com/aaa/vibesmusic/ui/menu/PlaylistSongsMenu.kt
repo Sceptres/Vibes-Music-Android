@@ -10,7 +10,6 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.ui.services.playlists.operators.RemovePlaylistSongOperator
-import com.aaa.vibesmusic.ui.services.songs.operators.DeleteSongOperator
 import com.aaa.vibesmusic.ui.services.songs.operators.EditSongOperator
 
 class PlaylistSongsMenu(
