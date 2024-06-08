@@ -12,6 +12,6 @@
     <string name="songs_imported_successfully">Music imported successfully</string>
     <string name="delete">Delete</string>
     <string name="edit_song">Edit Song</string>
-    <string name="edit_playlist">Edit Playlist Name</string>
+    <string name="edit_playlist">Rename Playlist</string>
     <string name="remove_song_from_playlist">Remove From Playlist</string>
 </resources>
