@@ -8,7 +8,6 @@ import androidx.room.Database;
 import androidx.room.RenameColumn;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.Transaction;
 import androidx.room.migration.AutoMigrationSpec;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
@@ -17,17 +16,10 @@ import com.aaa.vibesmusic.database.data.music.Song;
 import com.aaa.vibesmusic.database.data.music.SongDao;
 import com.aaa.vibesmusic.database.data.playlist.Playlist;
 import com.aaa.vibesmusic.database.data.playlist.PlaylistDao;
-import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationshipDao;
-import com.aaa.vibesmusic.database.util.DatabaseUtil;
 
-import java.util.List;
 import java.util.Objects;
-
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 @Database(
         entities = {Song.class, Playlist.class, PlaylistSongRelationship.class},

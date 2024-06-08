@@ -1,7 +1,6 @@
 package com.aaa.vibesmusic.ui.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
-import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.menu.PlaylistDropdownMenu
