@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship
 import com.aaa.vibesmusic.database.util.DatabaseUtil
@@ -94,9 +95,19 @@ class AddEditPlaylistSongsPopup(
 
             // Add new songs to playlist
             if(this.playlistSongs.songs != selectedSongs) {
-                this.playlistSongs.songs.clear()
-                this.playlistSongs.songs.addAll(selectedSongs)
-                this.addPlaylistSongsDisposable = DatabaseUtil.upsertPlaylistSong(this.db, this.playlistSongs)
+                // Get the image of the first song that has an image
+                val newPlaylistImage: String? = if(selectedSongs.isNotEmpty()) {
+                    var imageStr: String? = null
+                    selectedSongs.stream().filter{Objects.nonNull(it.imageLocation)}.findFirst().ifPresent{imageStr = it.imageLocation}
+                    imageStr
+                } else
+                    null
+
+                val playlist: Playlist = this.playlistSongs.playlist
+                val newPlaylist: Playlist = Playlist(playlist.playlistId, playlist.name, newPlaylistImage)
+                val newPlaylistSongs: PlaylistSongs = PlaylistSongs(newPlaylist, selectedSongs)
+
+                this.addPlaylistSongsDisposable = DatabaseUtil.upsertPlaylistSong(this.db, newPlaylistSongs)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
