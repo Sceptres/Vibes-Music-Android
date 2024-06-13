@@ -23,9 +23,17 @@ public class DatabaseUtil {
      * @return The {@link List} of {@link PlaylistSongRelationship} entities
      */
     public static List<PlaylistSongRelationship> convertPlaylistSongs(PlaylistSongs playlistSongs) {
-        Playlist playlist = playlistSongs.getPlaylist();
-        List<Song> playlistSongsList = playlistSongs.getSongs();
-        return playlistSongsList.stream()
+        return DatabaseUtil.convertPlaylistSongs(playlistSongs.getPlaylist(), playlistSongs.getSongs());
+    }
+
+    /**
+     *
+     * @param playlist The {@link Playlist} the {@link List} of {@link Song}s belong to
+     * @param songs The {@link List} of {@link Song}s
+     * @return The {@link List} of {@link PlaylistSongRelationship}s that represent the given {@link Playlist} and {@link Song}s in the database
+     */
+    public static List<PlaylistSongRelationship> convertPlaylistSongs(Playlist playlist, List<Song> songs) {
+        return songs.stream()
                 .map(ps -> new PlaylistSongRelationship(playlist.getPlaylistId(), ps.getSongId()))
                 .collect(Collectors.toList());
     }

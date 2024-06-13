@@ -22,6 +22,7 @@ import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.ServiceUtil
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.adapters.PlaylistSongsAdapter
+import com.aaa.vibesmusic.ui.popup.AddEditPlaylistSongsPopup
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
 
 
@@ -55,13 +56,22 @@ class PlaylistSongsFragment : Fragment(), ServiceConnection {
         val songsAdapter: PlaylistSongsAdapter = PlaylistSongsAdapter(requireContext(), null, ArrayList())
         this.binding.playlistSongsListView.adapter = songsAdapter
 
-        this.playlistSongs.observe(viewLifecycleOwner){
-            this.binding.playlistViewTitle.text = it.playlist.name
+        this.playlistSongs.observe(viewLifecycleOwner){ playlistSongsInstance ->
+            this.binding.playlistViewTitle.text = playlistSongsInstance.playlist.name
 
-            songsAdapter.playlistSongs = it
+            songsAdapter.playlistSongs = playlistSongsInstance
             songsAdapter.data.clear()
-            songsAdapter.data.addAll(it.songs)
+            songsAdapter.data.addAll(playlistSongsInstance.songs)
             songsAdapter.notifyDataSetChanged()
+
+            this.binding.addEditPlaylistBtn.setImageResource(
+                if(playlistSongsInstance.songs.isEmpty()) R.drawable.plus else R.drawable.edit
+            )
+
+            this.binding.addEditPlaylistBtn.setOnClickListener {
+                val addEditSongsPopup: AddEditPlaylistSongsPopup = AddEditPlaylistSongsPopup(this.requireContext(), db, playlistSongsInstance)
+                addEditSongsPopup.show(this.requireActivity().supportFragmentManager, "Add/Edit Songs")
+            }
         }
 
         this.binding.playlistSongsListView.setOnItemClickListener { _, _, position, _ ->
