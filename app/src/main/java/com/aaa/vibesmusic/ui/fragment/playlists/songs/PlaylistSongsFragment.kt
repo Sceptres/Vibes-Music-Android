@@ -8,6 +8,7 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.findNavController
@@ -90,6 +91,16 @@ class PlaylistSongsFragment : Fragment(), ServiceConnection {
             this.requireActivity().findNavController(R.id.nav_host_fragment)
                 .navigate(R.id.playlistSongsFragmentToPlaylistFragment)
         }
+
+        this.requireActivity().onBackPressedDispatcher.addCallback(this.viewLifecycleOwner, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(playSongsView.isShown) {
+                    playSongsView.closeView()
+                } else {
+                    requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.playlistSongsFragmentToPlaylistFragment)
+                }
+            }
+        })
 
         Ads.loadBanner(this.binding.playlistLibraryBanner, this.requireContext())
 

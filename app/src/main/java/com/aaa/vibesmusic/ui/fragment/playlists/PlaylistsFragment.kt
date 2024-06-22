@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.aaa.vibesmusic.R
@@ -51,6 +52,13 @@ class PlaylistsFragment : Fragment() {
             val createPlaylistPopup: CreatePlaylistPopup = CreatePlaylistPopup(this.requireContext(), db)
             createPlaylistPopup.show(this.requireActivity().supportFragmentManager, "Create Playlist Popup")
         }
+
+        this.requireActivity().onBackPressedDispatcher.addCallback(this.viewLifecycleOwner, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().findNavController(R.id.nav_host_fragment)
+                    .navigate(R.id.playlistFragmentToSongLibraryFragment)
+            }
+        })
 
         Ads.loadBanner(this.binding.playlistBanner, this.requireContext())
 
