@@ -21,7 +21,7 @@ import io.reactivex.disposables.CompositeDisposable
 import java.util.Date
 
 class ImportSongsFragment : Fragment() {
-    private var importSongsLauncher: ActivityResultLauncher<Void>? = null
+    private var importSongsLauncher: ActivityResultLauncher<Void?>? = null
     private val mDisposable: CompositeDisposable = CompositeDisposable()
     private var db: VibesMusicDatabase? = null
     private var lastShownAd: Long = 0
