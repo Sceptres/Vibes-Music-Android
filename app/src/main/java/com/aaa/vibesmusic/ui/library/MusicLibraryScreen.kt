@@ -1,5 +1,13 @@
 package com.aaa.vibesmusic.ui.library
 
+import android.Manifest
+import android.content.ComponentName
+import android.content.ServiceConnection
+import android.os.Build
+import android.os.IBinder
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +26,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
@@ -25,8 +34,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +61,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.perms.PermissionsUtil
+import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner;
 import java.util.Objects
 
@@ -56,6 +71,27 @@ import java.util.Objects
 fun MusicLibraryScreen() {
     val viewModel: MusicLibraryViewModel = viewModel()
     val songs by viewModel.songs.observeAsState(initial = listOf())
+    val currentContext = LocalContext.current
+
+    var playerService: MediaPlayerService? by remember { mutableStateOf(null) }
+
+    if(Objects.isNull(playerService)) {
+        MediaPlayerService.initialize(currentContext, object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                val binder = service as MediaPlayerService.MediaPlayerServiceBinder
+                playerService = binder.mediaPlayerService
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {}
+
+        })
+    }
+
+    val notificationPermissionRequest = viewModel.getNotificationsPermissionLauncher { isGranted ->
+        if(playerService?.isPlaying == true && isGranted) {
+            playerService?.showNotification()
+        }
+    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -92,7 +128,11 @@ fun MusicLibraryScreen() {
                 SongsList(
                     songs = songs,
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp),
-                    {},
+                    {
+                        if(!PermissionsUtil.hasPermission(currentContext, Manifest.permission.POST_NOTIFICATIONS))
+                            notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        playerService?.setSongs(songs, it)
+                    },
                     {}
                 )
             }
@@ -119,13 +159,13 @@ fun MusicLibraryScreen() {
 }
 
 @Composable
-fun SongsList(songs: List<Song>, modifier: Modifier = Modifier, onItemClick: () -> Unit, onOptionsClick: () -> Unit) {
+fun SongsList(songs: List<Song>, modifier: Modifier = Modifier, onItemClick: (index: Int) -> Unit, onOptionsClick: () -> Unit) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         modifier = modifier
     ) {
-        items(songs) { song ->
-            SongListItem(song, onItemClick, onOptionsClick)
+        itemsIndexed(songs) { index, song ->
+            SongListItem(song, index, onItemClick, onOptionsClick)
         }
     }
 }
@@ -149,14 +189,14 @@ fun SongPlayerFloatingButton(modifier: Modifier = Modifier, onClick: () -> Unit)
 }
 
 @Composable
-fun SongListItem(song: Song, onItemClick: () -> Unit, onOptionsClick: () -> Unit) {
+fun SongListItem(song: Song, index: Int, onItemClick: (index: Int) -> Unit, onOptionsClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(colorResource(id = R.color.foreground_color))
-            .clickable { onItemClick.invoke() }
+            .clickable { onItemClick(index) }
     ) {
         Row(
             modifier = Modifier
