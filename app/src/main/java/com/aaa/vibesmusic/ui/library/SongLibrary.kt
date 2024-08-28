@@ -47,7 +47,7 @@ import java.util.Objects
 
 @Composable
 @Preview(showBackground = true)
-fun SongLibrary() {
+fun MusicLibraryScreen() {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
