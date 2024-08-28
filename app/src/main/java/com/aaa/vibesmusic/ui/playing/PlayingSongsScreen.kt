@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.playing
+package com.aaa.vibesmusic.ui.playing
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
