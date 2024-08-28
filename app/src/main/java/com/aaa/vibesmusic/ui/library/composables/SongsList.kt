@@ -45,7 +45,7 @@ fun SongsList(
     songs: List<Song>,
     modifier: Modifier = Modifier,
     onItemClick: (index: Int) -> Unit,
-    SongItemDropdown: @Composable (expandedState: MutableState<Boolean>) -> Unit
+    SongItemDropdown: @Composable (expandedState: MutableState<Boolean>, song: Song) -> Unit
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(5.dp),
@@ -54,7 +54,7 @@ fun SongsList(
         itemsIndexed(songs) { index, song ->
             val menuExpanded: MutableState<Boolean> = remember { mutableStateOf(false) }
             SongListItem(song, index, onItemClick, { menuExpanded.value = true }) {
-                SongItemDropdown(menuExpanded)
+                SongItemDropdown(menuExpanded, song)
             }
         }
     }
