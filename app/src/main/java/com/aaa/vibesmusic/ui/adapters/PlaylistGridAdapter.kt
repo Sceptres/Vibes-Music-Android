@@ -13,7 +13,6 @@ import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.menu.PlaylistDropdownMenu
-import com.bumptech.glide.Glide
 import java.util.Objects
 
 class PlaylistGridAdapter(private val c: Context, val data: MutableList<PlaylistSongs>) :
@@ -41,12 +40,6 @@ class PlaylistGridAdapter(private val c: Context, val data: MutableList<Playlist
 
         playlistNameTextView.text = playlistName
         playlistLengthTextView.text = playlistLength
-
-        Glide.with(currentView)
-            .load(bitmap)
-            .centerCrop()
-            .placeholder(R.drawable.music_cover_image)
-            .into(playlistCoverImage)
 
         val options: ImageButton = currentView.findViewById(R.id.playlistOptionsBtn)
         options.setOnClickListener {

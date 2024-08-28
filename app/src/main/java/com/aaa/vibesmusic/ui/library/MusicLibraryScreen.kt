@@ -26,10 +26,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -40,6 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner;
@@ -48,6 +55,9 @@ import java.util.Objects
 @Composable
 @Preview(showBackground = true)
 fun MusicLibraryScreen() {
+    val viewModel: MusicLibraryViewModel = viewModel()
+    val songs by viewModel.songs.observeAsState(initial = listOf())
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -81,7 +91,7 @@ fun MusicLibraryScreen() {
                 )
 
                 SongsList(
-                    songs = arrayListOf(),
+                    songs = songs,
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
                 ) {}
             }
@@ -151,12 +161,14 @@ fun SongListItem(song: Song, onItemClick: () -> Unit, onOptionsClick: () -> Unit
             modifier = Modifier
                 .background(colorResource(id = R.color.foreground_color))
         ) {
-            Image(
-                painter = if(Objects.isNull(song.imageLocation))
-                    painterResource(id = R.drawable.music_cover_image)
-                else
-                    painterResource(id = R.drawable.music_cover_image),
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(if(Objects.isNull(song.imageLocation)) R.drawable.music_cover_image else song.imageLocation)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = null,
+                placeholder = painterResource(id = R.drawable.music_cover_image),
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(60.dp)
@@ -202,7 +214,7 @@ fun SongListItem(song: Song, onItemClick: () -> Unit, onOptionsClick: () -> Unit
                     .padding(vertical = 5.dp)
             ) {
                 Text(
-                    text = "03:40:23",
+                    text = Song.calculateDuration(song.duration),
                     color = Color.White,
                     fontSize = 11.sp,
                     maxLines = 1,
