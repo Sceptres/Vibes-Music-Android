@@ -1,6 +1,5 @@
 package com.aaa.vibesmusic.ui.library
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -92,8 +91,10 @@ fun MusicLibraryScreen() {
 
                 SongsList(
                     songs = songs,
-                    modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
-                ) {}
+                    modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp),
+                    {},
+                    {}
+                )
             }
             SongPlayerFloatingButton(
                 modifier = Modifier
@@ -118,13 +119,13 @@ fun MusicLibraryScreen() {
 }
 
 @Composable
-fun SongsList(songs: List<Song>, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun SongsList(songs: List<Song>, modifier: Modifier = Modifier, onItemClick: () -> Unit, onOptionsClick: () -> Unit) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         modifier = modifier
     ) {
         items(songs) { song ->
-            SongListItem(song, onClick, {})
+            SongListItem(song, onItemClick, onOptionsClick)
         }
     }
 }
