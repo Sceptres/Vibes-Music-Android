@@ -15,6 +15,7 @@
         <item name="android:windowBackground">@color/background_color</item>
         <item name="android:popupMenuStyle">@style/PopupMenus</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/navbar_color</item>
     </style>
     <style name="PopupMenus" parent="Widget.Material3.PopupMenu">
         <item name="android:popupBackground">@color/background_color</item>
