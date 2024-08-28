@@ -39,6 +39,7 @@ import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.import.ImportSongsScreen
 import com.aaa.vibesmusic.ui.library.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
 
 class MainActivity : AppCompatActivity(), ServiceConnection {
     private lateinit var mediaPlayerService: MediaPlayerService
@@ -133,6 +134,10 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
                 composable(route = Screens.ImportMusic.route) {
                     ImportSongsScreen()
+                }
+
+                composable(route = Screens.Playlists.route) {
+                    PlaylistsScreen()
                 }
             }
         }
