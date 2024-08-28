@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import com.aaa.vibesmusic.R
 
 @Composable
-@Preview(showBackground = true)
 fun PlaySongActivityLayout() {
     Column(
         modifier = Modifier
