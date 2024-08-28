@@ -26,9 +26,6 @@ import androidx.compose.ui.unit.sp
 import com.aaa.vibesmusic.R
 
 @Composable
-@Preview(
-    showBackground = true
-)
 fun ImportSongsScreen() {
     val backgroundColor = colorResource(id = R.color.background_color)
 
