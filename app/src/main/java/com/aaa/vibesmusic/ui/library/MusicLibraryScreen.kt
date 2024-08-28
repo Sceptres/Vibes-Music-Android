@@ -109,8 +109,14 @@ fun MusicLibraryScreen() {
                             notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
                         playerService?.setSongs(songs, it)
                     }
-                ) {
-                    MusicLibrarySongDropdown(expandedState = it, modifier = Modifier.background(colorResource(id = R.color.foreground_color)))
+                ) { expandedState, song ->
+                    MusicLibrarySongDropdown(
+                        expandedState = expandedState,
+                        song = song,
+                        modifier = Modifier.background(colorResource(id = R.color.foreground_color)),
+                        UpdateSuccess = {},
+                        UpdateFailure = {}
+                    )
                 }
             }
             SongPlayerFloatingButton(
