@@ -36,6 +36,7 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.storage.StorageUtil
+import com.aaa.vibesmusic.ui.import.ImportSongsScreen
 import com.aaa.vibesmusic.ui.library.SongLibrary
 import com.aaa.vibesmusic.ui.nav.Screens
 
@@ -128,6 +129,10 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
             ) {
                 composable(route = Screens.MusicLibrary.route) {
                     SongLibrary()
+                }
+
+                composable(route = Screens.ImportMusic.route) {
+                    ImportSongsScreen()
                 }
             }
         }
