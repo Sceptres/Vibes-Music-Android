@@ -12,7 +12,6 @@ import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.menu.PlaylistSongsMenu
-import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import java.util.Objects
 
@@ -36,13 +35,6 @@ class PlaylistSongsAdapter(private val c: Context, var playlistSongs: PlaylistSo
             song.imageLocation
         else
             R.drawable.music_cover_image
-
-
-        Glide.with(currentView)
-            .load(bitmapToLoad)
-            .centerCrop()
-            .placeholder(R.drawable.music_cover_image)
-            .into(songCoverImage)
 
         songName.text = song.name
         artistAlbum.text = "${song.artist} · ${song.albumName}"

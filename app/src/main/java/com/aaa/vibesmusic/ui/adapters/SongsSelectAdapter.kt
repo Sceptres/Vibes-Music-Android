@@ -13,7 +13,6 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.menu.SongDropdownMenu
-import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import java.util.Objects
 import java.util.stream.Collectors
@@ -75,13 +74,6 @@ class SongsSelectAdapter(private val c: Context, val data: MutableList<Song>) :
             song.imageLocation
         else
             R.drawable.music_cover_image
-
-
-        Glide.with(currentView)
-            .load(bitmapToLoad)
-            .centerCrop()
-            .placeholder(R.drawable.music_cover_image)
-            .into(songCoverImage)
 
         songName.text = song.name
         artistAlbum.text = "${song.artist} · ${song.albumName}"

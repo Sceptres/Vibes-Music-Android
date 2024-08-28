@@ -32,7 +32,6 @@ import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.activity.MainActivity
 import com.aaa.vibesmusic.ui.listener.OnCloseListener
 import com.aaa.vibesmusic.ui.listener.OnPlaySeekListener
-import com.bumptech.glide.Glide
 import java.util.Objects
 import kotlin.math.abs
 import kotlin.properties.Delegates
@@ -231,13 +230,6 @@ class PlaySongViewGroup @JvmOverloads constructor(
                     currentSong.imageLocation
                 else
                     R.drawable.music_cover_image
-
-
-            Glide.with(this)
-                .load(bitmapToLoad)
-                .centerCrop()
-                .placeholder(R.drawable.music_cover_image)
-                .into(this.songCoverImageView)
         }
 
         // Set the status of the play/pause button

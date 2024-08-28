@@ -18,7 +18,6 @@ import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.ServiceUtil
 import com.aaa.vibesmusic.ui.UIUtil
-import com.aaa.vibesmusic.ui.adapters.SongsArrayAdapter
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
 
 class SongLibraryFragment : Fragment(), ServiceConnection {
@@ -38,27 +37,17 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
 
         this.playSongsView = PlaySongViewGroup(this.requireContext())
 
-        val songsAdapter: SongsArrayAdapter = SongsArrayAdapter(requireContext(), ArrayList())
-        binding.songsListView.adapter = songsAdapter
-
         val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(context)
         this.viewModel = SongLibraryViewModelFactory.getFactory(this)
             .get(requireActivity().application, db)
 
         // Add songs to the UI
-        this.viewModel.songs.observe(viewLifecycleOwner) {
-            songsAdapter.data.clear()
-            songsAdapter.data.addAll(it)
-            songsAdapter.notifyDataSetChanged()
-
-            if(this::mediaPlayerService.isInitialized)
-                this.mediaPlayerService.updateSongs(songsAdapter.data)
-        }
+        this.viewModel.songs.observe(viewLifecycleOwner) {}
 
         binding.songsListView.setOnItemClickListener { parent, view, position, id ->
             if(!PermissionsUtil.hasPermission(this.requireContext(), Manifest.permission.POST_NOTIFICATIONS))
                 requireActivity().requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), PermissionsUtil.POST_NOTIF_CODE)
-            val list: List<Song> = songsAdapter.data
+            val list: List<Song> = listOf()
             this.mediaPlayerService.setSongs(list, position)
             UIUtil.openSongPlayer(this.requireContext(), this.playSongsView, this.binding, this.requireActivity())
         }
