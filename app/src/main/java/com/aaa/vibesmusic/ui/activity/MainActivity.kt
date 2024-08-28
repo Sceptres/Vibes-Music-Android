@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.os.IBinder
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -126,7 +128,9 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
             NavHost(
                 navController = navController,
                 startDestination = Screens.MusicLibrary.route,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None }
             ) {
                 composable(route = Screens.MusicLibrary.route) {
                     MusicLibraryScreen()
