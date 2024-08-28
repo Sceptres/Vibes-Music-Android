@@ -29,12 +29,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -63,6 +66,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
+import com.aaa.vibesmusic.ui.library.composables.MusicLibrarySongDropdown
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner;
 import java.util.Objects
 
@@ -132,9 +136,10 @@ fun MusicLibraryScreen() {
                         if(!PermissionsUtil.hasPermission(currentContext, Manifest.permission.POST_NOTIFICATIONS))
                             notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
                         playerService?.setSongs(songs, it)
-                    },
-                    {}
-                )
+                    }
+                ) {
+                    MusicLibrarySongDropdown(expandedState = it, modifier = Modifier.background(colorResource(id = R.color.foreground_color)))
+                }
             }
             SongPlayerFloatingButton(
                 modifier = Modifier
@@ -159,13 +164,21 @@ fun MusicLibraryScreen() {
 }
 
 @Composable
-fun SongsList(songs: List<Song>, modifier: Modifier = Modifier, onItemClick: (index: Int) -> Unit, onOptionsClick: () -> Unit) {
+fun SongsList(
+    songs: List<Song>,
+    modifier: Modifier = Modifier,
+    onItemClick: (index: Int) -> Unit,
+    SongItemDropdown: @Composable (expandedState: MutableState<Boolean>) -> Unit
+) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         modifier = modifier
     ) {
         itemsIndexed(songs) { index, song ->
-            SongListItem(song, index, onItemClick, onOptionsClick)
+            val menuExpanded: MutableState<Boolean> = remember { mutableStateOf(false) }
+            SongListItem(song, index, onItemClick, { menuExpanded.value = true }) {
+                SongItemDropdown(menuExpanded)
+            }
         }
     }
 }
@@ -189,7 +202,13 @@ fun SongPlayerFloatingButton(modifier: Modifier = Modifier, onClick: () -> Unit)
 }
 
 @Composable
-fun SongListItem(song: Song, index: Int, onItemClick: (index: Int) -> Unit, onOptionsClick: () -> Unit) {
+fun SongListItem(
+    song: Song,
+    index: Int,
+    onItemClick: (index: Int) -> Unit,
+    onOptionsClick: () -> Unit,
+    SongItemMenu: @Composable () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -266,17 +285,23 @@ fun SongListItem(song: Song, index: Int, onItemClick: (index: Int) -> Unit, onOp
                 )
             }
 
-            IconButton(
-                onClick = { onOptionsClick.invoke() },
+            Column(
+                verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxHeight()
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.options_btn),
-                    contentDescription = "Options",
-                    tint = Color.White,
-                    modifier = Modifier.fillMaxHeight()
-                )
+                IconButton(
+                    onClick = { onOptionsClick.invoke() },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.options_btn),
+                        contentDescription = "Options",
+                        tint = Color.White,
+                        modifier = Modifier.fillMaxHeight()
+                    )
+                }
+
+                SongItemMenu()
             }
         }
     }
