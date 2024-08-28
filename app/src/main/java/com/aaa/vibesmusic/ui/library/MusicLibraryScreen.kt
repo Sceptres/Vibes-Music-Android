@@ -70,7 +70,7 @@ import java.util.Objects
 @Preview(showBackground = true)
 fun MusicLibraryScreen() {
     val viewModel: MusicLibraryViewModel = viewModel()
-    val songs by viewModel.songs.observeAsState(initial = listOf())
+    val songs by viewModel.songs
     val currentContext = LocalContext.current
 
     var playerService: MediaPlayerService? by remember { mutableStateOf(null) }
