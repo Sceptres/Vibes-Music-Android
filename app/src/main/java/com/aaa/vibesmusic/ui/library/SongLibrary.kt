@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,12 +48,15 @@ import java.util.Objects
 @Composable
 @Preview(showBackground = true)
 fun SongLibrary() {
-    ConstraintLayout {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = colorResource(R.color.background_color))
+    ) {
         val (mainBody, adview) = createRefs()
 
         Box(
             modifier = Modifier
-                .background(color = colorResource(R.color.background_color))
                 .constrainAs(mainBody) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -61,6 +65,7 @@ fun SongLibrary() {
                     width = Dimension.preferredWrapContent
                     height = Dimension.preferredWrapContent
                 }
+                .fillMaxSize()
         ) {
             Column(
                 modifier = Modifier.align(Alignment.TopStart)

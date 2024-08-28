@@ -6,26 +6,44 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
-import com.aaa.vibesmusic.databinding.ActivityMainBinding
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.storage.StorageUtil
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.aaa.vibesmusic.ui.library.SongLibrary
+import com.aaa.vibesmusic.ui.nav.Screens
 
 class MainActivity : AppCompatActivity(), ServiceConnection {
     private lateinit var mediaPlayerService: MediaPlayerService
-    private var _binding: ActivityMainBinding? = null
-    private val binding
-        get() = _binding!!
 
     companion object {
+        // Keeping this to avoid errors during development
         var SNACK_BAR_VIEW: CoordinatorLayout? = null
     }
 
@@ -40,23 +58,79 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-
         super.onCreate(savedInstanceState)
-
-        _binding = ActivityMainBinding.inflate(this.layoutInflater)
-        setContentView(binding.root)
 
         VibesMusicDatabase.getInstance(applicationContext)
         StorageUtil.setup(this.applicationContext)
 
-        val bottomNav: BottomNavigationView = binding.bottomNav
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        setContent {
+            VibesMusicApp()
+        }
+    }
 
-        bottomNav.setupWithNavController(navController)
+    @Composable
+    fun VibesMusicApp() {
+        val navController = rememberNavController()
 
-        SNACK_BAR_VIEW = binding.fragmentContainer
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                NavigationBar(
+                    containerColor = colorResource(id = R.color.navbar_color),
+                ) {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+
+                    Screens.SCREENS.forEach { screen ->
+                        val navItemText: String = stringResource(id = screen.screenNavText)
+                        val isSelected: Boolean = currentDestination?.hierarchy?.any{ it.route == screen.route } == true
+
+                        NavigationBarItem(
+                            colors = NavigationBarItemColors(
+                                selectedIconColor = Color.Gray,
+                                selectedTextColor = Color.Gray,
+                                selectedIndicatorColor = Color.White,
+                                unselectedIconColor = Color.White,
+                                unselectedTextColor = Color.White,
+                                disabledIconColor = Color.Gray,
+                                disabledTextColor = Color.Gray
+                            ),
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = screen.screenNavIcon),
+                                    contentDescription = navItemText
+                                )
+                           },
+                            label = {
+                                Text(
+                                    text = navItemText
+                                )
+                            },
+                            selected = isSelected,
+                            onClick = {
+                                navController.navigate(screen.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Screens.MusicLibrary.route,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(route = Screens.MusicLibrary.route) {
+                    SongLibrary()
+                }
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
