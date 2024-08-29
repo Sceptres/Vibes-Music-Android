@@ -28,7 +28,6 @@ import com.aaa.vibesmusic.player.PlayStatus
 import com.aaa.vibesmusic.player.mode.PlayMode
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode
 import com.aaa.vibesmusic.storage.StorageUtil
-import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.activity.MainActivity
 import com.aaa.vibesmusic.ui.listener.OnCloseListener
 import com.aaa.vibesmusic.ui.listener.OnPlaySeekListener
@@ -209,7 +208,6 @@ class PlaySongViewGroup @JvmOverloads constructor(
     // When closing the view group, reset the status bar color
     override fun onAnimationStart(animation: Animation?) {
         val activity = this.context as Activity
-        UIUtil.setStatusBarColor(activity, this.oldStatusBarColor)
     }
 
     override fun onAnimationEnd(animation: Animation?) {

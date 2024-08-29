@@ -21,7 +21,6 @@ import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.ServiceUtil
-import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.adapters.PlaylistSongsAdapter
 import com.aaa.vibesmusic.ui.popup.AddEditPlaylistSongsPopup
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
@@ -45,8 +44,6 @@ class PlaylistSongsFragment : Fragment(), ServiceConnection {
             .get(this.requireActivity().application, this.db)
 
         arguments?.let {
-            val playlistSongsId: Int = it.getInt(UIUtil.PLAYLISTSONGS_KEY)
-            this.playlistSongs = this.playlistSongsViewModel.getPlaylistSongs(playlistSongsId)
         }
     }
 
@@ -80,11 +77,9 @@ class PlaylistSongsFragment : Fragment(), ServiceConnection {
                 requireActivity().requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), PermissionsUtil.POST_NOTIF_CODE)
             val list: List<Song> = songsAdapter.data
             this.mediaPlayerService.setSongs(list, position)
-            UIUtil.openSongPlayer(this.requireContext(), this.playSongsView, this.binding, this.requireActivity())
         }
 
         this.binding.playingSongsPlaylistBtn.setOnClickListener {
-            UIUtil.openSongPlayer(this.requireContext(), this.playSongsView, this.binding, this.requireActivity())
         }
 
         this.binding.playlistsBackBtn.setOnClickListener {
@@ -116,12 +111,10 @@ class PlaylistSongsFragment : Fragment(), ServiceConnection {
 
     override fun onResume() {
         super.onResume()
-        UIUtil.setStatusBarColorResource(this.requireActivity(), R.color.foreground_color)
     }
 
     override fun onPause() {
         super.onPause()
-        UIUtil.setStatusBarColorResource(this.requireActivity(), R.color.background_color)
     }
 
     override fun onDestroy() {

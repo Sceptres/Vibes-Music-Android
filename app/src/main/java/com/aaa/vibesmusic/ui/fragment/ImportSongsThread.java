@@ -15,7 +15,6 @@ import com.aaa.vibesmusic.exceptions.SongAlreadyExistsException;
 import com.aaa.vibesmusic.metadata.SongMetaData;
 import com.aaa.vibesmusic.metadata.retriever.SongMetadataRetriever;
 import com.aaa.vibesmusic.storage.StorageUtil;
-import com.aaa.vibesmusic.ui.UIUtil;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -53,10 +52,6 @@ public class ImportSongsThread extends Thread {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(() -> {
-                        UIUtil.showLongSnackBar(
-                                resources.getString(R.string.songs_imported_successfully),
-                                resources.getColor(R.color.foreground_color, null)
-                        );
                         mDisposable.dispose();
                         interrupt();
                     })
@@ -150,11 +145,6 @@ public class ImportSongsThread extends Thread {
             String msg = failedSongs > 1 ?
                     resources.getString(R.string.failed_songs) :
                     resources.getString(R.string.failed_song);
-
-            UIUtil.showLongSnackBar(
-                    msg,
-                    resources.getColor(R.color.foreground_color, null)
-            );
         }
     }
 
@@ -166,11 +156,6 @@ public class ImportSongsThread extends Thread {
             String msg = existingSongs > 1 ?
                     resources.getString(R.string.songs_exist) :
                     resources.getString(R.string.song_exists);
-
-            UIUtil.showLongSnackBar(
-                    msg,
-                    resources.getColor(R.color.foreground_color, null)
-            );
         }
     }
 }

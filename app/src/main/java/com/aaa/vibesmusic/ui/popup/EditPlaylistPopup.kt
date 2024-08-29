@@ -16,7 +16,6 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.util.DatabaseUtil
-import com.aaa.vibesmusic.ui.UIUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -61,10 +60,6 @@ class EditPlaylistPopup(
             val newPlaylistName = playlistNameEditText.text.toString()
 
             if(newPlaylistName.isEmpty()) {
-                UIUtil.showLongSnackBar(
-                    "Cannot have empty playlist name! Please try again",
-                    resources.getColor(R.color.foreground_color, null)
-                )
                 return@setOnClickListener
             }
 
@@ -83,16 +78,8 @@ class EditPlaylistPopup(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        UIUtil.showLongSnackBar(
-                            "Playlist updated successfully.",
-                            resources.getColor(R.color.foreground_color, null)
-                        )
                     }, { error ->
                         if(error is SQLiteConstraintException) {
-                            UIUtil.showLongSnackBar(
-                                String.format("Playlist with the name %s already exists", newPlaylistName),
-                                resources.getColor(R.color.foreground_color, null)
-                            )
                         }
                     })
             }

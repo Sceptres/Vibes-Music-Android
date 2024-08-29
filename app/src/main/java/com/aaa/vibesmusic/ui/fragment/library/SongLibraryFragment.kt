@@ -17,7 +17,6 @@ import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.ServiceUtil
-import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.viewgroup.PlaySongViewGroup
 
 class SongLibraryFragment : Fragment(), ServiceConnection {
@@ -49,11 +48,9 @@ class SongLibraryFragment : Fragment(), ServiceConnection {
                 requireActivity().requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), PermissionsUtil.POST_NOTIF_CODE)
             val list: List<Song> = listOf()
             this.mediaPlayerService.setSongs(list, position)
-            UIUtil.openSongPlayer(this.requireContext(), this.playSongsView, this.binding, this.requireActivity())
         }
 
         binding.playingSongsActivityBtn.setOnClickListener {
-            UIUtil.openSongPlayer(this.requireContext(), this.playSongsView, this.binding, this.requireActivity())
         }
 
         Ads.loadBanner(binding.musicLibraryBanner, this.requireContext())
