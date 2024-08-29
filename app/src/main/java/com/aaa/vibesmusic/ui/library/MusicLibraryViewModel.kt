@@ -1,7 +1,9 @@
 package com.aaa.vibesmusic.ui.library
 
+import android.Manifest
 import android.app.Application
 import android.content.ComponentName
+import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -25,6 +27,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.dialogs.edit.song.EditSongDialogViewModel
 import java.util.Objects
@@ -65,6 +68,12 @@ class MusicLibraryViewModel(application: Application) : AndroidViewModel(applica
 
     private fun getSongsFromDatabase(): LiveData<List<Song>> {
         return this.db.songDao().songs
+    }
+
+    fun onSongClick(launcher: ManagedActivityResultLauncher<String, Boolean>, context: Context, index: Int) {
+        if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
+            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        this.playerService?.setSongs(this.songs, index)
     }
 
     @Composable

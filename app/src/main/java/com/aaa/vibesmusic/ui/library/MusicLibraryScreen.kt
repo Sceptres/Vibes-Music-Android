@@ -54,9 +54,7 @@ import java.util.Objects
 @Preview(showBackground = true)
 fun MusicLibraryScreen() {
     val viewModel: MusicLibraryViewModel = viewModel(factory = MusicLibraryViewModel.FACTORY)
-
     val currentContext = LocalContext.current
-
     val notificationPermissionRequest = viewModel.getNotificationsPermissionLauncher()
 
     ConstraintLayout(
@@ -94,11 +92,7 @@ fun MusicLibraryScreen() {
                 SongsList(
                     songs = viewModel.songs,
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp),
-                    {
-                        if(!PermissionsUtil.hasPermission(currentContext, Manifest.permission.POST_NOTIFICATIONS))
-                            notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
-                        viewModel.playerService?.setSongs(viewModel.songs, it)
-                    }
+                    { index -> viewModel.onSongClick(notificationPermissionRequest, currentContext, index) }
                 ) { expandedState, song ->
                     MusicLibrarySongDropdown(
                         expandedState = expandedState,
