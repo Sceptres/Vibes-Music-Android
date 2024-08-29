@@ -23,9 +23,9 @@ class MusicLibraryViewModel : ViewModel() {
     private val songsLiveData = this.getSongsFromDatabase()
     val songs: MutableList<Song> = mutableStateListOf()
     private val songsObserver: Observer<List<Song>> = Observer { value ->
-            songs.clear()
-            songs.addAll(value)
-        }
+        songs.clear()
+        songs.addAll(value)
+    }
 
     init {
         this.songsLiveData.observeForever(this.songsObserver)
@@ -34,6 +34,8 @@ class MusicLibraryViewModel : ViewModel() {
     private fun getSongsFromDatabase(): LiveData<List<Song>> {
         return this.db.songDao().songs
     }
+
+    pr
 
     @Composable
     fun getNotificationsPermissionLauncher(permissionGrantedHandler: (Boolean) -> Unit): ManagedActivityResultLauncher<String, Boolean> {
