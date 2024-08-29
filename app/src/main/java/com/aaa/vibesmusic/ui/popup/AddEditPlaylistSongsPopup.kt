@@ -3,7 +3,6 @@ package com.aaa.vibesmusic.ui.popup
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -17,7 +16,6 @@ import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship
 import com.aaa.vibesmusic.database.util.DatabaseUtil
-import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.adapters.SongsSelectAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -110,15 +108,7 @@ class AddEditPlaylistSongsPopup(
                 this.addPlaylistSongsDisposable = DatabaseUtil.upsertPlaylistSong(this.db, newPlaylistSongs)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        UIUtil.showLongSnackBar(
-                            String.format(
-                                if (songsEmpty) "Songs successfully added to %s." else "%s songs successfully updated.",
-                                this.playlistSongs.playlist.name
-                            ),
-                            this.resources.getColor(R.color.foreground_color, null)
-                        )
-                    }
+                    .subscribe {}
             }
 
             alertDialog.dismiss()

@@ -11,7 +11,6 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.databinding.FragmentPlaylistsBinding
 import com.aaa.vibesmusic.monetization.Ads
-import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.adapters.PlaylistGridAdapter
 import com.aaa.vibesmusic.ui.popup.CreatePlaylistPopup
 
@@ -42,7 +41,6 @@ class PlaylistsFragment : Fragment() {
 
         this.binding.playlistGridView.setOnItemClickListener { _, _, position, _ ->
             val bundle: Bundle = Bundle()
-            bundle.putInt(UIUtil.PLAYLISTSONGS_KEY, playlistAdapter.data[position].playlist.playlistId)
 
             this.requireActivity().findNavController(R.id.nav_host_fragment)
                 .navigate(R.id.playlistFragmentToPlaylistSongsFragment, bundle)

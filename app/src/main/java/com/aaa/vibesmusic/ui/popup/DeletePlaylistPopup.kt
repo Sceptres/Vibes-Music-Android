@@ -8,7 +8,6 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.util.DatabaseUtil
-import com.aaa.vibesmusic.ui.UIUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -28,10 +27,6 @@ class DeletePlaylistPopup(private val playlistSong: PlaylistSongs, private val d
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe{
-                            UIUtil.showLongSnackBar(
-                                "Playlist successfully deleted.",
-                                this.requireContext().getColor(R.color.foreground_color)
-                            )
                         }
                 }
             }

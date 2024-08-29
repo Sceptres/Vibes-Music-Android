@@ -17,9 +17,12 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -46,11 +49,6 @@ import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
 class MainActivity : AppCompatActivity(), ServiceConnection {
     private lateinit var mediaPlayerService: MediaPlayerService
 
-    companion object {
-        // Keeping this to avoid errors during development
-        var SNACK_BAR_VIEW: CoordinatorLayout? = null
-    }
-
     override fun onStart() {
         super.onStart()
         if(!this::mediaPlayerService.isInitialized) {
@@ -75,9 +73,15 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     @Composable
     fun VibesMusicApp() {
         val navController = rememberNavController()
+        val snackBarHostState = remember { SnackbarHostState() }
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
+            snackbarHost = { 
+                SnackbarHost(
+                    hostState = snackBarHostState,
+                )
+            },
             bottomBar = {
                 NavigationBar(
                     containerColor = colorResource(id = R.color.navbar_color),
@@ -133,7 +137,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 exitTransition = { ExitTransition.None }
             ) {
                 composable(route = Screens.MusicLibrary.route) {
-                    MusicLibraryScreen()
+                    MusicLibraryScreen(snackBarHostState)
                 }
 
                 composable(route = Screens.ImportMusic.route) {

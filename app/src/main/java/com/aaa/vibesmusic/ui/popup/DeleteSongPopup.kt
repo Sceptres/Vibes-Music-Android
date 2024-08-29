@@ -8,7 +8,6 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.storage.StorageUtil
-import com.aaa.vibesmusic.ui.UIUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -31,10 +30,6 @@ class DeleteSongPopup(val song: Song, val db: VibesMusicDatabase) : AppCompatDia
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            UIUtil.showLongSnackBar(
-                                "Song successfully deleted.",
-                                requireContext().getColor(R.color.foreground_color)
-                            )
                         }
                 }
             }

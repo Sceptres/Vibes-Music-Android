@@ -9,7 +9,6 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship
-import com.aaa.vibesmusic.ui.UIUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -35,10 +34,6 @@ class RemovePlaylistSongPopup(
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe{
-                            UIUtil.showLongSnackBar(
-                                String.format("%s successfully removed from this playlist.", this.song.name),
-                                this.requireContext().getColor(R.color.foreground_color)
-                            )
                         }
                 }
             }

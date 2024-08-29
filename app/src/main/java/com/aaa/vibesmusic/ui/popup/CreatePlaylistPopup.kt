@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.playlist.Playlist
-import com.aaa.vibesmusic.ui.UIUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -51,17 +50,9 @@ class CreatePlaylistPopup(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    UIUtil.showLongSnackBar(
-                        "Playlist successfully created!",
-                        this.requireContext().getColor(R.color.foreground_color)
-                    )
                     alertDialog.dismiss()
                 }, { error ->
                     if(error is SQLiteConstraintException) {
-                        UIUtil.showLongSnackBar(
-                            String.format("Playlist with the name %s already exists!", newPlaylistName),
-                            this.requireContext().getColor(R.color.foreground_color)
-                        )
                     }
                 })
         }
