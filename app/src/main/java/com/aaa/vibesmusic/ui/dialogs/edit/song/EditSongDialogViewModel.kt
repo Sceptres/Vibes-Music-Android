@@ -49,12 +49,14 @@ class EditSongDialogViewModel(context: Context) : ViewModel() {
             song.duration
         )
 
-        this.disposables.add(
-            db.songDao().updateSong(newSong)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onSuccess, onError)
-        )
+        if(!Song.isSameSong(song, newSong)) {
+            this.disposables.add(
+                db.songDao().updateSong(newSong)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(onSuccess, onError)
+            )
+        }
     }
 
     override fun onCleared() {
