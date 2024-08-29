@@ -34,7 +34,7 @@ import java.util.Objects
 
 class MusicLibraryViewModel(application: Application) : AndroidViewModel(application) {
 
-    var db: VibesMusicDatabase = VibesMusicDatabase.getInstance(null)
+    var db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
 
     // Songs data state
     private val songsLiveData = this.getSongsFromDatabase()
