@@ -115,7 +115,7 @@ fun SongListItem(
                 )
 
                 Text(
-                    text = song.artist,
+                    text = "${song.artist} · ${song.albumName}",
                     color = Color.White,
                     fontSize = 11.sp,
                     maxLines = 1,
