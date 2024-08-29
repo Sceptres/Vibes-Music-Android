@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ComponentName
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,14 +17,20 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -35,6 +42,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.library.composables.MusicLibrarySongDropdown
@@ -46,7 +54,7 @@ import java.util.Objects
 @Preview(showBackground = true)
 fun MusicLibraryScreen() {
     val viewModel: MusicLibraryViewModel = viewModel()
-    val songs by viewModel.songs
+
     val currentContext = LocalContext.current
 
     var playerService: MediaPlayerService? by remember { mutableStateOf(null) }
@@ -102,12 +110,12 @@ fun MusicLibraryScreen() {
                 )
 
                 SongsList(
-                    songs = songs,
+                    songs = viewModel.songs,
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp),
                     {
                         if(!PermissionsUtil.hasPermission(currentContext, Manifest.permission.POST_NOTIFICATIONS))
                             notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
-                        playerService?.setSongs(songs, it)
+                        playerService?.setSongs(viewModel.songs, it)
                     }
                 ) { expandedState, song ->
                     MusicLibrarySongDropdown(
