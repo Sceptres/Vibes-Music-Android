@@ -42,6 +42,8 @@ class MusicLibraryViewModel(application: Application) : AndroidViewModel(applica
     private val songsObserver: Observer<List<Song>> = Observer { value ->
         songs.clear()
         songs.addAll(value)
+
+        this.playerService?.updateSongs(value)
     }
 
     // Player service
