@@ -53,29 +53,11 @@ import java.util.Objects
 @Composable
 @Preview(showBackground = true)
 fun MusicLibraryScreen() {
-    val viewModel: MusicLibraryViewModel = viewModel()
+    val viewModel: MusicLibraryViewModel = viewModel(factory = MusicLibraryViewModel.FACTORY)
 
     val currentContext = LocalContext.current
 
-    var playerService: MediaPlayerService? by remember { mutableStateOf(null) }
-
-    if(Objects.isNull(playerService)) {
-        MediaPlayerService.initialize(currentContext, object : ServiceConnection {
-            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                val binder = service as MediaPlayerService.MediaPlayerServiceBinder
-                playerService = binder.mediaPlayerService
-            }
-
-            override fun onServiceDisconnected(name: ComponentName?) {}
-
-        })
-    }
-
-    val notificationPermissionRequest = viewModel.getNotificationsPermissionLauncher { isGranted ->
-        if(playerService?.isPlaying == true && isGranted) {
-            playerService?.showNotification()
-        }
-    }
+    val notificationPermissionRequest = viewModel.getNotificationsPermissionLauncher()
 
     ConstraintLayout(
         modifier = Modifier
@@ -115,7 +97,7 @@ fun MusicLibraryScreen() {
                     {
                         if(!PermissionsUtil.hasPermission(currentContext, Manifest.permission.POST_NOTIFICATIONS))
                             notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
-                        playerService?.setSongs(viewModel.songs, it)
+                        viewModel.playerService?.setSongs(viewModel.songs, it)
                     }
                 ) { expandedState, song ->
                     MusicLibrarySongDropdown(
