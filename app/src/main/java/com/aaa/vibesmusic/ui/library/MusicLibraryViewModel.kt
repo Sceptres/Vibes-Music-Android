@@ -35,10 +35,6 @@ class MusicLibraryViewModel : ViewModel() {
         return this.db.songDao().songs
     }
 
-    fun observeSongs(lifecycleOwner: LifecycleOwner, observer: Observer<List<Song>>) {
-        this.songsLiveData.observe(lifecycleOwner, observer)
-    }
-
     @Composable
     fun getNotificationsPermissionLauncher(permissionGrantedHandler: (Boolean) -> Unit): ManagedActivityResultLauncher<String, Boolean> {
         return rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission(), permissionGrantedHandler)
