@@ -35,8 +35,6 @@ class MusicLibraryViewModel : ViewModel() {
         return this.db.songDao().songs
     }
 
-    pr
-
     @Composable
     fun getNotificationsPermissionLauncher(permissionGrantedHandler: (Boolean) -> Unit): ManagedActivityResultLauncher<String, Boolean> {
         return rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission(), permissionGrantedHandler)
