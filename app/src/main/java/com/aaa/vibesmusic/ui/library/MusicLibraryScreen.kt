@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +35,10 @@ import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun MusicLibraryScreen(snackBarState: SnackbarHostState) {
+fun MusicLibraryScreen(
+    snackBarState: SnackbarHostState,
+    playingSongScreenState: MutableState<Boolean>
+) {
     val viewModel: MusicLibraryViewModel = viewModel(factory = MusicLibraryViewModel.FACTORY)
     val currentContext = LocalContext.current
     val notificationPermissionRequest = viewModel.getNotificationsPermissionLauncher()
@@ -92,7 +96,7 @@ fun MusicLibraryScreen(snackBarState: SnackbarHostState) {
                     .padding(end = 10.dp, bottom = 10.dp)
                     .wrapContentSize()
             ) {
-
+                playingSongScreenState.value = true
             }
         }
         AdmobBanner(
