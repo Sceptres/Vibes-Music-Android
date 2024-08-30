@@ -21,17 +21,22 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -44,6 +49,7 @@ import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.import.ImportSongsScreen
 import com.aaa.vibesmusic.ui.library.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.playing.PlayingSongScreen
 import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
 
 class MainActivity : AppCompatActivity(), ServiceConnection {
@@ -74,10 +80,30 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     fun VibesMusicApp() {
         val navController = rememberNavController()
         val snackBarHostState = remember { SnackbarHostState() }
+        val playingSongScreenState: MutableState<Boolean> = remember { mutableStateOf(false) }
 
+        if(!playingSongScreenState.value) {
+            AppScaffold(
+                navController = navController,
+                snackBarHostState = snackBarHostState,
+                playingSongScreenState = playingSongScreenState
+            )
+        } else {
+            PlayingSongScreen(
+                screenState = playingSongScreenState
+            )
+        }
+    }
+
+    @Composable
+    fun AppScaffold(
+        navController: NavHostController,
+        snackBarHostState: SnackbarHostState,
+        playingSongScreenState: MutableState<Boolean>
+    ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            snackbarHost = { 
+            snackbarHost = {
                 SnackbarHost(
                     hostState = snackBarHostState,
                 )
@@ -91,7 +117,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
                     Screens.SCREENS.forEach { screen ->
                         val navItemText: String = stringResource(id = screen.screenNavText)
-                        val isSelected: Boolean = currentDestination?.hierarchy?.any{ it.route == screen.route } == true
+                        val isSelected: Boolean = currentDestination?.hierarchy?.any { it.route == screen.route } == true
 
                         NavigationBarItem(
                             colors = NavigationBarItemColors(
@@ -108,7 +134,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                                     painter = painterResource(id = screen.screenNavIcon),
                                     contentDescription = navItemText
                                 )
-                           },
+                            },
                             label = {
                                 Text(
                                     text = navItemText
@@ -137,7 +163,10 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 exitTransition = { ExitTransition.None }
             ) {
                 composable(route = Screens.MusicLibrary.route) {
-                    MusicLibraryScreen(snackBarHostState)
+                    MusicLibraryScreen(
+                        snackBarState = snackBarHostState,
+                        playingSongScreenState = playingSongScreenState
+                    )
                 }
 
                 composable(route = Screens.ImportMusic.route) {
