@@ -24,13 +24,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aaa.vibesmusic.R
 
 @Composable
-fun PlaySongActivityLayout() {
+fun PlayingSongScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
