@@ -38,8 +38,6 @@ import com.aaa.vibesmusic.ui.playlists.composables.PlaylistCard
 fun PlaylistsScreen() {
     val playlistsScreenViewModel: PlaylistsScreenViewModel = viewModel(factory = PlaylistsScreenViewModel.FACTORY)
 
-    val blueSelected = colorResource(id = R.color.blue_selected)
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -90,7 +88,7 @@ fun PlaylistsScreen() {
 
             FloatingActionButton(
                 onClick = { /* handle create playlist */ },
-                containerColor = blueSelected,
+                containerColor = colorResource(id = R.color.blue_selected),
                 shape = CircleShape,
                 contentColor = Color.White,
                 modifier = Modifier
