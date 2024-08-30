@@ -22,9 +22,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -82,16 +84,27 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
         val snackBarHostState = remember { SnackbarHostState() }
         val playingSongScreenState: MutableState<Boolean> = remember { mutableStateOf(false) }
 
+        val backgroundColor: Color = colorResource(id = R.color.background_color)
+        val navBarColor: Color = colorResource(id = R.color.navbar_color)
+
+        var navBarColorState: Color by remember { mutableStateOf(backgroundColor) }
+
+        SideEffect {
+            window.navigationBarColor = navBarColorState.toArgb()
+        }
+
         if(!playingSongScreenState.value) {
             AppScaffold(
                 navController = navController,
                 snackBarHostState = snackBarHostState,
                 playingSongScreenState = playingSongScreenState
             )
+            navBarColorState = navBarColor
         } else {
             PlayingSongScreen(
                 screenState = playingSongScreenState
             )
+            navBarColorState = backgroundColor
         }
     }
 
