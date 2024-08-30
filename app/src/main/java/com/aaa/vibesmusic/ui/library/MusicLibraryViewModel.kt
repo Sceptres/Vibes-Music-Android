@@ -10,18 +10,13 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -29,7 +24,6 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
-import com.aaa.vibesmusic.ui.dialogs.edit.song.EditSongDialogViewModel
 import java.util.Objects
 
 class MusicLibraryViewModel(application: Application) : AndroidViewModel(application) {
@@ -49,6 +43,17 @@ class MusicLibraryViewModel(application: Application) : AndroidViewModel(applica
     // Player service
     var playerService: MediaPlayerService? by mutableStateOf(null)
 
+    private val serviceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MediaPlayerService.MediaPlayerServiceBinder
+            playerService = binder.mediaPlayerService
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            playerService = null
+        }
+    }
+
     init {
         this.songsLiveData.observeForever(this.songsObserver)
 
@@ -57,14 +62,7 @@ class MusicLibraryViewModel(application: Application) : AndroidViewModel(applica
     }
     private fun initPlayerService() {
         if(Objects.isNull(playerService)) {
-            MediaPlayerService.initialize(super.getApplication(), object : ServiceConnection {
-                override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                    val binder = service as MediaPlayerService.MediaPlayerServiceBinder
-                    playerService = binder.mediaPlayerService
-                }
-
-                override fun onServiceDisconnected(name: ComponentName?) {}
-            })
+            MediaPlayerService.bindTo(super.getApplication(), this.serviceConnection)
         }
     }
 
@@ -90,6 +88,7 @@ class MusicLibraryViewModel(application: Application) : AndroidViewModel(applica
     override fun onCleared() {
         super.onCleared()
         this.songsLiveData.removeObserver(this.songsObserver)
+        getApplication<Application>().unbindService(this.serviceConnection)
     }
 
     companion object {

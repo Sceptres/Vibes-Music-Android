@@ -70,10 +70,9 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
      * @param context The {@link Context} to bind the service to
      * @param serviceConnection The {@link ServiceConnection} of this binding operation
      */
-    public static void initialize(Context context, ServiceConnection serviceConnection) {
+    public static void bindTo(Context context, ServiceConnection serviceConnection) {
         Intent serviceIntent = new Intent(context, MediaPlayerService.class);
         context.bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE);
-        context.startService(serviceIntent);
     }
 
     public MediaPlayerService() {
