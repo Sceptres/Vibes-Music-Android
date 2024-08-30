@@ -75,7 +75,7 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
 
     private fun initPlayerService() {
         if(Objects.isNull(this.playerService)) {
-            MediaPlayerService.initialize(super.getApplication(), this.serviceConnection)
+            MediaPlayerService.bindTo(super.getApplication(), this.serviceConnection)
         }
     }
 
