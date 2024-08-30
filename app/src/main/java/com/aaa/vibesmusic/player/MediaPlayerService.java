@@ -258,6 +258,14 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
     /**
      *
+     * @return True if the seeker thread is paused. False otherwise
+     */
+    public boolean isSeekerPaused() {
+        return this.timeThread.isPaused();
+    }
+
+    /**
+     *
      * @param time The time in milliseconds to seek to in the {@link Song}
      */
     public void seekTo(int time) {

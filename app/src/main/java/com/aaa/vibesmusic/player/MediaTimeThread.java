@@ -47,6 +47,14 @@ public class MediaTimeThread extends Thread {
     }
 
     /**
+     *
+     * @return True if the counter has been paused. False otherwise
+     */
+    public synchronized boolean isPaused() {
+        return this.paused;
+    }
+
+    /**
      * Unpause the thread
      */
     public synchronized void unpause() {
