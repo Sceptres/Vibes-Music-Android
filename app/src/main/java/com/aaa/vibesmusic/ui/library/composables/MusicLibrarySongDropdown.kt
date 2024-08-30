@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.ui.dialogs.delete.song.DeleteSongDialog
 import com.aaa.vibesmusic.ui.dialogs.edit.song.EditSongDialog
 import kotlinx.coroutines.CoroutineScope
 
@@ -23,12 +24,21 @@ fun MusicLibrarySongDropdown(
     modifier: Modifier = Modifier
 ) {
     val editDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val deleteDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     when {
         editDialogState.value -> {
             EditSongDialog(
                 song = song,
                 dialogState = editDialogState,
+                snackBarState = snackBarState,
+                snackBarScope = snackBarScope
+            )
+        }
+        deleteDialogState.value -> {
+            DeleteSongDialog(
+                song = song,
+                dialogState = deleteDialogState,
                 snackBarState = snackBarState,
                 snackBarScope = snackBarScope
             )
@@ -52,7 +62,7 @@ fun MusicLibrarySongDropdown(
             text = "Delete",
             onClick = {
                 expandedState.value = false
-                // TODO Open delete song confirmation popup
+                deleteDialogState.value = true
             }
         )
     }
