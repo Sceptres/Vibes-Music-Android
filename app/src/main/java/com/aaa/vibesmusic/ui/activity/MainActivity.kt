@@ -6,11 +6,21 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -33,6 +43,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
@@ -48,6 +59,7 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.storage.StorageUtil
+import com.aaa.vibesmusic.ui.anim.PlayingSongScreenAnim
 import com.aaa.vibesmusic.ui.import.ImportSongsScreen
 import com.aaa.vibesmusic.ui.library.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
@@ -82,7 +94,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     fun VibesMusicApp() {
         val navController = rememberNavController()
         val snackBarHostState = remember { SnackbarHostState() }
-        val playingSongScreenState: MutableState<Boolean> = remember { mutableStateOf(false) }
+        val playingSongScreenState: MutableTransitionState<Boolean> = remember { MutableTransitionState(false) }
 
         val backgroundColor: Color = colorResource(id = R.color.background_color)
         val navBarColor: Color = colorResource(id = R.color.navbar_color)
@@ -93,16 +105,18 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
             window.navigationBarColor = navBarColorState.toArgb()
         }
 
-        if(!playingSongScreenState.value) {
+        if(!playingSongScreenState.currentState || !playingSongScreenState.targetState) {
             AppScaffold(
                 navController = navController,
                 snackBarHostState = snackBarHostState,
-                playingSongScreenState = playingSongScreenState
+                openPlayingSongScreen = { playingSongScreenState.targetState = true }
             )
             navBarColorState = navBarColor
-        } else {
+        }
+
+        PlayingSongScreenAnim(visibleState = playingSongScreenState) {
             PlayingSongScreen(
-                screenState = playingSongScreenState
+                closeScreen = { playingSongScreenState.targetState = false }
             )
             navBarColorState = backgroundColor
         }
@@ -112,7 +126,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     fun AppScaffold(
         navController: NavHostController,
         snackBarHostState: SnackbarHostState,
-        playingSongScreenState: MutableState<Boolean>
+        openPlayingSongScreen: () -> Unit
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -178,7 +192,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 composable(route = Screens.MusicLibrary.route) {
                     MusicLibraryScreen(
                         snackBarState = snackBarHostState,
-                        playingSongScreenState = playingSongScreenState
+                        openPlayingSongScreen = openPlayingSongScreen
                     )
                 }
 

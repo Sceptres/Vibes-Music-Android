@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +36,7 @@ import com.aaa.vibesmusic.ui.playing.composables.TimeBar
 import java.util.Objects
 
 @Composable
-fun PlayingSongScreen(screenState: MutableState<Boolean>) {
+fun PlayingSongScreen(closeScreen: () -> Unit) {
     val playingSongViewModel: PlayingSongsViewModel = viewModel(factory = PlayingSongsViewModel.FACTORY)
     val song: Song? = playingSongViewModel.currentSong
 
@@ -58,8 +57,9 @@ fun PlayingSongScreen(screenState: MutableState<Boolean>) {
                 .align(Alignment.Start)
                 .clickable(
                     indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) { screenState.value = false }
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = closeScreen
+                )
         )
 
         Spacer(modifier = Modifier.height(20.dp))

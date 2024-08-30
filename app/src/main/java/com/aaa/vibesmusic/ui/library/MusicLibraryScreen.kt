@@ -37,7 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun MusicLibraryScreen(
     snackBarState: SnackbarHostState,
-    playingSongScreenState: MutableState<Boolean>
+    openPlayingSongScreen: () -> Unit
 ) {
     val viewModel: MusicLibraryViewModel = viewModel(factory = MusicLibraryViewModel.FACTORY)
     val currentContext = LocalContext.current
@@ -91,13 +91,12 @@ fun MusicLibraryScreen(
                 }
             }
             SongPlayerFloatingButton(
+                onClick = openPlayingSongScreen,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 10.dp, bottom = 10.dp)
                     .wrapContentSize()
-            ) {
-                playingSongScreenState.value = true
-            }
+            )
         }
         AdmobBanner(
             adId = "ca-app-pub-1417462071241776/9650528268",
