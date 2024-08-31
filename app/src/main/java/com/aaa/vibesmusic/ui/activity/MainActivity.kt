@@ -201,7 +201,9 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 }
 
                 composable(route = Screens.Playlists.route) {
-                    PlaylistsScreen()
+                    PlaylistsScreen(
+                        snackBarState = snackBarHostState
+                    )
                 }
             }
         }
