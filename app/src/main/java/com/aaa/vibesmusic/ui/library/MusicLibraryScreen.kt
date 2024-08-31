@@ -13,8 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,8 +27,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.library.composables.MusicLibrarySongDropdown
-import com.aaa.vibesmusic.ui.library.composables.SongsList
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import kotlinx.coroutines.CoroutineScope
 
