@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dialogs
+package com.aaa.vibesmusic.ui.dialogs.common
 
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
