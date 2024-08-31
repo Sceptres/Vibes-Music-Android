@@ -1,14 +1,16 @@
 package com.aaa.vibesmusic.ui.playlists.composables
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -36,7 +38,11 @@ import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import java.util.Objects
 
 @Composable
-fun PlaylistCard(playlistSongs: PlaylistSongs) {
+fun PlaylistCard(
+    playlistSongs: PlaylistSongs,
+    onOptionsClick: () -> Unit,
+    PlaylistMenu: @Composable () -> Unit
+) {
     val playlist: Playlist = playlistSongs.playlist
     val songs: List<Song> = playlistSongs.songs
 
@@ -78,19 +84,26 @@ fun PlaylistCard(playlistSongs: PlaylistSongs) {
                         .clip(RoundedCornerShape(30.dp))
                 )
 
-                IconButton(
-                    onClick = { /* handle options click */ },
+                Column(
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .size(45.dp)
                         .align(Alignment.BottomEnd)
-                        .padding(end = 10.dp)
-                        .background(transparent)
+                        .wrapContentSize()
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.options_btn),
-                        contentDescription = "Options",
-                        tint = Color.White
-                    )
+                    IconButton(
+                        onClick = onOptionsClick,
+                        modifier = Modifier
+                            .size(45.dp)
+                            .padding(end = 10.dp)
+                            .background(transparent)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.options_btn),
+                            contentDescription = "Options",
+                            tint = Color.White
+                        )
+                    }
+                    PlaylistMenu()
                 }
             }
 

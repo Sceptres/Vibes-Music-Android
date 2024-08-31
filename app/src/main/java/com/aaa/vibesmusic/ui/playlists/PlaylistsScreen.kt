@@ -39,6 +39,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.dialogs.add.playlist.AddPlaylistDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.playlists.composables.PlaylistCard
+import com.aaa.vibesmusic.ui.playlists.composables.PlaylistDropdown
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -101,8 +102,19 @@ fun PlaylistsScreen(
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    items(playlistsScreenViewModel.playlistSongs) { playlistSong ->
-                        PlaylistCard(playlistSong)
+                    items(playlistsScreenViewModel.playlistSongs) { playlistSongs ->
+                        val expandedState: MutableState<Boolean> = remember { mutableStateOf(false) }
+                        PlaylistCard(
+                            playlistSongs = playlistSongs,
+                            onOptionsClick = {expandedState.value = true}
+                        ) {
+                            PlaylistDropdown(
+                                expandedState = expandedState,
+                                playlistSongs = playlistSongs,
+                                snackBarState = snackBarState,
+                                snackBarScope = snackBarScope
+                            )
+                        }
                     }
                 }
             }
