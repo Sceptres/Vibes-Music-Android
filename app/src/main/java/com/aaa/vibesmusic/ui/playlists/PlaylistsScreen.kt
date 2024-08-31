@@ -44,10 +44,10 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun PlaylistsScreen(
     snackBarState: SnackbarHostState,
+    snackBarScope: CoroutineScope
 ) {
     val playlistsScreenViewModel: PlaylistsScreenViewModel = viewModel(factory = PlaylistsScreenViewModel.FACTORY)
     val addPlaylistDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val snackBarScope: CoroutineScope = rememberCoroutineScope()
 
     when {
         addPlaylistDialogState.value -> {

@@ -37,12 +37,12 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun MusicLibraryScreen(
     snackBarState: SnackbarHostState,
+    snackBarScope: CoroutineScope,
     openPlayingSongScreen: () -> Unit
 ) {
     val viewModel: MusicLibraryViewModel = viewModel(factory = MusicLibraryViewModel.FACTORY)
     val currentContext = LocalContext.current
     val notificationPermissionRequest = viewModel.getNotificationsPermissionLauncher()
-    val snackBarScope: CoroutineScope = rememberCoroutineScope()
 
     ConstraintLayout(
         modifier = Modifier

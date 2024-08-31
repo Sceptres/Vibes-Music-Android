@@ -36,6 +36,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,6 +66,7 @@ import com.aaa.vibesmusic.ui.library.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playing.PlayingSongScreen
 import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
+import kotlinx.coroutines.CoroutineScope
 
 class MainActivity : AppCompatActivity(), ServiceConnection {
     private lateinit var mediaPlayerService: MediaPlayerService
@@ -94,6 +96,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     fun VibesMusicApp() {
         val navController = rememberNavController()
         val snackBarHostState = remember { SnackbarHostState() }
+        val snackBarScope: CoroutineScope = rememberCoroutineScope()
         val playingSongScreenState: MutableTransitionState<Boolean> = remember { MutableTransitionState(false) }
 
         val backgroundColor: Color = colorResource(id = R.color.background_color)
@@ -109,6 +112,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
             AppScaffold(
                 navController = navController,
                 snackBarHostState = snackBarHostState,
+                snackBarScope = snackBarScope,
                 openPlayingSongScreen = { playingSongScreenState.targetState = true }
             )
             navBarColorState = navBarColor
@@ -126,6 +130,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     fun AppScaffold(
         navController: NavHostController,
         snackBarHostState: SnackbarHostState,
+        snackBarScope: CoroutineScope,
         openPlayingSongScreen: () -> Unit
     ) {
         Scaffold(
@@ -192,6 +197,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 composable(route = Screens.MusicLibrary.route) {
                     MusicLibraryScreen(
                         snackBarState = snackBarHostState,
+                        snackBarScope = snackBarScope,
                         openPlayingSongScreen = openPlayingSongScreen
                     )
                 }
@@ -202,7 +208,8 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
                 composable(route = Screens.Playlists.route) {
                     PlaylistsScreen(
-                        snackBarState = snackBarHostState
+                        snackBarState = snackBarHostState,
+                        snackBarScope = snackBarScope
                     )
                 }
             }
