@@ -84,7 +84,6 @@ fun MusicLibraryScreen(
                     MusicLibrarySongDropdown(
                         expandedState = expandedState,
                         song = song,
-                        modifier = Modifier.background(colorResource(id = R.color.foreground_color)),
                         snackBarState = snackBarState,
                         snackBarScope = snackBarScope
                     )
