@@ -9,8 +9,6 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
-import com.aaa.vibesmusic.ui.services.playlists.operators.RemovePlaylistSongOperator
-import com.aaa.vibesmusic.ui.services.songs.operators.EditSongOperator
 
 class PlaylistSongsMenu(
     private val c: Context,
@@ -24,13 +22,7 @@ class PlaylistSongsMenu(
         super.getMenuInflater().inflate(R.menu.playlist_songs_dropdown_menu, super.getMenu())
         this.setOnMenuItemClickListener {
             when(it.itemId) {
-                R.id.editSong -> EditSongOperator(
-                    this.c,
-                    fragmentManager
-                ).operate(this.song, this.db)
-                R.id.removeSongFromPlaylist -> RemovePlaylistSongOperator(
-                    fragmentManager, this.song
-                ).operate(this.playlistSongs, this.db)
+
             }
             return@setOnMenuItemClickListener true
         }

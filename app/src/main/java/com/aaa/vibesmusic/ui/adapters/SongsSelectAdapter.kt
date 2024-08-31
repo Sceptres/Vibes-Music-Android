@@ -1,18 +1,15 @@
 package com.aaa.vibesmusic.ui.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
-import android.widget.ImageButton
 import android.widget.TextView
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.storage.StorageUtil
-import com.aaa.vibesmusic.ui.menu.SongDropdownMenu
 import com.google.android.material.imageview.ShapeableImageView
 import java.util.Objects
 import java.util.stream.Collectors
