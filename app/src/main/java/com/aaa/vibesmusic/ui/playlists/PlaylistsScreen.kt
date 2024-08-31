@@ -15,8 +15,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,12 +36,28 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.ui.dialogs.add.playlist.AddPlaylistDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.playlists.composables.PlaylistCard
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun PlaylistsScreen() {
+fun PlaylistsScreen(
+    snackBarState: SnackbarHostState,
+) {
     val playlistsScreenViewModel: PlaylistsScreenViewModel = viewModel(factory = PlaylistsScreenViewModel.FACTORY)
+    val addPlaylistDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val snackBarScope: CoroutineScope = rememberCoroutineScope()
+
+    when {
+        addPlaylistDialogState.value -> {
+            AddPlaylistDialog(
+                dialogState = addPlaylistDialogState,
+                snackBarHostState = snackBarState,
+                snackBarScope = snackBarScope
+            )
+        }
+    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -87,7 +108,7 @@ fun PlaylistsScreen() {
             }
 
             FloatingActionButton(
-                onClick = { /* handle create playlist */ },
+                onClick = { addPlaylistDialogState.value = true },
                 containerColor = colorResource(id = R.color.blue_selected),
                 shape = CircleShape,
                 contentColor = Color.White,
