@@ -11,6 +11,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.ui.common.CustomDropdown
 import com.aaa.vibesmusic.ui.common.CustomDropdownMenuItem
+import com.aaa.vibesmusic.ui.dialogs.delete.playlist.DeletePlaylistDialog
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -26,7 +27,14 @@ fun PlaylistDropdown(
 
     when {
         editDialogState.value -> {}
-        deleteDialogState.value -> {}
+        deleteDialogState.value -> {
+            DeletePlaylistDialog(
+                playlistSongs = playlistSongs,
+                dialogState = deleteDialogState,
+                snackBarState = snackBarState,
+                snackBarScope = snackBarScope
+            )
+        }
     }
 
     CustomDropdown(
