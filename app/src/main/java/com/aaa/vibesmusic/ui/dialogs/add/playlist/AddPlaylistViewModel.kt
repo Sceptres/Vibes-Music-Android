@@ -40,4 +40,9 @@ class AddPlaylistViewModel(application: Application) : AndroidViewModel(applicat
                 .subscribe(onSuccess, onFail)
         )
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        this.disposables.clear()
+    }
 }
