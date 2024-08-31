@@ -5,11 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,6 +22,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.library.composables.MusicLibrarySongDropdown
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
@@ -87,7 +83,7 @@ fun MusicLibraryScreen(
                     )
                 }
             }
-            SongPlayerFloatingButton(
+            PlayingSongsButton(
                 onClick = openPlayingSongScreen,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -106,22 +102,4 @@ fun MusicLibraryScreen(
                 }
         )
     }
-}
-
-@Composable
-fun SongPlayerFloatingButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
-    FloatingActionButton(
-        onClick = { onClick.invoke() },
-        containerColor = colorResource(id = R.color.blue_selected),
-        content = {
-            Icon(
-                painter = painterResource(id = R.drawable.play_arrow),
-                contentDescription = "Playing songs page",
-                tint = Color.White,
-                modifier = Modifier.size(50.dp)
-            )
-        },
-        shape = CircleShape,
-        modifier = modifier
-    )
 }
