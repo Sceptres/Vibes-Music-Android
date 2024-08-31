@@ -33,6 +33,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.UIUtil
+import com.aaa.vibesmusic.ui.dialogs.EditField
+import com.aaa.vibesmusic.ui.dialogs.EditFieldLabel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -167,40 +169,4 @@ fun EditSongDialog(
             }
         }
     }
-}
-
-@Composable
-private fun EditFieldLabel(text: String, modifier: Modifier = Modifier) {
-    Text(
-        text = text,
-        fontSize = 15.sp,
-        color = Color.White,
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun EditField(valueState: MutableState<String>, placeholderText: String, modifier: Modifier = Modifier) {
-    TextField(
-        value = valueState.value,
-        onValueChange = { newValue -> valueState.value = newValue },
-        modifier = modifier,
-        placeholder = {
-            Text(
-                text = placeholderText,
-                color = Color.Gray,
-                fontSize = 13.sp,
-                modifier = Modifier
-                    .wrapContentSize()
-            )
-        },
-        singleLine = true,
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = Color.White,
-            unfocusedTextColor = Color.White,
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent
-        )
-    )
 }
