@@ -1,17 +1,12 @@
 package com.aaa.vibesmusic.ui.playlists
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -21,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,8 +32,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.dialogs.add.playlist.AddPlaylistDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
-import com.aaa.vibesmusic.ui.playlists.composables.PlaylistCard
 import com.aaa.vibesmusic.ui.playlists.composables.PlaylistDropdown
+import com.aaa.vibesmusic.ui.playlists.composables.PlaylistsGrid
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -93,29 +87,18 @@ fun PlaylistsScreen(
                     modifier = Modifier.padding(top = 5.dp)
                 )
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(top = 20.dp, bottom = 60.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                PlaylistsGrid(
+                    playlistSongsList = playlistsScreenViewModel.playlistSongs,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
-                ) {
-                    items(playlistsScreenViewModel.playlistSongs) { playlistSongs ->
-                        val expandedState: MutableState<Boolean> = remember { mutableStateOf(false) }
-                        PlaylistCard(
-                            playlistSongs = playlistSongs,
-                            onOptionsClick = {expandedState.value = true}
-                        ) {
-                            PlaylistDropdown(
-                                expandedState = expandedState,
-                                playlistSongs = playlistSongs,
-                                snackBarState = snackBarState,
-                                snackBarScope = snackBarScope
-                            )
-                        }
-                    }
+                        .weight(1f),
+                ) { expandedState, playlistSongs ->
+                    PlaylistDropdown(
+                        expandedState = expandedState,
+                        playlistSongs = playlistSongs,
+                        snackBarState = snackBarState,
+                        snackBarScope = snackBarScope
+                    )
                 }
             }
 
