@@ -1,7 +1,6 @@
 package com.aaa.vibesmusic.ui.dialogs.add.playlist
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,7 +12,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -27,6 +25,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
+import com.aaa.vibesmusic.ui.dialogs.common.DialogButton
+import com.aaa.vibesmusic.ui.dialogs.common.DialogButtons
 import com.aaa.vibesmusic.ui.dialogs.common.EditField
 import com.aaa.vibesmusic.ui.dialogs.common.EditFieldLabel
 import kotlinx.coroutines.CoroutineScope
@@ -89,8 +89,14 @@ fun AddPlaylistDialog(
                         .padding(horizontal = 9.dp)
                 )
 
-                Row {
-                    TextButton(
+                // Dialog buttons
+                val dialogButtons: List<DialogButton> = listOf(
+                    DialogButton(
+                        btnTxt = "Cancel",
+                        onClick = onDismiss
+                    ),
+                    DialogButton(
+                        btnTxt = "Add",
                         onClick = {
                             addPlaylistViewModel.addPlaylist(
                                 {
@@ -109,12 +115,14 @@ fun AddPlaylistDialog(
                                     )
                                 }
                             )
-                        },
-                        modifier = Modifier.padding(8.dp),
-                    ) {
-                        Text("Add")
-                    }
-                }
+                        }
+                    )
+                )
+
+                DialogButtons(
+                    buttons = dialogButtons,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
