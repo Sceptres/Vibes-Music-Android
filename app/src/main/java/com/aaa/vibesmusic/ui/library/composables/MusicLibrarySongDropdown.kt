@@ -11,6 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.ui.common.CustomDropdown
+import com.aaa.vibesmusic.ui.common.CustomDropdownMenuItem
 import com.aaa.vibesmusic.ui.dialogs.delete.song.DeleteSongDialog
 import com.aaa.vibesmusic.ui.dialogs.edit.song.EditSongDialog
 import kotlinx.coroutines.CoroutineScope
@@ -45,12 +47,12 @@ fun MusicLibrarySongDropdown(
         }
     }
 
-    DropdownMenu(
+    CustomDropdown(
         expanded = expandedState.value,
-        onDismissRequest = { expandedState.value = false },
+        onDismiss = { expandedState.value = false },
         modifier = modifier
     ) {
-        MusicLibrarySongDropdownMenuItem(
+        CustomDropdownMenuItem(
             text = "Edit Song",
             onClick = {
                 expandedState.value = false
@@ -58,7 +60,7 @@ fun MusicLibrarySongDropdown(
             }
         )
 
-        MusicLibrarySongDropdownMenuItem(
+        CustomDropdownMenuItem(
             text = "Delete",
             onClick = {
                 expandedState.value = false
@@ -66,17 +68,4 @@ fun MusicLibrarySongDropdown(
             }
         )
     }
-}
-
-@Composable
-private fun MusicLibrarySongDropdownMenuItem(text: String, onClick: () -> Unit) {
-    DropdownMenuItem(
-        text = {
-            Text(
-                text = text,
-                color = Color.White
-            )
-       },
-        onClick = { onClick() }
-    )
 }
