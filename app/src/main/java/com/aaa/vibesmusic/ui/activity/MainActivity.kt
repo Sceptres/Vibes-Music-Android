@@ -32,6 +32,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -110,14 +111,20 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
         val navBarColor: Color = colorResource(id = R.color.navbar_color)
 
         var navBarColorState: Color by remember { mutableStateOf(backgroundColor) }
+        var statusBarColorState: Color by remember { mutableStateOf(backgroundColor) }
 
-        SideEffect {
+        LaunchedEffect(navBarColorState) {
             window.navigationBarColor = navBarColorState.toArgb()
+        }
+
+        LaunchedEffect(statusBarColorState) {
+            window.statusBarColor = statusBarColorState.toArgb()
         }
 
         if(!playingSongScreenState.currentState || !playingSongScreenState.targetState) {
             AppScaffold(
                 navController = navController,
+                statusBarColorSetter = { color -> statusBarColorState = color },
                 snackBarHostState = snackBarHostState,
                 snackBarScope = snackBarScope,
                 openPlayingSongScreen = { playingSongScreenState.targetState = true }
@@ -148,6 +155,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
     @Composable
     fun AppScaffold(
         navController: NavHostController,
+        statusBarColorSetter: (Color) -> Unit,
         snackBarHostState: SnackbarHostState,
         snackBarScope: CoroutineScope,
         openPlayingSongScreen: () -> Unit
@@ -214,6 +222,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 exitTransition = { ExitTransition.None }
             ) {
                 composable(route = Screens.MusicLibrary.route) {
+                    statusBarColorSetter(colorResource(id = R.color.background_color))
                     MusicLibraryScreen(
                         snackBarState = snackBarHostState,
                         snackBarScope = snackBarScope,
@@ -222,6 +231,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 }
 
                 composable(route = Screens.ImportMusic.route) {
+                    statusBarColorSetter(colorResource(id = R.color.background_color))
                     ImportSongsScreen()
                 }
 
@@ -230,6 +240,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                     route = "playlists_nav"
                 ) {
                     composable(route = Screens.PLAYLISTS_PATH) {
+                        statusBarColorSetter(colorResource(id = R.color.background_color))
                         PlaylistsScreen(
                             navController = navController,
                             snackBarState = snackBarHostState,
@@ -243,6 +254,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                     ) {backStack ->
                         val playlistId: Int = backStack.arguments?.getInt("playlistId") ?:
                         throw IllegalArgumentException("Missing {playlistId} argument")
+                        statusBarColorSetter(colorResource(id = R.color.foreground_color))
                         PlaylistScreen(
                             playlistId = playlistId,
                             navController = navController
