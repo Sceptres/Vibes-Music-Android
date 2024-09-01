@@ -136,6 +136,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
             PlayingSongScreen(
                 closeScreen = { playingSongScreenState.targetState = false }
             )
+            statusBarColorState = backgroundColor
             navBarColorState = backgroundColor
         }
     }
@@ -249,7 +250,8 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                         statusBarColorSetter(foregroundColor)
                         PlaylistScreen(
                             playlistId = playlistId,
-                            navController = navController
+                            navController = navController,
+                            openPlayingSongScreen = openPlayingSongScreen
                         )
                     }
                 }

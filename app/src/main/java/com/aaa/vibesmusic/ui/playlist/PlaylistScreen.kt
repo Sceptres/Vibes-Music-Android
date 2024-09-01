@@ -26,7 +26,8 @@ import com.aaa.vibesmusic.ui.playlist.composables.PlaylistTopBar
 @Composable
 fun PlaylistScreen(
     playlistId: Int,
-    navController: NavController
+    navController: NavController,
+    openPlayingSongScreen: () -> Unit
 ) {
     val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(factory = PlaylistScreenViewModel.getFactory(playlistId))
 
@@ -77,7 +78,7 @@ fun PlaylistScreen(
             }
 
             PlayingSongsButton(
-                onClick = {},
+                onClick = openPlayingSongScreen,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 10.dp, bottom = 10.dp)
