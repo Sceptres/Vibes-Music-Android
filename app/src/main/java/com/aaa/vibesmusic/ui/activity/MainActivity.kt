@@ -160,6 +160,10 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
         snackBarScope: CoroutineScope,
         openPlayingSongScreen: () -> Unit
     ) {
+        val navBarColor: Color = colorResource(id = R.color.navbar_color)
+        val backgroundColor: Color = colorResource(id = R.color.background_color)
+        val foregroundColor: Color = colorResource(id = R.color.foreground_color)
+
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             snackbarHost = {
@@ -169,7 +173,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
             },
             bottomBar = {
                 NavigationBar(
-                    containerColor = colorResource(id = R.color.navbar_color),
+                    containerColor = navBarColor,
                 ) {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
@@ -222,7 +226,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 exitTransition = { ExitTransition.None }
             ) {
                 composable(route = Screens.MusicLibrary.route) {
-                    statusBarColorSetter(colorResource(id = R.color.background_color))
+                    statusBarColorSetter(backgroundColor)
                     MusicLibraryScreen(
                         snackBarState = snackBarHostState,
                         snackBarScope = snackBarScope,
@@ -231,7 +235,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 }
 
                 composable(route = Screens.ImportMusic.route) {
-                    statusBarColorSetter(colorResource(id = R.color.background_color))
+                    statusBarColorSetter(backgroundColor)
                     ImportSongsScreen()
                 }
 
@@ -240,7 +244,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                     route = "playlists_nav"
                 ) {
                     composable(route = Screens.PLAYLISTS_PATH) {
-                        statusBarColorSetter(colorResource(id = R.color.background_color))
+                        statusBarColorSetter(backgroundColor)
                         PlaylistsScreen(
                             navController = navController,
                             snackBarState = snackBarHostState,
@@ -254,7 +258,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                     ) {backStack ->
                         val playlistId: Int = backStack.arguments?.getInt("playlistId") ?:
                         throw IllegalArgumentException("Missing {playlistId} argument")
-                        statusBarColorSetter(colorResource(id = R.color.foreground_color))
+                        statusBarColorSetter(foregroundColor)
                         PlaylistScreen(
                             playlistId = playlistId,
                             navController = navController
