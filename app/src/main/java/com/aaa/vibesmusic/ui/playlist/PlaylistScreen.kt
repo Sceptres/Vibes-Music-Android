@@ -78,6 +78,7 @@ fun PlaylistScreen(
                     songs = playlistScreenViewModel.getPlaylistSongs(),
                     onItemClick = {index ->
                         playlistScreenViewModel.onSongClicked(notificationPermLauncher, currentContext, index)
+                        openPlayingSongScreen()
                     },
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
                 ) { expandedState, song ->
