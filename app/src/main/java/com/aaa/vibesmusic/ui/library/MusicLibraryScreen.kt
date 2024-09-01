@@ -73,7 +73,10 @@ fun MusicLibraryScreen(
                 SongsList(
                     songs = viewModel.songs,
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp),
-                    { index -> viewModel.onSongClick(notificationPermissionRequest, currentContext, index) }
+                    { index ->
+                        viewModel.onSongClick(notificationPermissionRequest, currentContext, index)
+                        openPlayingSongScreen()
+                    }
                 ) { expandedState, song ->
                     MusicLibrarySongDropdown(
                         expandedState = expandedState,
