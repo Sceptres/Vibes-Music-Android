@@ -1,6 +1,7 @@
 package com.aaa.vibesmusic.ui.playlists.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,7 @@ import java.util.Objects
 @Composable
 fun PlaylistCard(
     playlistSongs: PlaylistSongs,
+    onClick: () -> Unit,
     onOptionsClick: () -> Unit,
     PlaylistMenu: @Composable () -> Unit
 ) {
@@ -55,6 +57,7 @@ fun PlaylistCard(
             .clip(RoundedCornerShape(30.dp))
             .background(colorResource(id = R.color.foreground_color))
             .padding(10.dp)
+            .clickable(onClick = onClick)
     ) {
         Column(
             modifier = Modifier

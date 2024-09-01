@@ -53,10 +53,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.perms.PermissionsUtil
@@ -67,8 +70,10 @@ import com.aaa.vibesmusic.ui.import.ImportSongsScreen
 import com.aaa.vibesmusic.ui.library.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playing.PlayingSongScreen
+import com.aaa.vibesmusic.ui.playlist.PlaylistScreen
 import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
 import kotlinx.coroutines.CoroutineScope
+import java.lang.IllegalArgumentException
 
 class MainActivity : AppCompatActivity(), ServiceConnection {
     private lateinit var mediaPlayerService: MediaPlayerService
@@ -220,11 +225,29 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                     ImportSongsScreen()
                 }
 
-                composable(route = Screens.Playlists.route) {
-                    PlaylistsScreen(
-                        snackBarState = snackBarHostState,
-                        snackBarScope = snackBarScope
-                    )
+                navigation(
+                    startDestination = Screens.PLAYLISTS_PATH,
+                    route = "playlists_nav"
+                ) {
+                    composable(route = Screens.PLAYLISTS_PATH) {
+                        PlaylistsScreen(
+                            navController = navController,
+                            snackBarState = snackBarHostState,
+                            snackBarScope = snackBarScope
+                        )
+                    }
+
+                    composable(
+                        route = Screens.PLAYLIST_PATH,
+                        arguments = listOf(navArgument("playlistId") { type = NavType.IntType })
+                    ) {backStack ->
+                        val playlistId: Int = backStack.arguments?.getInt("playlistId") ?:
+                        throw IllegalArgumentException("Missing {playlistId} argument")
+                        PlaylistScreen(
+                            playlistId = playlistId,
+                            navController = navController
+                        )
+                    }
                 }
             }
         }

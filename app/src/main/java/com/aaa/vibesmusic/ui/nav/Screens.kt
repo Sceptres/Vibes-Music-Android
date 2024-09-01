@@ -8,7 +8,9 @@ sealed class Screens(val route: String, @StringRes val screenNavText: Int, @Draw
     companion object {
         private const val MUSIC_LIBRARY_PATH: String = "music_library"
         private const val IMPORT_MUSIC_PATH: String = "import_music"
-        private const val PLAYLISTS_PATH: String = "playlists"
+        private const val PLAYLISTS_NAV_PATH: String = "playlists_nav"
+        const val PLAYLISTS_PATH: String = "playlists"
+        const val PLAYLIST_PATH: String = "playlist/{playlistId}"
 
         val SCREENS = arrayOf(
             Playlists,
@@ -19,5 +21,5 @@ sealed class Screens(val route: String, @StringRes val screenNavText: Int, @Draw
 
     data object MusicLibrary : Screens(MUSIC_LIBRARY_PATH, R.string.music_library, R.drawable.ic_music_library)
     data object ImportMusic : Screens(IMPORT_MUSIC_PATH, R.string.import_music, R.drawable.ic_import)
-    data object Playlists : Screens(PLAYLISTS_PATH, R.string.playlists, R.drawable.playlist)
+    data object Playlists : Screens(PLAYLISTS_NAV_PATH, R.string.playlists, R.drawable.playlist)
 }
