@@ -29,19 +29,23 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.dialogs.add.playlist.AddPlaylistDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
+import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playlists.composables.PlaylistDropdown
 import com.aaa.vibesmusic.ui.playlists.composables.PlaylistsGrid
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun PlaylistsScreen(
+    navController: NavController,
     snackBarState: SnackbarHostState,
-    snackBarScope: CoroutineScope
+    snackBarScope: CoroutineScope,
 ) {
     val playlistsScreenViewModel: PlaylistsScreenViewModel = viewModel(factory = PlaylistsScreenViewModel.FACTORY)
+
     val addPlaylistDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     when {
@@ -89,6 +93,11 @@ fun PlaylistsScreen(
 
                 PlaylistsGrid(
                     playlistSongsList = playlistsScreenViewModel.playlistSongs,
+                    onPlaylistItemClick = { playlistSongs ->
+                        val playlistId: Int = playlistSongs.playlist.playlistId
+                        val playlistPath: String = Screens.PLAYLIST_PATH.replace("{playlistId}", playlistId.toString())
+                        navController.navigate(playlistPath)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),

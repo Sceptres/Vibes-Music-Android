@@ -17,6 +17,7 @@ import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 fun PlaylistsGrid(
     playlistSongsList: List<PlaylistSongs>,
     modifier: Modifier = Modifier,
+    onPlaylistItemClick: (PlaylistSongs) -> Unit,
     PlaylistItemMenu: @Composable (expandedState: MutableState<Boolean>, playlistSongs: PlaylistSongs) -> Unit
 ) {
     LazyVerticalGrid(
@@ -30,6 +31,7 @@ fun PlaylistsGrid(
             val expandedState: MutableState<Boolean> = remember { mutableStateOf(false) }
             PlaylistCard(
                 playlistSongs = playlistSongs,
+                onClick = {onPlaylistItemClick(playlistSongs)},
                 onOptionsClick = {expandedState.value = true}
             ) {
                 PlaylistItemMenu(expandedState, playlistSongs)
