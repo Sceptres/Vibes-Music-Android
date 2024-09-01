@@ -137,18 +137,6 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 closeScreen = { playingSongScreenState.targetState = false }
             )
             navBarColorState = backgroundColor
-
-            // Ensure swiping back closes the playing song screen
-            onBackPressedDispatcher.addCallback(LocalLifecycleOwner.current, object: OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if(playingSongScreenState.currentState) {
-                        playingSongScreenState.targetState = false
-                    } else {
-                        isEnabled = false
-                        moveTaskToBack(true)
-                    }
-                }
-            })
         }
     }
 
