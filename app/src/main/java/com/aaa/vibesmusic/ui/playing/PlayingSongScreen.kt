@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.playing
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,6 +40,10 @@ import java.util.Objects
 fun PlayingSongScreen(closeScreen: () -> Unit) {
     val playingSongViewModel: PlayingSongsViewModel = viewModel(factory = PlayingSongsViewModel.FACTORY)
     val song: Song? = playingSongViewModel.currentSong
+
+    BackHandler {
+        closeScreen()
+    }
 
     Column(
         modifier = Modifier
