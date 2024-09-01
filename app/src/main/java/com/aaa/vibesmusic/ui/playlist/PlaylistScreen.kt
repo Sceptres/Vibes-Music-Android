@@ -1,6 +1,8 @@
 package com.aaa.vibesmusic.ui.playlist
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -17,6 +20,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
@@ -30,6 +34,8 @@ fun PlaylistScreen(
     openPlayingSongScreen: () -> Unit
 ) {
     val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(factory = PlaylistScreenViewModel.getFactory(playlistId))
+    val notificationPermLauncher: ManagedActivityResultLauncher<String, Boolean> = playlistScreenViewModel.getNotificationsPermissionLauncher()
+    val currentContext: Context = LocalContext.current
 
     val closer: () -> Unit = {
         navController.navigate(Screens.Playlists.route) {
@@ -69,8 +75,10 @@ fun PlaylistScreen(
                 )
 
                 SongsList(
-                    songs = playlistScreenViewModel.playlistSongs?.songs ?: listOf(),
-                    onItemClick = {},
+                    songs = playlistScreenViewModel.getPlaylistSongs(),
+                    onItemClick = {index ->
+                        playlistScreenViewModel.onSongClicked(notificationPermLauncher, currentContext, index)
+                    },
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
                 ) { expandedState, song ->
 
