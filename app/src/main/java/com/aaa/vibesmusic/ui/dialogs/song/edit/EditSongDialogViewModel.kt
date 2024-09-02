@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dialogs.edit.song
+package com.aaa.vibesmusic.ui.dialogs.song.edit
 
 import android.app.Application
 import android.content.Context

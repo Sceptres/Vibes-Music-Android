@@ -12,8 +12,8 @@ import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.ui.common.CustomDropdown
 import com.aaa.vibesmusic.ui.common.CustomDropdownMenuItem
-import com.aaa.vibesmusic.ui.dialogs.delete.playlist.song.DeletePlaylistSongDialog
-import com.aaa.vibesmusic.ui.dialogs.edit.song.EditSongDialog
+import com.aaa.vibesmusic.ui.dialogs.playlist.remove.song.DeletePlaylistSongDialog
+import com.aaa.vibesmusic.ui.dialogs.song.edit.EditSongDialog
 import kotlinx.coroutines.CoroutineScope
 
 @Composable

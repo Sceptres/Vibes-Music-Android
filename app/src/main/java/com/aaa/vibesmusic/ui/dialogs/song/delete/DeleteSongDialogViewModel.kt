@@ -1,40 +1,32 @@
-package com.aaa.vibesmusic.ui.dialogs.add.playlist
+package com.aaa.vibesmusic.ui.dialogs.song.delete
 
 import android.app.Application
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
-import com.aaa.vibesmusic.database.data.playlist.Playlist
+import com.aaa.vibesmusic.database.data.music.Song
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class AddPlaylistViewModel(application: Application) : AndroidViewModel(application) {
+class DeleteSongDialogViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
         val FACTORY: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                AddPlaylistViewModel(this[APPLICATION_KEY] as Application)
+                DeleteSongDialogViewModel(this[APPLICATION_KEY] as Application)
             }
         }
     }
 
-    val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.getApplication())
-    val playlistNameState: MutableState<String> = mutableStateOf("")
+    val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
     val disposables: CompositeDisposable = CompositeDisposable()
 
-    fun addPlaylist(onSuccess: () -> Unit, onFail: (Throwable) -> Unit) {
-        val newPlaylist = Playlist(
-            this.playlistNameState.value,
-            null
-        )
-
+    fun deleteSong(song: Song, onSuccess: () -> Unit, onFail: (err: Throwable) -> Unit) {
         this.disposables.add(
-            this.db.playlistDao().insertPlaylist(newPlaylist)
+            db.songDao().deleteSong(song)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onSuccess, onFail)

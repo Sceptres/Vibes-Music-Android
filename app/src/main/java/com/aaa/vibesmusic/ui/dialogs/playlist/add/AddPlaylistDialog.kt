@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dialogs.add.playlist
+package com.aaa.vibesmusic.ui.dialogs.playlist.add
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

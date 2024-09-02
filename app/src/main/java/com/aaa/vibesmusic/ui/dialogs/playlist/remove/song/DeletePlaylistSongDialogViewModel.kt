@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dialogs.delete.playlist
+package com.aaa.vibesmusic.ui.dialogs.playlist.remove.song
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,31 +7,30 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
-import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
-import com.aaa.vibesmusic.database.util.DatabaseUtil
+import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.database.data.playlist.Playlist
+import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class DeletePlaylistDialogViewModel(application: Application) : AndroidViewModel(application) {
+class DeletePlaylistSongDialogViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
         val FACTORY: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                DeletePlaylistDialogViewModel(this[APPLICATION_KEY] as Application)
+                DeletePlaylistSongDialogViewModel(this[APPLICATION_KEY] as Application)
             }
         }
     }
 
-    private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
+    private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.getApplication())
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    fun deletePlaylistSongs(
-        playlistSongs: PlaylistSongs,
-        onSuccess: () -> Unit,
-        onFail: (Throwable) -> Unit
-    ) {
+    fun deletePlaylistSong(playlist: Playlist, song: Song, onSuccess: () -> Unit, onFail: (Throwable) -> Unit) {
+        val playlistSongsRelationship: PlaylistSongRelationship = PlaylistSongRelationship(playlist.playlistId, song.songId)
         this.disposables.add(
-            DatabaseUtil.deletePlaylistSong(this.db, playlistSongs)
+            this.db.playlistSongRelationshipDao()
+                .deletePlaylistSongRelationship(playlistSongsRelationship)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onSuccess, onFail)
@@ -42,5 +41,4 @@ class DeletePlaylistDialogViewModel(application: Application) : AndroidViewModel
         super.onCleared()
         this.disposables.clear()
     }
-
 }

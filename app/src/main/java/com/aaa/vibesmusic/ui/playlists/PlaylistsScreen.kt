@@ -31,7 +31,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.ui.dialogs.add.playlist.AddPlaylistDialog
+import com.aaa.vibesmusic.ui.dialogs.playlist.add.AddPlaylistDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playlists.composables.PlaylistDropdown
