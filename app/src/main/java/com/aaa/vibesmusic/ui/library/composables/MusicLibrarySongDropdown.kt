@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.common.CustomDropdown
 import com.aaa.vibesmusic.ui.common.CustomDropdownMenuItem
-import com.aaa.vibesmusic.ui.dialogs.delete.song.DeleteSongDialog
-import com.aaa.vibesmusic.ui.dialogs.edit.song.EditSongDialog
+import com.aaa.vibesmusic.ui.dialogs.song.delete.DeleteSongDialog
+import com.aaa.vibesmusic.ui.dialogs.song.edit.EditSongDialog
 import kotlinx.coroutines.CoroutineScope
 
 @Composable

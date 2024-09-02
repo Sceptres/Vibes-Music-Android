@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dialogs.delete.song
+package com.aaa.vibesmusic.ui.dialogs.playlist.delete
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,26 +7,31 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
-import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
+import com.aaa.vibesmusic.database.util.DatabaseUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class DeleteSongDialogViewModel(application: Application) : AndroidViewModel(application) {
+class DeletePlaylistDialogViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
         val FACTORY: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                DeleteSongDialogViewModel(this[APPLICATION_KEY] as Application)
+                DeletePlaylistDialogViewModel(this[APPLICATION_KEY] as Application)
             }
         }
     }
 
-    val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
-    val disposables: CompositeDisposable = CompositeDisposable()
+    private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
-    fun deleteSong(song: Song, onSuccess: () -> Unit, onFail: (err: Throwable) -> Unit) {
+    fun deletePlaylistSongs(
+        playlistSongs: PlaylistSongs,
+        onSuccess: () -> Unit,
+        onFail: (Throwable) -> Unit
+    ) {
         this.disposables.add(
-            db.songDao().deleteSong(song)
+            DatabaseUtil.deletePlaylistSong(this.db, playlistSongs)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onSuccess, onFail)
@@ -37,4 +42,5 @@ class DeleteSongDialogViewModel(application: Application) : AndroidViewModel(app
         super.onCleared()
         this.disposables.clear()
     }
+
 }

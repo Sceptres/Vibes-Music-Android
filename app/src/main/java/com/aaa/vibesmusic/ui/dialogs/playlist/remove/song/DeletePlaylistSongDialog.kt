@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dialogs.delete.playlist.song
+package com.aaa.vibesmusic.ui.dialogs.playlist.remove.song
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable

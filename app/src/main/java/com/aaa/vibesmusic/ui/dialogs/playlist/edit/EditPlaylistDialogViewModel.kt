@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dialogs.edit.playlist
+package com.aaa.vibesmusic.ui.dialogs.playlist.edit
 
 import android.app.Application
 import androidx.compose.runtime.MutableState
