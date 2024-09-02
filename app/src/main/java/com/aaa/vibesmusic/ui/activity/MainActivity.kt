@@ -251,7 +251,9 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                         PlaylistScreen(
                             playlistId = playlistId,
                             navController = navController,
-                            openPlayingSongScreen = openPlayingSongScreen
+                            openPlayingSongScreen = openPlayingSongScreen,
+                            snackBarState = snackBarHostState,
+                            snackBarScope = snackBarScope
                         )
                     }
                 }

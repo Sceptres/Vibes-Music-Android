@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,12 +27,16 @@ import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playlist.composables.PlaylistTopBar
+import com.aaa.vibesmusic.ui.playlists.composables.PlaylistSongDropdown
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun PlaylistScreen(
     playlistId: Int,
     navController: NavController,
-    openPlayingSongScreen: () -> Unit
+    openPlayingSongScreen: () -> Unit,
+    snackBarState: SnackbarHostState,
+    snackBarScope: CoroutineScope
 ) {
     val playlistScreenViewModel: PlaylistScreenViewModel = viewModel(factory = PlaylistScreenViewModel.getFactory(playlistId))
     val notificationPermLauncher: ManagedActivityResultLauncher<String, Boolean> = playlistScreenViewModel.getNotificationsPermissionLauncher()
@@ -82,7 +87,13 @@ fun PlaylistScreen(
                     },
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
                 ) { expandedState, song ->
-
+                    PlaylistSongDropdown(
+                        expandedState = expandedState,
+                        playlistSongs = playlistScreenViewModel.playlistSongs!!,
+                        song = song,
+                        snackBarState = snackBarState,
+                        snackBarScope = snackBarScope
+                    )
                 }
             }
 
