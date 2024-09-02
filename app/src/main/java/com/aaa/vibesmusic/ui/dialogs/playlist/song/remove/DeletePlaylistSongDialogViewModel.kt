@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dialogs.playlist.remove.song
+package com.aaa.vibesmusic.ui.dialogs.playlist.song.remove
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
