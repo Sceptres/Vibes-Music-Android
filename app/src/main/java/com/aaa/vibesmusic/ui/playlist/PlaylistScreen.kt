@@ -113,9 +113,10 @@ fun PlaylistScreen(
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
                 ) { expandedState, song ->
                     PlaylistSongDropdown(
-                        expandedState = expandedState,
                         playlistSongs = playlistScreenViewModel.playlistSongs!!,
                         song = song,
+                        expanded = expandedState.value,
+                        closer = { expandedState.value = false },
                         snackBarState = snackBarState,
                         snackBarScope = snackBarScope
                     )

@@ -20,9 +20,10 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun PlaylistSongDropdown(
-    expandedState: MutableState<Boolean>,
     playlistSongs: PlaylistSongs,
     song: Song,
+    expanded: Boolean,
+    closer: () -> Unit,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope,
     modifier: Modifier = Modifier
@@ -51,14 +52,14 @@ fun PlaylistSongDropdown(
     }
 
     CustomDropdown(
-        expanded = expandedState.value, 
-        onDismiss = { expandedState.value = false },
+        expanded = expanded,
+        onDismiss = closer,
         modifier = modifier
     ) {
         CustomDropdownMenuItem(
             text = stringResource(id = R.string.edit_song),
             onClick = {
-                expandedState.value = false
+                closer()
                 editDialogState = true
             }
         )
@@ -66,7 +67,7 @@ fun PlaylistSongDropdown(
         CustomDropdownMenuItem(
             text = stringResource(id = R.string.remove_song_from_playlist),
             onClick = {
-                expandedState.value = false
+                closer()
                 removeSongState = true
             }
         )

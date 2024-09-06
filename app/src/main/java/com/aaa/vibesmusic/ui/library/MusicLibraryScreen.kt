@@ -79,8 +79,9 @@ fun MusicLibraryScreen(
                     }
                 ) { expandedState, song ->
                     MusicLibrarySongDropdown(
-                        expandedState = expandedState,
                         song = song,
+                        expanded = expandedState.value,
+                        closer = { expandedState.value = false },
                         snackBarState = snackBarState,
                         snackBarScope = snackBarScope
                     )
