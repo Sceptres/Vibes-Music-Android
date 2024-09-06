@@ -3,8 +3,10 @@ package com.aaa.vibesmusic.ui.playlists.composables
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.aaa.vibesmusic.R
@@ -25,23 +27,23 @@ fun PlaylistSongDropdown(
     snackBarScope: CoroutineScope,
     modifier: Modifier = Modifier
 ) {
-    val editDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val removeSongState: MutableState<Boolean> = remember { mutableStateOf(false) }
+    var editDialogState: Boolean by remember { mutableStateOf(false) }
+    var removeSongState: Boolean by remember { mutableStateOf(false) }
 
     when {
-        editDialogState.value -> {
+        editDialogState -> {
             EditSongDialog(
                 song = song,
-                dialogState = editDialogState,
+                closer = { editDialogState = false },
                 snackBarState = snackBarState,
                 snackBarScope = snackBarScope
             )
         }
-        removeSongState.value -> {
+        removeSongState -> {
             DeletePlaylistSongDialog(
-                dialogState = removeSongState,
                 playlistSongs = playlistSongs,
                 song = song,
+                closer = { removeSongState = false },
                 snackBarState = snackBarState,
                 snackBarScope = snackBarScope
             )
@@ -57,7 +59,7 @@ fun PlaylistSongDropdown(
             text = stringResource(id = R.string.edit_song),
             onClick = {
                 expandedState.value = false
-                editDialogState.value = true
+                editDialogState = true
             }
         )
 
@@ -65,7 +67,7 @@ fun PlaylistSongDropdown(
             text = stringResource(id = R.string.remove_song_from_playlist),
             onClick = {
                 expandedState.value = false
-                removeSongState.value = true
+                removeSongState = true
             }
         )
     }

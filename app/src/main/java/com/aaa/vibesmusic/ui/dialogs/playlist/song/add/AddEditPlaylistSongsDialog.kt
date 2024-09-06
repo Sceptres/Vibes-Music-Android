@@ -32,19 +32,15 @@ import com.aaa.vibesmusic.ui.dialogs.common.DialogButtons
 
 @Composable
 fun AddEditPlaylistSongsDialog(
-    dialogState: MutableState<Boolean>,
-    playlistSongs: PlaylistSongs
+    playlistSongs: PlaylistSongs,
+    closer: () -> Unit
 ) {
     val viewModel: AddEditPlaylistSongsDialogViewModel = viewModel(factory = AddEditPlaylistSongsDialogViewModel.FACTORY)
     val songs: List<Song> = viewModel.songs
 
     viewModel.updatePlaylistSongs(playlistSongs)
 
-    val onDismiss: () -> Unit = {
-        dialogState.value = false
-    }
-
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(onDismissRequest = closer) {
         Card(
             shape = RoundedCornerShape(30.dp),
             colors = CardColors(
@@ -93,13 +89,13 @@ fun AddEditPlaylistSongsDialog(
                 val dialogButtons: List<DialogButton> = listOf(
                     DialogButton(
                         btnTxt = "Cancel",
-                        onClick = onDismiss
+                        onClick = closer
                     ),
                     DialogButton(
                         btnTxt = if(viewModel.playlistSongs?.songs?.isEmpty() != false) "Add" else "Update",
                         onClick = {
                             viewModel.addEditPlaylistSongs()
-                            onDismiss()
+                            closer()
                         }
                     )
                 )

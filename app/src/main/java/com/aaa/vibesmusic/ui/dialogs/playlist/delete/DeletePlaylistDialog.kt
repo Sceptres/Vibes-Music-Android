@@ -12,22 +12,20 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun DeletePlaylistDialog(
     playlistSongs: PlaylistSongs,
-    dialogState: MutableState<Boolean>,
+    closer: () -> Unit,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
     val deletePlaylistDialogViewModel: DeletePlaylistDialogViewModel = viewModel(factory = DeletePlaylistDialogViewModel.FACTORY)
 
-    val onDismiss: () -> Unit = { dialogState.value = false }
-
     ConfirmAlertDialog(
         title = "Are you sure?",
         text = "Are you sure you want to delete the ${playlistSongs.playlist.name} playlist?",
         dismissButtonText = "Cancel",
-        onDismiss = onDismiss,
+        onDismiss = closer,
         confirmButtonText = "Delete",
         onConfirm = {
-            onDismiss()
+            closer()
             deletePlaylistDialogViewModel.deletePlaylistSongs(
                 playlistSongs = playlistSongs,
                 onSuccess = {
