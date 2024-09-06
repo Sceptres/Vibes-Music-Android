@@ -33,15 +33,13 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun AddPlaylistDialog(
-    dialogState: MutableState<Boolean>,
+    closer: () -> Unit,
     snackBarHostState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
     val addPlaylistViewModel: AddPlaylistViewModel = viewModel(factory = AddPlaylistViewModel.FACTORY)
 
-    val onDismiss: () -> Unit = { dialogState.value = false }
-
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(onDismissRequest = closer) {
         Card(
             shape = RoundedCornerShape(30.dp),
             colors = CardColors(
@@ -93,14 +91,14 @@ fun AddPlaylistDialog(
                 val dialogButtons: List<DialogButton> = listOf(
                     DialogButton(
                         btnTxt = "Cancel",
-                        onClick = onDismiss
+                        onClick = closer
                     ),
                     DialogButton(
                         btnTxt = "Add",
                         onClick = {
                             addPlaylistViewModel.addPlaylist(
                                 {
-                                    onDismiss()
+                                    closer()
                                     UIUtil.showSnackBar(
                                         snackBarScope = snackBarScope,
                                         snackBarState = snackBarHostState,
