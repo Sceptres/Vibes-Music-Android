@@ -3,8 +3,10 @@ package com.aaa.vibesmusic.ui.playlists.composables
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.aaa.vibesmusic.R
@@ -23,22 +25,22 @@ fun PlaylistDropdown(
     snackBarScope: CoroutineScope,
     modifier: Modifier = Modifier
 ) {
-    val editDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val deleteDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
+    var editDialogState: Boolean by remember { mutableStateOf(false) }
+    var deleteDialogState: Boolean by remember { mutableStateOf(false) }
 
     when {
-        editDialogState.value -> {
+        editDialogState -> {
             EditPlaylistDialog(
                 playlist = playlistSongs.playlist,
-                dialogState = editDialogState,
+                closer = { editDialogState = false },
                 snackBarState = snackBarState,
                 snackBarScope = snackBarScope
             )
         }
-        deleteDialogState.value -> {
+        deleteDialogState -> {
             DeletePlaylistDialog(
                 playlistSongs = playlistSongs,
-                dialogState = deleteDialogState,
+                closer = { deleteDialogState = false },
                 snackBarState = snackBarState,
                 snackBarScope = snackBarScope
             )
@@ -54,7 +56,7 @@ fun PlaylistDropdown(
             text = stringResource(id = R.string.delete),
             onClick = {
                 expandedState.value = false
-                deleteDialogState.value = true
+                deleteDialogState = true
             }
         )
 
@@ -62,7 +64,7 @@ fun PlaylistDropdown(
             text = stringResource(id = R.string.edit_playlist),
             onClick = {
                 expandedState.value = false
-                editDialogState.value = true
+                editDialogState = true
             }
         )
     }

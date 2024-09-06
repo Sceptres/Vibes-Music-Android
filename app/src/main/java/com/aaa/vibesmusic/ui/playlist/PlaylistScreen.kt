@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -55,12 +57,12 @@ fun PlaylistScreen(
         }
     }
 
-    val addEditDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
+    var addEditDialogState: Boolean by remember { mutableStateOf(false) }
 
     when {
-        addEditDialogState.value -> {
+        addEditDialogState -> {
             AddEditPlaylistSongsDialog(
-                dialogState = addEditDialogState,
+                closer = { addEditDialogState = false },
                 playlistSongs = playlistScreenViewModel.playlistSongs!!
             )
         }
@@ -93,7 +95,7 @@ fun PlaylistScreen(
                 PlaylistTopBar(
                     text = playlistScreenViewModel.playlistSongs?.playlist?.name ?: "Playlist Name",
                     onBackArrowPressed = closer,
-                    onAddEditPressed = { addEditDialogState.value = true },
+                    onAddEditPressed = { addEditDialogState = true },
                     addEditButtonSrcGenerator = @Composable {
                         if(playlistScreenViewModel.playlistSongs?.songs?.isNotEmpty() == true)
                             painterResource(id = R.drawable.edit)

@@ -36,18 +36,14 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun EditSongDialog(
     song: Song,
-    dialogState: MutableState<Boolean>,
+    closer: () -> Unit,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
     val editSongDialogViewModel: EditSongDialogViewModel = viewModel(factory = EditSongDialogViewModel.FACTORY)
     editSongDialogViewModel.updateDialogSong(song)
 
-    val onDismiss: () -> Unit = {
-        dialogState.value = false
-    }
-
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(onDismissRequest = closer) {
         Card(
             shape = RoundedCornerShape(30.dp),
             colors = CardColors(
@@ -128,7 +124,7 @@ fun EditSongDialog(
                 val dialogButtons: List<DialogButton> = listOf(
                     DialogButton(
                         btnTxt = "Cancel",
-                        onClick = onDismiss
+                        onClick = closer
                     ),
                     DialogButton(
                         btnTxt = "Update",
@@ -136,7 +132,7 @@ fun EditSongDialog(
                             editSongDialogViewModel.updateSong(
                                 song,
                                 {
-                                    onDismiss()
+                                    closer()
                                     UIUtil.showSnackBar(
                                         snackBarScope = snackBarScope,
                                         snackBarState = snackBarState,

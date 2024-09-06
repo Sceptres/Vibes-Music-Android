@@ -3,8 +3,10 @@ package com.aaa.vibesmusic.ui.library.composables
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.common.CustomDropdown
@@ -21,22 +23,22 @@ fun MusicLibrarySongDropdown(
     snackBarScope: CoroutineScope,
     modifier: Modifier = Modifier
 ) {
-    val editDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val deleteDialogState: MutableState<Boolean> = remember { mutableStateOf(false) }
+    var editDialogState: Boolean by remember { mutableStateOf(false) }
+    var deleteDialogState: Boolean by remember { mutableStateOf(false) }
 
     when {
-        editDialogState.value -> {
+        editDialogState -> {
             EditSongDialog(
                 song = song,
-                dialogState = editDialogState,
+                closer = { editDialogState = false },
                 snackBarState = snackBarState,
                 snackBarScope = snackBarScope
             )
         }
-        deleteDialogState.value -> {
+        deleteDialogState -> {
             DeleteSongDialog(
                 song = song,
-                dialogState = deleteDialogState,
+                closer = { deleteDialogState = false },
                 snackBarState = snackBarState,
                 snackBarScope = snackBarScope
             )
@@ -52,7 +54,7 @@ fun MusicLibrarySongDropdown(
             text = "Edit Song",
             onClick = {
                 expandedState.value = false
-                editDialogState.value = true
+                editDialogState = true
             }
         )
 
@@ -60,7 +62,7 @@ fun MusicLibrarySongDropdown(
             text = "Delete",
             onClick = {
                 expandedState.value = false
-                deleteDialogState.value = true
+                deleteDialogState = true
             }
         )
     }
