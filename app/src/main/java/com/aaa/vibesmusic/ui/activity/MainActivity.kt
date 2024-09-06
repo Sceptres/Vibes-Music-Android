@@ -119,7 +119,9 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 globalCoroutineScope = globalCoroutineScope,
                 openPlayingSongScreen = { playingSongScreenState.targetState = true }
             )
-            navBarColorState = navBarColor
+
+            if(!playingSongScreenState.targetState)
+                navBarColorState = navBarColor
         }
 
         PlayingSongScreenAnim(visibleState = playingSongScreenState) {
