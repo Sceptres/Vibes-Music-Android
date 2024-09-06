@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -58,6 +59,7 @@ import com.aaa.vibesmusic.ui.playing.PlayingSongScreen
 import com.aaa.vibesmusic.ui.playlist.PlaylistScreen
 import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import java.lang.IllegalArgumentException
 
 class MainActivity : AppCompatActivity(), ServiceConnection {
@@ -86,6 +88,9 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
     @Composable
     fun VibesMusicApp() {
+        val job: Job = Job()
+        val globalCoroutineScope: CoroutineScope = CoroutineScope(job)
+
         val navController = rememberNavController()
         val snackBarHostState = remember { SnackbarHostState() }
         val snackBarScope: CoroutineScope = rememberCoroutineScope()
@@ -111,6 +116,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 statusBarColorSetter = { color -> statusBarColorState = color },
                 snackBarHostState = snackBarHostState,
                 snackBarScope = snackBarScope,
+                globalCoroutineScope = globalCoroutineScope,
                 openPlayingSongScreen = { playingSongScreenState.targetState = true }
             )
             navBarColorState = navBarColor
@@ -131,6 +137,7 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
         statusBarColorSetter: (Color) -> Unit,
         snackBarHostState: SnackbarHostState,
         snackBarScope: CoroutineScope,
+        globalCoroutineScope: CoroutineScope,
         openPlayingSongScreen: () -> Unit
     ) {
         val navBarColor: Color = colorResource(id = R.color.navbar_color)
@@ -209,7 +216,11 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
 
                 composable(route = Screens.ImportMusic.route) {
                     statusBarColorSetter(backgroundColor)
-                    ImportSongsScreen()
+                    ImportSongsScreen(
+                        globalScope = globalCoroutineScope,
+                        snackBarState = snackBarHostState,
+                        snackBarScope = snackBarScope
+                    )
                 }
 
                 navigation(
