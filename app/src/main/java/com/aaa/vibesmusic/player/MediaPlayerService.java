@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -63,6 +64,16 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     private MediaControlNotification notification;
     private MediaPlayer.OnPreparedListener preparedListener;
     private SongsPlayedListener songsPlayedListener;
+
+    /**
+     *
+     * @param context The {@link Context} to bind the service to
+     * @param serviceConnection The {@link ServiceConnection} of this binding operation
+     */
+    public static void bindTo(Context context, ServiceConnection serviceConnection) {
+        Intent serviceIntent = new Intent(context, MediaPlayerService.class);
+        context.bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE);
+    }
 
     public MediaPlayerService() {
         this.songPlayer = new SongPlayer();
@@ -242,6 +253,14 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         } catch (IOException e) {
             this.stopSelf();
         }
+    }
+
+    /**
+     *
+     * @return True if the seeker thread is paused. False otherwise
+     */
+    public boolean isSeekerPaused() {
+        return this.timeThread.isPaused();
     }
 
     /**
