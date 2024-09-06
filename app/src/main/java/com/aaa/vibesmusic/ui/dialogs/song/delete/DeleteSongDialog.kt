@@ -1,8 +1,12 @@
 package com.aaa.vibesmusic.ui.dialogs.song.delete
 
+import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.UIUtil
@@ -16,7 +20,10 @@ fun DeleteSongDialog(
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
-    val deleteSongDialogViewModel: DeleteSongDialogViewModel = viewModel(factory = DeleteSongDialogViewModel.FACTORY)
+    val currentContext: Context = LocalContext.current
+    val deleteSongDialogState: DeleteSongDialogState by remember {
+        mutableStateOf(DeleteSongDialogState(currentContext))
+    }
 
     ConfirmAlertDialog(
         title = "Are you sure?",
@@ -28,7 +35,7 @@ fun DeleteSongDialog(
         confirmButtonText = "Delete",
         onConfirm = {
             closer()
-            deleteSongDialogViewModel.deleteSong(
+            deleteSongDialogState.deleteSong(
                 song = song,
                 onSuccess = {
                     UIUtil.showSnackBar(
