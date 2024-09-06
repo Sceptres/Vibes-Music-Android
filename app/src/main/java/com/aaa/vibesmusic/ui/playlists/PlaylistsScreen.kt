@@ -105,8 +105,9 @@ fun PlaylistsScreen(
                         .weight(1f),
                 ) { expandedState, playlistSongs ->
                     PlaylistDropdown(
-                        expandedState = expandedState,
                         playlistSongs = playlistSongs,
+                        expanded = expandedState.value,
+                        closer = { expandedState.value = false },
                         snackBarState = snackBarState,
                         snackBarScope = snackBarScope
                     )
