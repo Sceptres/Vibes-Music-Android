@@ -9,7 +9,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
-import com.aaa.vibesmusic.databinding.FragmentImportSongsBinding
 import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.ui.fragment.result.ImportSongsActivityResultContract
 import com.google.android.gms.ads.AdError
@@ -25,10 +24,6 @@ class ImportSongsFragment : Fragment() {
     private val mDisposable: CompositeDisposable = CompositeDisposable()
     private var db: VibesMusicDatabase? = null
     private var lastShownAd: Long = 0
-
-    private var _binding: FragmentImportSongsBinding? = null
-    private val binding: FragmentImportSongsBinding
-        get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,14 +46,8 @@ class ImportSongsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentImportSongsBinding.inflate(inflater)
-
-        binding.importLocalFiles.setOnClickListener {
-            this.importSongsLauncher?.launch(null)
-        }
-
-        return binding.root
+    ): View? {
+       return null
     }
 
     override fun onStop() {
