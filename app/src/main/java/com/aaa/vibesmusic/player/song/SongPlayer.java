@@ -26,6 +26,7 @@ public class SongPlayer implements Playable {
         this.currentSongIndex = 0;
         this.originalSongs = new ArrayList<>();
         this.songs = new ArrayList<>();
+        this.pause();
         this.setPlayMode(PlayMode.REPEAT);
         this.setShuffleMode(ShuffleMode.UNSHUFFLED);
     }
