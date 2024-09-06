@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dialogs.confirm
+package com.aaa.vibesmusic.ui.dialogs.common
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonColors
