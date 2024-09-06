@@ -1,15 +1,14 @@
 package com.aaa.vibesmusic.ui.songimport
 
-import androidx.compose.foundation.BorderStroke
+import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,19 +18,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.ui.songimport.composables.ImportSongsMethodButton
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun ImportSongsScreen() {
-    val backgroundColor = colorResource(id = R.color.background_color)
+fun ImportSongsScreen(
+    globalScope: CoroutineScope,
+    snackBarState: SnackbarHostState,
+    snackBarScope: CoroutineScope
+) {
+    val viewModel: ImportSongsScreenViewModel = viewModel(factory = ImportSongsScreenViewModel.getFactory(globalScope))
+    val songActivityFileLauncher: ManagedActivityResultLauncher<Void?, List<Uri>> = viewModel.ActivityFilesLauncher(
+        snackBarState = snackBarState,
+        snackBarScope = snackBarScope
+    )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor)
+            .background(colorResource(id = R.color.background_color))
     ) {
         Column(
             modifier = Modifier
@@ -58,36 +67,14 @@ fun ImportSongsScreen() {
                     .padding(top = 5.dp)
             )
 
-            Button(
-                onClick = { /* handle click */ },
-                colors = ButtonColors(
-                    containerColor = colorResource(id = R.color.foreground_color),
-                    contentColor = Color.White,
-                    disabledContainerColor = backgroundColor,
-                    disabledContentColor = Color.Gray
-                ),
-                border = BorderStroke(1.dp, colorResource(id = R.color.blue_selected)),
+            ImportSongsMethodButton(
+                icon = painterResource(id = R.drawable.folder_24),
+                text = stringResource(id = R.string.local_files),
+                onClick = { songActivityFileLauncher.launch(null) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.folder_24),
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.padding(end = 4.dp)
-                )
-                Text(
-                    text = stringResource(id = R.string.local_files),
-                    color = Color.White,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Light,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                        .weight(1f)
-                )
-            }
+                    .padding(top = 10.dp),
+            )
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.fragment.result;
+package com.aaa.vibesmusic.ui.songimport.result;
 
 import android.app.Activity;
 import android.content.ClipData;
