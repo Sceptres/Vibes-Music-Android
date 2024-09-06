@@ -8,7 +8,7 @@ import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.ui.UIUtil
-import com.aaa.vibesmusic.ui.dialogs.confirm.ConfirmAlertDialog
+import com.aaa.vibesmusic.ui.dialogs.common.ConfirmAlertDialog
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
