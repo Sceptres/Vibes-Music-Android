@@ -1,8 +1,12 @@
 package com.aaa.vibesmusic.ui.dialogs.playlist.song.remove
 
+import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.Playlist
@@ -19,7 +23,11 @@ fun DeletePlaylistSongDialog(
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
-    val deletePlaylistSongViewModel: DeletePlaylistSongDialogViewModel = viewModel(factory = DeletePlaylistSongDialogViewModel.FACTORY)
+    val currentContext: Context = LocalContext.current
+
+    val deletePlaylistSongViewModel: DeletePlaylistSongDialogState by remember {
+        mutableStateOf(DeletePlaylistSongDialogState(currentContext))
+    }
     val playlist: Playlist = playlistSongs.playlist
 
     ConfirmAlertDialog(
