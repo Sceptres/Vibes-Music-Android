@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.dialogs.song.edit
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,17 +14,19 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.UIUtil
@@ -40,8 +43,10 @@ fun EditSongDialog(
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
-    val editSongDialogViewModel: EditSongDialogViewModel = viewModel(factory = EditSongDialogViewModel.FACTORY)
-    editSongDialogViewModel.updateDialogSong(song)
+    val currentContext: Context = LocalContext.current
+    val editSongDialogState: EditSongDialogState by remember {
+        mutableStateOf(EditSongDialogState(currentContext, song))
+    }
 
     Dialog(onDismissRequest = closer) {
         Card(
@@ -80,7 +85,7 @@ fun EditSongDialog(
                         .padding(start = 13.dp)
                 )
                 EditField(
-                    valueState = editSongDialogViewModel.songNameState,
+                    valueState = editSongDialogState.songNameState,
                     placeholderText = "Song Name",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -96,7 +101,7 @@ fun EditSongDialog(
                         .padding(start = 13.dp)
                 )
                 EditField(
-                    valueState = editSongDialogViewModel.artistState,
+                    valueState = editSongDialogState.artistState,
                     placeholderText = "Artist",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -112,7 +117,7 @@ fun EditSongDialog(
                         .padding(start = 13.dp)
                 )
                 EditField(
-                    valueState = editSongDialogViewModel.albumState,
+                    valueState = editSongDialogState.albumState,
                     placeholderText = "Album",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -129,7 +134,7 @@ fun EditSongDialog(
                     DialogButton(
                         btnTxt = "Update",
                         onClick = {
-                            editSongDialogViewModel.updateSong(
+                            editSongDialogState.updateSong(
                                 song,
                                 {
                                     closer()
