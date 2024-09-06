@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.dialogs.playlist.song.add
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,20 +13,19 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.ui.common.SelectSongsList
 import com.aaa.vibesmusic.ui.dialogs.common.DialogButton
@@ -36,8 +36,10 @@ fun AddEditPlaylistSongsDialog(
     playlistSongs: PlaylistSongs,
     closer: () -> Unit
 ) {
-    val viewModel: AddEditPlaylistSongsDialogViewModel = viewModel(factory = AddEditPlaylistSongsDialogViewModel.FACTORY)
-    viewModel.updatePlaylistSongs(playlistSongs)
+    val currentContext: Context = LocalContext.current
+    val addEditPlaylistSongsState: AddEditPlaylistSongsDialogState by remember {
+        mutableStateOf(AddEditPlaylistSongsDialogState(currentContext, playlistSongs))
+    }
 
     Dialog(onDismissRequest = closer) {
         Card(
@@ -66,21 +68,21 @@ fun AddEditPlaylistSongsDialog(
                 )
 
                 TextButton(
-                    onClick = { viewModel.toggleSelectAllSongs() },
+                    onClick = { addEditPlaylistSongsState.toggleSelectAllSongs() },
                     border = BorderStroke(3.dp, colorResource(id = R.color.blue_selected)),
                     modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp)
                 ) {
                     Text(
-                        text = if(!viewModel.selectAllSongsState) "Select All" else "Unselect All",
+                        text = if(!addEditPlaylistSongsState.selectAllSongsState) "Select All" else "Unselect All",
                         color = colorResource(id = R.color.blue_selected)
                     )
                 }
 
                 SelectSongsList(
-                    songs = viewModel.selectSongs,
-                    onCheckedChange = { song, isChecked -> viewModel.onCheckChanged(song, isChecked)},
+                    songs = addEditPlaylistSongsState.selectSongs,
+                    onCheckedChange = { song, isChecked -> addEditPlaylistSongsState.onCheckChanged(song, isChecked)},
                     modifier = Modifier
-                        .fillMaxHeight(3/5f)
+                        .fillMaxHeight(3 / 5f)
                         .padding(top = 20.dp, start = 10.dp, end = 10.dp),
                 )
 
@@ -90,9 +92,9 @@ fun AddEditPlaylistSongsDialog(
                         onClick = closer
                     ),
                     DialogButton(
-                        btnTxt = if(viewModel.playlistSongs?.songs?.isEmpty() != false) "Add" else "Update",
+                        btnTxt = if(addEditPlaylistSongsState.playlistSongs.songs.isEmpty()) "Add" else "Update",
                         onClick = {
-                            viewModel.addEditPlaylistSongs()
+                            addEditPlaylistSongsState.addEditPlaylistSongs()
                             closer()
                         }
                     )
