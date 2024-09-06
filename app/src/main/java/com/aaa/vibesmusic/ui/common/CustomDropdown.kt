@@ -20,7 +20,7 @@ fun CustomDropdown(
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismiss,
-        modifier = modifier.background(colorResource(id = R.color.foreground_color))
+        modifier = modifier.background(colorResource(id = R.color.navbar_color))
     ) {
         content()
     }
