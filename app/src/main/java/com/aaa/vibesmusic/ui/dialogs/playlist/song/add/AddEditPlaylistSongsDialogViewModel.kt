@@ -18,6 +18,7 @@ import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship
 import com.aaa.vibesmusic.database.util.DatabaseUtil
+import com.aaa.vibesmusic.ui.common.SelectSong
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -35,18 +36,17 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.getApplication())
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    // All songs states
-    val songs: MutableList<Song> = mutableStateListOf()
-    private val songsLiveData: LiveData<List<Song>> = this.getSongsLiveData()
-    private val songsObserver: Observer<List<Song>> = Observer {newSongs ->
-        songs.clear()
-        songs.addAll(newSongs)
-    }
-
     // Playlist songs state
     var playlistSongs: PlaylistSongs? by mutableStateOf(null)
     var selectAllSongsState: Boolean by mutableStateOf(false)
-    private val selectedSongs: MutableList<Song> = mutableStateListOf()
+    val selectSongs: MutableList<SelectSong> = mutableStateListOf()
+
+    // All songs states
+    private val songsLiveData: LiveData<List<Song>> = this.getSongsLiveData()
+    private val songsObserver: Observer<List<Song>> = Observer {newSongs ->
+        selectSongs.clear()
+        selectSongs.addAll(mapSongsToSelectedSongs(newSongs))
+    }
 
     init {
         this.songsLiveData.observeForever(this.songsObserver)
@@ -54,8 +54,11 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
 
     fun addEditPlaylistSongs() {
         this.playlistSongs?.let {playlistSongs ->
+            val checkedSelectSong: List<SelectSong> = this.selectSongs.filter { it.checkedState.value }
+            val selectedSongs: List<Song> = this.mapSelectSongsToSongs(checkedSelectSong)
+
             val playlistSongsRemoved: ArrayList<Song> = ArrayList(playlistSongs.songs)
-            playlistSongsRemoved.removeAll(this.selectedSongs.toSet())
+            playlistSongsRemoved.removeAll(selectedSongs.toSet())
 
             // Remove old songs from the playlist
             if(playlistSongsRemoved.isNotEmpty()) {
@@ -69,13 +72,13 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
             }
 
             // Add new songs to playlist
-            if(playlistSongs.songs != this.selectedSongs) {
+            if(playlistSongs.songs != selectedSongs) {
                 val playlist: Playlist = playlistSongs.playlist
 
                 // Get the image of the first song that has an image
-                val newPlaylistImage: String? = if(this.selectedSongs.isNotEmpty()) {
+                val newPlaylistImage: String? = if(selectedSongs.isNotEmpty()) {
                     var imageStr: String? = null
-                    this.selectedSongs.stream()
+                    selectedSongs.stream()
                         .filter{ Objects.nonNull(it.imageLocation) }
                         .findFirst()
                         .ifPresent { imageStr = it.imageLocation }
@@ -84,7 +87,7 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
                     null
 
                 val newPlaylist: Playlist = Playlist(playlist.playlistId, playlist.name, newPlaylistImage)
-                val newPlaylistSongs: PlaylistSongs = PlaylistSongs(newPlaylist, this.selectedSongs)
+                val newPlaylistSongs: PlaylistSongs = PlaylistSongs(newPlaylist, selectedSongs)
 
                 this.disposables.add(
                     DatabaseUtil.upsertPlaylistSong(this.db, newPlaylistSongs)
@@ -96,21 +99,18 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
         }
     }
 
-    fun isSongSelected(song: Song): Boolean {
-        return this.selectedSongs.contains(song)
-    }
-
     fun toggleSelectAllSongs() {
         this.selectAllSongsState = !this.selectAllSongsState
-        this.selectedSongs.clear()
         if(this.selectAllSongsState) {
-            this.selectedSongs.addAll(this.songs)
+            this.selectSongs.forEach { selectSong ->
+                selectSong.checkedState.value = true
+            }
         } else {
-            this.selectedSongs.addAll(this.playlistSongs?.songs ?: listOf())
+            this.selectPlaylistSongsOnly()
         }
     }
 
-    fun onCheckChanged(song: Song, isChecked: Boolean) {
+    fun onCheckChanged(song: SelectSong, isChecked: Boolean) {
         if(isChecked) {
             this.addSelectedPlaylistSong(song)
         } else {
@@ -120,15 +120,29 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
 
     fun updatePlaylistSongs(playlistSongs: PlaylistSongs) {
         this.playlistSongs = playlistSongs
-        this.selectedSongs.addAll(this.playlistSongs?.songs ?: listOf())
+        this.selectPlaylistSongsOnly()
     }
 
-    private fun addSelectedPlaylistSong(song: Song) {
-        this.selectedSongs.add(song)
+    private fun selectPlaylistSongsOnly() {
+        this.selectSongs.forEach { selectSong ->
+            selectSong.checkedState.value = this.playlistSongs?.songs?.contains(selectSong.song) ?: false
+        }
     }
 
-    private fun removeSelectedPlaylistSong(song: Song) {
-        this.selectedSongs.remove(song)
+    private fun mapSongsToSelectedSongs(list: List<Song>): List<SelectSong> {
+        return list.map { SelectSong(it) }
+    }
+
+    private fun mapSelectSongsToSongs(list: List<SelectSong>): List<Song> {
+        return list.map { it.song }
+    }
+
+    private fun addSelectedPlaylistSong(song: SelectSong) {
+        song.checkedState.value = true
+    }
+
+    private fun removeSelectedPlaylistSong(song: SelectSong) {
+        song.checkedState.value = false
     }
 
     private fun getSongsLiveData(): LiveData<List<Song>> {

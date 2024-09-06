@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,31 +41,33 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import java.util.Objects
 
+data class SelectSong(val song: Song) {
+    val checkedState: MutableState<Boolean> = mutableStateOf(false)
+}
+
 @Composable
 fun SelectSongsList(
-    songs: List<Song>,
-    isSongChecked: (Song) -> Boolean,
+    songs: List<SelectSong>,
     modifier: Modifier = Modifier,
-    onCheckedChange: (Song, Boolean) -> Unit
+    onCheckedChange: (SelectSong, Boolean) -> Unit
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         modifier = modifier
     ) {
-        items(songs) { song ->
-            var selectSongCheckState: Boolean by remember { mutableStateOf(false) }
-            selectSongCheckState = isSongChecked(song)
+        items(songs) { selectSong ->
+            val song: Song = selectSong.song
 
             SelectSongItem(
                 song = song,
                 onClick = {
-                    selectSongCheckState = !selectSongCheckState
-                    onCheckedChange(song, selectSongCheckState)
+                    selectSong.checkedState.value = !selectSong.checkedState.value
+                    onCheckedChange(selectSong, selectSong.checkedState.value)
                 },
-                checkValue = selectSongCheckState,
+                checkValue = selectSong.checkedState.value,
                 onCheckedChange = {
-                    onCheckedChange(song, it)
-                    selectSongCheckState = it
+                    onCheckedChange(selectSong, it)
+                    selectSong.checkedState.value = it
                 }
             )
         }
