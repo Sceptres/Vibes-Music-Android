@@ -3,6 +3,7 @@ package com.aaa.vibesmusic.ui.dialogs.playlist.song.add
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -102,7 +103,7 @@ fun AddEditPlaylistSongsDialog(
 
                 DialogButtons(
                     buttons = dialogButtons,
-                    modifier = Modifier.align(Alignment.End)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

@@ -7,7 +7,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.aaa.vibesmusic.R
 
 data class DialogButton(val btnTxt: String, val onClick: () -> Unit)
 
@@ -18,7 +20,7 @@ fun DialogButtons(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.End,
     ) {
         for(button in buttons) {
             Button(
@@ -38,6 +40,9 @@ private fun Button(
         onClick = btn.onClick,
         modifier = modifier,
     ) {
-        Text(btn.btnTxt)
+        Text(
+            text = btn.btnTxt,
+            color = colorResource(id = R.color.blue_selected)
+        )
     }
 }
