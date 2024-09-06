@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,7 +25,6 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
-import java.util.Objects
 
 class MusicLibraryViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -61,8 +61,9 @@ class MusicLibraryViewModel(application: Application) : AndroidViewModel(applica
         this.initPlayerService()
     }
     private fun initPlayerService() {
-        if(Objects.isNull(playerService)) {
-            MediaPlayerService.bindTo(super.getApplication(), this.serviceConnection)
+        this.playerService ?: run {
+            Log.d("CALLED", "BINDING TO SERVICE")
+            MediaPlayerService.bindTo(super.getApplication(), serviceConnection)
         }
     }
 

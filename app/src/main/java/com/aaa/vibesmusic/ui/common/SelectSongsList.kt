@@ -97,7 +97,7 @@ fun SelectSongItem(
             )
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(if(Objects.isNull(song.imageLocation)) R.drawable.music_cover_image else song.imageLocation)
+                    .data(song.imageLocation ?: R.drawable.music_cover_image)
                     .crossfade(true)
                     .build(),
                 contentDescription = null,

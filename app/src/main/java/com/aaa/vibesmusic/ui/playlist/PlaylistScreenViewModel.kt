@@ -86,8 +86,9 @@ class PlaylistScreenViewModel(application: Application, playlistId: Int) : Andro
     }
 
     private fun initPlayerService() {
-        if(Objects.isNull(this.playerService))
+        this.playerService ?: run {
             MediaPlayerService.bindTo(this.getApplication(), this.serviceConnection)
+        }
     }
 
     private fun getPlaylistSongsLiveData(playlistId: Int): LiveData<PlaylistSongs> {
