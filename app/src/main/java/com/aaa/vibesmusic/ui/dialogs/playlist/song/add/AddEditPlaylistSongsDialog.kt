@@ -37,8 +37,6 @@ fun AddEditPlaylistSongsDialog(
     closer: () -> Unit
 ) {
     val viewModel: AddEditPlaylistSongsDialogViewModel = viewModel(factory = AddEditPlaylistSongsDialogViewModel.FACTORY)
-    val songs: List<Song> = viewModel.songs
-
     viewModel.updatePlaylistSongs(playlistSongs)
 
     Dialog(onDismissRequest = closer) {
@@ -79,8 +77,7 @@ fun AddEditPlaylistSongsDialog(
                 }
 
                 SelectSongsList(
-                    songs = songs,
-                    isSongChecked = { song -> viewModel.isSongSelected(song)},
+                    songs = viewModel.selectSongs,
                     onCheckedChange = { song, isChecked -> viewModel.onCheckChanged(song, isChecked)},
                     modifier = Modifier
                         .fillMaxHeight(3/5f)
