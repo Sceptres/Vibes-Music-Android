@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.dialogs.playlist.add
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,10 +14,13 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -37,7 +41,10 @@ fun AddPlaylistDialog(
     snackBarHostState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
-    val addPlaylistViewModel: AddPlaylistViewModel = viewModel(factory = AddPlaylistViewModel.FACTORY)
+    val localContext: Context = LocalContext.current
+    val addPlaylistDialogState: AddPlaylistDialogState by remember {
+        mutableStateOf(AddPlaylistDialogState(localContext))
+    }
 
     Dialog(onDismissRequest = closer) {
         Card(
@@ -79,7 +86,7 @@ fun AddPlaylistDialog(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 EditField(
-                    valueState = addPlaylistViewModel.playlistNameState,
+                    valueState = addPlaylistDialogState.playlistNameState,
                     placeholderText = "Playlist Name",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -96,13 +103,13 @@ fun AddPlaylistDialog(
                     DialogButton(
                         btnTxt = "Add",
                         onClick = {
-                            addPlaylistViewModel.addPlaylist(
+                            addPlaylistDialogState.addPlaylist(
                                 {
                                     closer()
                                     UIUtil.showSnackBar(
                                         snackBarScope = snackBarScope,
                                         snackBarState = snackBarHostState,
-                                        "Playlist ${addPlaylistViewModel.playlistNameState.value} has been successfully added!"
+                                        "Playlist ${addPlaylistDialogState.playlistNameState.value} has been successfully added!"
                                     )
                                 },
                                 {
