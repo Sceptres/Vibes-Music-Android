@@ -47,8 +47,8 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     private val seekListener: (MediaPlayer?) -> Unit = { player ->
-        if(Objects.nonNull(player)) {
-            val currentTime = player!!.currentPosition
+        player?.let {
+            val currentTime = it.currentPosition
             seekBarValue = currentTime
         }
     }
@@ -74,7 +74,7 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     private fun initPlayerService() {
-        if(Objects.isNull(this.playerService)) {
+        this.playerService ?: run {
             MediaPlayerService.bindTo(super.getApplication(), this.serviceConnection)
         }
     }
