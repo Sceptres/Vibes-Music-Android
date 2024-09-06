@@ -17,7 +17,7 @@ fun ConfirmAlertDialog(
     title: String,
     text: String,
     iconTint: Color = Color.White,
-    backgroundColor: Color = colorResource(id = R.color.background_color),
+    backgroundColor: Color = colorResource(id = R.color.navbar_color),
     onDismiss: () -> Unit = {},
     dismissButtonText: String = "Dismiss",
     onConfirm: () -> Unit = {},

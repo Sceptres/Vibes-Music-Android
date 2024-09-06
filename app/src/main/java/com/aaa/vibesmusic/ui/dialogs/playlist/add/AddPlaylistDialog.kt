@@ -43,7 +43,7 @@ fun AddPlaylistDialog(
         Card(
             shape = RoundedCornerShape(30.dp),
             colors = CardColors(
-                containerColor = colorResource(id = R.color.background_color),
+                containerColor = colorResource(id = R.color.navbar_color),
                 contentColor = Color.Unspecified,
                 disabledContainerColor = Color.Unspecified,
                 disabledContentColor = Color.Unspecified
