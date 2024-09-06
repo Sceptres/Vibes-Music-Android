@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.dialogs.playlist.edit
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,17 +14,19 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.ui.UIUtil
@@ -40,8 +43,10 @@ fun EditPlaylistDialog(
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
-    val editPlaylistDialogViewModel: EditPlaylistDialogViewModel = viewModel(factory = EditPlaylistDialogViewModel.FACTORY)
-    editPlaylistDialogViewModel.updateDialogPlaylist(playlist)
+    val currentContext: Context = LocalContext.current
+    val editPlaylistDialogState: EditPlaylistDialogState by remember {
+        mutableStateOf(EditPlaylistDialogState(currentContext, playlist))
+    }
 
     Dialog(
         onDismissRequest = closer
@@ -84,7 +89,7 @@ fun EditPlaylistDialog(
                         .padding(start = 13.dp)
                 )
                 EditField(
-                    valueState = editPlaylistDialogViewModel.playlistNameEditState,
+                    valueState = editPlaylistDialogState.playlistNameEditState,
                     placeholderText = "Playlist Name",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -100,7 +105,7 @@ fun EditPlaylistDialog(
                     DialogButton(
                         btnTxt = "Update",
                         onClick = {
-                            editPlaylistDialogViewModel.updatePlaylist(
+                            editPlaylistDialogState.updatePlaylist(
                                 playlist = playlist,
                                 onSuccess = {
                                     closer()
