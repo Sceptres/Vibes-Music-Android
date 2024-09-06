@@ -1,17 +1,12 @@
 package com.aaa.vibesmusic.ui.dialogs.playlist.song.add
 
-import android.app.Application
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.Playlist
@@ -24,20 +19,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.Objects
 
-class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidViewModel(application) {
-    companion object {
-        val FACTORY: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                AddEditPlaylistSongsDialogViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-    }
-
-    private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.getApplication())
+class AddEditPlaylistSongsDialogState(private val context: Context, private val playlistSongsObj: PlaylistSongs) {
+    private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.context)
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     // Playlist songs state
-    var playlistSongs: PlaylistSongs? by mutableStateOf(null)
+    val playlistSongs: PlaylistSongs by mutableStateOf(this.playlistSongsObj)
     var selectAllSongsState: Boolean by mutableStateOf(false)
     val selectSongs: MutableList<SelectSong> = mutableStateListOf()
 
@@ -46,6 +33,7 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
     private val songsObserver: Observer<List<Song>> = Observer {newSongs ->
         selectSongs.clear()
         selectSongs.addAll(mapSongsToSelectedSongs(newSongs))
+        selectPlaylistSongsOnly()
     }
 
     init {
@@ -53,7 +41,7 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
     }
 
     fun addEditPlaylistSongs() {
-        this.playlistSongs?.let {playlistSongs ->
+        this.playlistSongs.let {playlistSongs ->
             val checkedSelectSong: List<SelectSong> = this.selectSongs.filter { it.checkedState.value }
             val selectedSongs: List<Song> = this.mapSelectSongsToSongs(checkedSelectSong)
 
@@ -118,14 +106,9 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
         }
     }
 
-    fun updatePlaylistSongs(playlistSongs: PlaylistSongs) {
-        this.playlistSongs = playlistSongs
-        this.selectPlaylistSongsOnly()
-    }
-
     private fun selectPlaylistSongsOnly() {
         this.selectSongs.forEach { selectSong ->
-            selectSong.checkedState.value = this.playlistSongs?.songs?.contains(selectSong.song) ?: false
+            selectSong.checkedState.value = this.playlistSongs.songs.contains(selectSong.song)
         }
     }
 
@@ -147,11 +130,5 @@ class AddEditPlaylistSongsDialogViewModel(application: Application) : AndroidVie
 
     private fun getSongsLiveData(): LiveData<List<Song>> {
         return this.db.songDao().songs
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        this.songsLiveData.removeObserver(this.songsObserver)
-        this.disposables.clear()
     }
 }
