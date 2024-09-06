@@ -13,42 +13,8 @@
         <item name="android:statusBarColor">@color/background_color</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/background_color</item>
-        <item name="android:popupMenuStyle">@style/PopupMenus</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:navigationBarColor">@color/navbar_color</item>
-    </style>
-    <style name="PopupMenus" parent="Widget.Material3.PopupMenu">
-        <item name="android:popupBackground">@color/background_color</item>
-    </style>
-    <style name="ConfirmDialogStyle" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleTextStyle</item>
-        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialogBodyTextStyle</item>
-        <item name="colorSurface">@color/background_color</item>
-        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
-    </style>
-    <style name="MaterialAlertDialogTitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-    <style name="MaterialAlertDialogBodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/blue_selected</item>
-        <item name="rippleColor">@color/purple_500</item>
-    </style>
-    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/gray</item>
-        <item name="rippleColor">@color/tan</item>
-    </style>
-    <style name="SongPlayerSeekBar" parent="Widget.AppCompat.SeekBar">
-        <item name="android:progressBackgroundTint">@color/gray</item>
-        <item name="android:progressTint">@color/blue_selected</item>
-        <item name="android:thumbTint">@color/blue_selected</item>
-        <item name="android:thumb">@drawable/song_player_seekbar_thumb</item>
-        <item name="android:progressDrawable">@drawable/song_player_seekbar_progress</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
