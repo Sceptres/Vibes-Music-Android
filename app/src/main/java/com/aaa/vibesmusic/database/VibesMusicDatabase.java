@@ -18,12 +18,14 @@ import com.aaa.vibesmusic.database.data.playlist.Playlist;
 import com.aaa.vibesmusic.database.data.playlist.PlaylistDao;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationshipDao;
+import com.aaa.vibesmusic.database.views.PlaylistView;
 
 import java.util.Objects;
 
 @Database(
         entities = {Song.class, Playlist.class, PlaylistSongRelationship.class},
-        version = 3,
+        views = {PlaylistView.class},
+        version = 4,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = VibesMusicDatabase.SongTableRenameIdColumnMigration.class)
         }
@@ -58,8 +60,10 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
                 VibesMusicDatabase.class,
                 VibesMusicDatabase.DATABASE_NAME
         ).allowMainThreadQueries()
-                .addMigrations(new PlaylistTablesCreationMigration())
-                .build();
+                .addMigrations(
+                        new PlaylistTablesCreationMigration(),
+                        new PlaylistImgTableMigration()
+                ).build();
     }
 
     protected VibesMusicDatabase() {}
@@ -86,6 +90,24 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
             db.execSQL("CREATE TABLE IF NOT EXISTS `PlaylistSongRelationship` (`playlistId` INTEGER NOT NULL, `songId` INTEGER NOT NULL, PRIMARY KEY(`playlistId`, `songId`), FOREIGN KEY(`playlistId`) REFERENCES `Playlists`(`playlistId`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`songId`) REFERENCES `Songs`(`songId`) ON UPDATE CASCADE ON DELETE CASCADE )");
             db.execSQL("CREATE INDEX IF NOT EXISTS `index_PlaylistSongRelationship_playlistId` ON `PlaylistSongRelationship` (`playlistId`)");
             db.execSQL("CREATE INDEX IF NOT EXISTS `index_PlaylistSongRelationship_songId` ON `PlaylistSongRelationship` (`songId`)");
+        }
+    }
+
+    static class PlaylistImgTableMigration extends Migration {
+        public PlaylistImgTableMigration() {
+            super(3, 4);
+        }
+
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("ALTER TABLE `Playlists` DROP COLUMN playlistCoverImageLocation;");
+            db.execSQL("CREATE VIEW `PlaylistView` AS SELECT Playlists.playlistId,\n"
+                    + "       Playlists.playlistName,\n"
+                    + "       Songs.image_location AS playlistCoverImageLocation\n"
+                    + "FROM Playlists\n"
+                    + "LEFT JOIN PlaylistSongRelationship ON PlaylistSongRelationship.playlistId = Playlists.playlistId\n"
+                    + "LEFT JOIN Songs ON PlaylistSongRelationship.songId = Songs.songId AND Songs.image_location IS NOT NULL\n"
+                    + "GROUP BY Playlists.playlistId");
         }
     }
 }
