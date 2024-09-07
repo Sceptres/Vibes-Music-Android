@@ -13,6 +13,7 @@ import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship
 import com.aaa.vibesmusic.database.util.DatabaseUtil
+import com.aaa.vibesmusic.database.views.PlaylistView
 import com.aaa.vibesmusic.ui.common.SelectSong
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -50,7 +51,8 @@ class AddEditPlaylistSongsDialogState(private val context: Context, private val 
 
             // Remove old songs from the playlist
             if(playlistSongsRemoved.isNotEmpty()) {
-                val removePlaylistSongsRelationship: List<PlaylistSongRelationship> = DatabaseUtil.convertPlaylistSongs(playlistSongs.playlist, playlistSongsRemoved)
+                val playlist: Playlist = PlaylistView.toPlaylist(playlistSongs.playlist)
+                val removePlaylistSongsRelationship: List<PlaylistSongRelationship> = DatabaseUtil.convertPlaylistSongs(playlist, playlistSongsRemoved)
                 this.disposables.add(
                     this.db.playlistSongRelationshipDao().deletePlaylistSongRelationship(removePlaylistSongsRelationship)
                         .subscribeOn(Schedulers.io())
@@ -61,21 +63,7 @@ class AddEditPlaylistSongsDialogState(private val context: Context, private val 
 
             // Add new songs to playlist
             if(playlistSongs.songs != selectedSongs) {
-                val playlist: Playlist = playlistSongs.playlist
-
-                // Get the image of the first song that has an image
-                val newPlaylistImage: String? = if(selectedSongs.isNotEmpty()) {
-                    var imageStr: String? = null
-                    selectedSongs.stream()
-                        .filter{ Objects.nonNull(it.imageLocation) }
-                        .findFirst()
-                        .ifPresent { imageStr = it.imageLocation }
-                    imageStr
-                } else
-                    null
-
-                val newPlaylist: Playlist = Playlist(playlist.playlistId, playlist.name, newPlaylistImage)
-                val newPlaylistSongs: PlaylistSongs = PlaylistSongs(newPlaylist, selectedSongs)
+                val newPlaylistSongs: PlaylistSongs = PlaylistSongs(playlistSongs.playlist, selectedSongs)
 
                 this.disposables.add(
                     DatabaseUtil.upsertPlaylistSong(this.db, newPlaylistSongs)

@@ -93,7 +93,7 @@ fun PlaylistScreen(
         ) {
             Column {
                 PlaylistTopBar(
-                    text = playlistScreenViewModel.playlistSongs?.playlist?.name ?: "Playlist Name",
+                    text = playlistScreenViewModel.playlistSongs?.playlist?.playlistName ?: "Playlist Name",
                     onBackArrowPressed = closer,
                     onAddEditPressed = { addEditDialogState = true },
                     addEditButtonSrcGenerator = @Composable {
