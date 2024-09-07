@@ -211,9 +211,11 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
         this.timeThread = new MediaTimeThread(this.player);
 
-        this.session = new MediaSessionHolder(this.getApplicationContext(), this);
-        this.session.setActive(true);
-        this.setSessionToken(this.session.getSessionToken());
+        if(Objects.isNull(this.session)) {
+            this.session = new MediaSessionHolder(this.getApplicationContext(), this);
+            this.session.setActive(true);
+            this.setSessionToken(this.session.getSessionToken());
+        }
 
         IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         this.registerReceiver(this.noisyReceiver, filter);
