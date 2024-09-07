@@ -18,8 +18,7 @@ class EditPlaylistDialogState(val context: Context, playlist: Playlist) {
     fun updatePlaylist(playlist: Playlist, onSuccess: () -> Unit, onFail: (Throwable) -> Unit) {
         val newPlaylist: Playlist = Playlist(
             playlist.playlistId,
-            this.playlistNameEditState.value,
-            playlist.coverImageLocation
+            this.playlistNameEditState.value
         )
 
         this.disposables.add(

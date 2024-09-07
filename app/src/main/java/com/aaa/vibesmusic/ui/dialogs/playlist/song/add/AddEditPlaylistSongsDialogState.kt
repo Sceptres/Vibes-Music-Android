@@ -62,20 +62,7 @@ class AddEditPlaylistSongsDialogState(private val context: Context, private val 
             // Add new songs to playlist
             if(playlistSongs.songs != selectedSongs) {
                 val playlist: Playlist = playlistSongs.playlist
-
-                // Get the image of the first song that has an image
-                val newPlaylistImage: String? = if(selectedSongs.isNotEmpty()) {
-                    var imageStr: String? = null
-                    selectedSongs.stream()
-                        .filter{ Objects.nonNull(it.imageLocation) }
-                        .findFirst()
-                        .ifPresent { imageStr = it.imageLocation }
-                    imageStr
-                } else
-                    null
-
-                val newPlaylist: Playlist = Playlist(playlist.playlistId, playlist.name, newPlaylistImage)
-                val newPlaylistSongs: PlaylistSongs = PlaylistSongs(newPlaylist, selectedSongs)
+                val newPlaylistSongs: PlaylistSongs = PlaylistSongs(playlist, selectedSongs)
 
                 this.disposables.add(
                     DatabaseUtil.upsertPlaylistSong(this.db, newPlaylistSongs)

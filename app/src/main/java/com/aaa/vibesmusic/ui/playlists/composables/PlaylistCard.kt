@@ -72,7 +72,7 @@ fun PlaylistCard(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(playlist.coverImageLocation ?: R.drawable.music_cover_image)
+                        .data(null ?: R.drawable.music_cover_image)
                         .crossfade(true)
                         .build(),
                     contentDescription = "Playlist Cover",
