@@ -84,9 +84,13 @@ fun EditSongDialog(
                         .fillMaxWidth()
                         .padding(start = 13.dp)
                 )
+
+                val songNameValidator: Boolean = editSongDialogState.validateSongName()
                 EditField(
                     valueState = editSongDialogState.songNameState,
                     placeholderText = "Song Name",
+                    validator = songNameValidator,
+                    validatorErrorMsg = "Song name cannot be blank!",
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
@@ -100,9 +104,13 @@ fun EditSongDialog(
                         .fillMaxWidth()
                         .padding(start = 13.dp)
                 )
+
+                val artistNameValidator: Boolean = editSongDialogState.validateArtistName()
                 EditField(
                     valueState = editSongDialogState.artistState,
                     placeholderText = "Artist",
+                    validator = artistNameValidator,
+                    validatorErrorMsg = "Artist name cannot be blank!",
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
@@ -116,9 +124,13 @@ fun EditSongDialog(
                         .fillMaxWidth()
                         .padding(start = 13.dp)
                 )
+
+                val albumNameValidator: Boolean = editSongDialogState.validateAlbumName()
                 EditField(
                     valueState = editSongDialogState.albumState,
                     placeholderText = "Album",
+                    validator = albumNameValidator,
+                    validatorErrorMsg = "Album name cannot be blank!",
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
@@ -129,10 +141,12 @@ fun EditSongDialog(
                 val dialogButtons: List<DialogButton> = listOf(
                     DialogButton(
                         btnTxt = "Cancel",
+                        isEnabled = true,
                         onClick = closer
                     ),
                     DialogButton(
                         btnTxt = "Update",
+                        isEnabled = songNameValidator && artistNameValidator && albumNameValidator,
                         onClick = {
                             editSongDialogState.updateSong(
                                 song,

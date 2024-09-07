@@ -17,6 +17,18 @@ class EditSongDialogState(private val context: Context, private val songObj: Son
     var artistState: MutableState<String> = mutableStateOf(songObj.artist)
     var albumState: MutableState<String> = mutableStateOf(songObj.albumName)
 
+    fun validateSongName(): Boolean {
+        return this.songNameState.value.isNotBlank()
+    }
+
+    fun validateArtistName(): Boolean {
+        return this.artistState.value.isNotBlank()
+    }
+
+    fun validateAlbumName(): Boolean {
+        return this.albumState.value.isNotBlank()
+    }
+
     fun updateSong(song: Song, onSuccess: () -> Unit, onError: (err: Throwable) -> Unit) {
         val newSong = Song(
             song.songId,

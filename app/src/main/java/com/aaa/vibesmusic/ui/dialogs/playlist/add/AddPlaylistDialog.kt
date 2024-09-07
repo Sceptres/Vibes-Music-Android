@@ -85,9 +85,12 @@ fun AddPlaylistDialog(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                val nameValidator: Boolean = addPlaylistDialogState.validatePlaylistName()
                 EditField(
                     valueState = addPlaylistDialogState.playlistNameState,
                     placeholderText = "Playlist Name",
+                    validator = nameValidator,
+                    validatorErrorMsg = "Playlist name cannot be blank!",
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
@@ -98,10 +101,12 @@ fun AddPlaylistDialog(
                 val dialogButtons: List<DialogButton> = listOf(
                     DialogButton(
                         btnTxt = "Cancel",
+                        isEnabled = true,
                         onClick = closer
                     ),
                     DialogButton(
                         btnTxt = "Add",
+                        isEnabled = nameValidator,
                         onClick = {
                             addPlaylistDialogState.addPlaylist(
                                 {

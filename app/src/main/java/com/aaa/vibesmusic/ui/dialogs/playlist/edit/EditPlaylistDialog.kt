@@ -89,9 +89,13 @@ fun EditPlaylistDialog(
                         .fillMaxWidth()
                         .padding(start = 13.dp)
                 )
+
+                val playlistNameValidator: Boolean = editPlaylistDialogState.validatePlaylistName()
                 EditField(
                     valueState = editPlaylistDialogState.playlistNameEditState,
                     placeholderText = "Playlist Name",
+                    validator = playlistNameValidator,
+                    validatorErrorMsg = "Playlist name cannot be blank!",
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
@@ -101,10 +105,12 @@ fun EditPlaylistDialog(
                 val dialogButtons: List<DialogButton> = listOf(
                     DialogButton(
                         btnTxt = "Cancel",
+                        isEnabled = true,
                         onClick = closer
                     ),
                     DialogButton(
                         btnTxt = "Update",
+                        isEnabled = playlistNameValidator,
                         onClick = {
                             editPlaylistDialogState.updatePlaylist(
                                 playlist = playlist,
