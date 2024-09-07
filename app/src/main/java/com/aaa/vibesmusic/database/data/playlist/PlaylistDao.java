@@ -45,10 +45,10 @@ public interface PlaylistDao {
     LiveData<List<Playlist>> getPlaylists();
 
     @Transaction
-    @Query("SELECT * FROM Playlists")
+    @Query("SELECT * FROM PlaylistView")
     LiveData<List<PlaylistSongs>> getPlaylistsSongs();
 
     @Transaction
-    @Query("SELECT * FROM Playlists WHERE playlistId=:id")
+    @Query("SELECT * FROM PlaylistView WHERE playlistId=:id")
     LiveData<PlaylistSongs> getPlaylistSongsByPlaylistId(int id);
 }
