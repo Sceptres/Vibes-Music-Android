@@ -28,8 +28,8 @@ public class ImportLocalSongsNotification {
         this.notificationBuilder = this.createNotificationBuilder("", 0);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Local Song Import";
-            String description = "Local song import progress";
+            CharSequence name = "Song Import";
+            String description = "Song import progress";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
