@@ -30,7 +30,7 @@ public class ImportSongsNotification {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Song Import";
             String description = "Song import progress";
-            int importance = NotificationManager.IMPORTANCE_MAX;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
 
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
@@ -48,6 +48,7 @@ public class ImportSongsNotification {
                 .setContentTitle("Importing Songs...")
                 .setContentText(contentText)
                 .setProgress(100, progress, false)
+                .setPriority(NotificationManager.IMPORTANCE_MAX)
                 .setOngoing(true);
     }
 
