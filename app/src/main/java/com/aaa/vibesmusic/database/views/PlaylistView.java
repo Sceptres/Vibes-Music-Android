@@ -2,6 +2,8 @@ package com.aaa.vibesmusic.database.views;
 
 import androidx.room.DatabaseView;
 
+import com.aaa.vibesmusic.database.data.playlist.Playlist;
+
 @DatabaseView("""
         SELECT Playlists.playlistId,
                Playlists.playlistName,
@@ -15,6 +17,15 @@ public class PlaylistView {
     private final int playlistId;
     private final String playlistName;
     private final String playlistCoverImageLocation;
+
+    /**
+     *
+     * @param playlistView The {@link PlaylistView} to convert to a {@link Playlist}
+     * @return The {@link Playlist} equivalent to the given {@link PlaylistView}
+     */
+    public static Playlist toPlaylist(PlaylistView playlistView) {
+        return new Playlist(playlistView.playlistId, playlistView.playlistName);
+    }
 
     public PlaylistView(int playlistId, String playlistName, String playlistCoverImageLocation) {
         this.playlistId = playlistId;

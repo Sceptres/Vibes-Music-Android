@@ -26,7 +26,7 @@ fun DeletePlaylistDialog(
 
     ConfirmAlertDialog(
         title = "Are you sure?",
-        text = "Are you sure you want to delete the ${playlistSongs.playlist.name} playlist?",
+        text = "Are you sure you want to delete the ${playlistSongs.playlist.playlistName} playlist?",
         dismissButtonText = "Cancel",
         onDismiss = closer,
         confirmButtonText = "Delete",
@@ -38,7 +38,7 @@ fun DeletePlaylistDialog(
                     UIUtil.showSnackBar(
                         snackBarScope = snackBarScope,
                         snackBarState = snackBarState,
-                        message = "The playlist ${playlistSongs.playlist.name} has been successfully deleted!"
+                        message = "The playlist ${playlistSongs.playlist.playlistName} has been successfully deleted!"
                     )
                 },
                 onFail = {

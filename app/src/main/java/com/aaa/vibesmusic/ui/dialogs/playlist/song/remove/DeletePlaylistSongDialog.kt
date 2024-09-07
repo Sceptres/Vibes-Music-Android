@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
+import com.aaa.vibesmusic.database.views.PlaylistView
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.dialogs.common.ConfirmAlertDialog
 import kotlinx.coroutines.CoroutineScope
@@ -28,11 +29,11 @@ fun DeletePlaylistSongDialog(
     val deletePlaylistSongViewModel: DeletePlaylistSongDialogState by remember {
         mutableStateOf(DeletePlaylistSongDialogState(currentContext))
     }
-    val playlist: Playlist = playlistSongs.playlist
+    val playlist: PlaylistView = playlistSongs.playlist
 
     ConfirmAlertDialog(
         title = "Are you sure?",
-        text = "Are you sure you want to remove ${song.name} from the ${playlist.name} playlist?",
+        text = "Are you sure you want to remove ${song.name} from the ${playlist.playlistName} playlist?",
         onDismiss = closer,
         dismissButtonText = "Cancel",
         onConfirm = {

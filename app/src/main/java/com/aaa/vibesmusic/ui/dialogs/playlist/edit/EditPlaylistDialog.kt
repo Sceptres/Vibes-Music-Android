@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.playlist.Playlist
+import com.aaa.vibesmusic.database.views.PlaylistView
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.dialogs.common.DialogButton
 import com.aaa.vibesmusic.ui.dialogs.common.DialogButtons
@@ -38,7 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun EditPlaylistDialog(
-    playlist: Playlist,
+    playlist: PlaylistView,
     closer: () -> Unit,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
@@ -69,7 +70,7 @@ fun EditPlaylistDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = playlist.name,
+                    text = playlist.playlistName,
                     fontSize = 20.sp,
                     color = Color.White,
                     maxLines = 1,
