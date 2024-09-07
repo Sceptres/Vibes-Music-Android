@@ -102,12 +102,16 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase db) {
             db.execSQL("ALTER TABLE `Playlists` DROP COLUMN playlistCoverImageLocation;");
             db.execSQL("CREATE VIEW `PlaylistView` AS SELECT Playlists.playlistId,\n"
-                    + "       Playlists.playlistName,\n"
-                    + "       Songs.image_location AS playlistCoverImageLocation\n"
-                    + "FROM Playlists\n"
-                    + "LEFT JOIN PlaylistSongRelationship ON PlaylistSongRelationship.playlistId = Playlists.playlistId\n"
-                    + "LEFT JOIN Songs ON PlaylistSongRelationship.songId = Songs.songId AND Songs.image_location IS NOT NULL\n"
-                    + "GROUP BY Playlists.playlistId");
+                    + "          Playlists.playlistName,\n"
+                    + "          (\n"
+                    + "              SELECT Songs.image_location\n"
+                    + "              FROM PlaylistSongRelationship\n"
+                    + "              JOIN Songs ON PlaylistSongRelationship.songId = Songs.songId\n"
+                    + "              WHERE PlaylistSongRelationship.playlistId = Playlists.playlistId\n"
+                    + "                    AND Songs.image_location IS NOT NULL\n"
+                    + "              LIMIT 1\n"
+                    + "          ) AS playlistCoverImageLocation\n"
+                    + "FROM Playlists");
         }
     }
 }

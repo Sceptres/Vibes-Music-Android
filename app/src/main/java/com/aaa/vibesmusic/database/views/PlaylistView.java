@@ -4,15 +4,21 @@ import androidx.room.DatabaseView;
 
 import com.aaa.vibesmusic.database.data.playlist.Playlist;
 
-@DatabaseView("""
+@DatabaseView(
+        """
         SELECT Playlists.playlistId,
                Playlists.playlistName,
-               Songs.image_location AS playlistCoverImageLocation
-        FROM Playlists
-        LEFT JOIN PlaylistSongRelationship ON PlaylistSongRelationship.playlistId = Playlists.playlistId
-        LEFT JOIN Songs ON PlaylistSongRelationship.songId = Songs.songId AND Songs.image_location IS NOT NULL
-        GROUP BY Playlists.playlistId
-        """)
+               (
+                   SELECT Songs.image_location
+                   FROM PlaylistSongRelationship
+                   JOIN Songs ON PlaylistSongRelationship.songId = Songs.songId
+                   WHERE PlaylistSongRelationship.playlistId = Playlists.playlistId
+                         AND Songs.image_location IS NOT NULL
+                   LIMIT 1
+               ) AS playlistCoverImageLocation
+     FROM Playlists
+     """
+)
 public class PlaylistView {
     private final int playlistId;
     private final String playlistName;

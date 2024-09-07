@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "71618ed0666fcc4a562779ea9f4cea6e",
+    "identityHash": "74b7ab679feffed3df33d94878ce9a50",
     "entities": [
       {
         "tableName": "Songs",
@@ -179,12 +179,12 @@
     "views": [
       {
         "viewName": "PlaylistView",
-        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT Playlists.playlistId,\n       Playlists.playlistName,\n       Songs.image_location AS playlistCoverImageLocation\nFROM Playlists\nLEFT JOIN PlaylistSongRelationship ON PlaylistSongRelationship.playlistId = Playlists.playlistId\nLEFT JOIN Songs ON PlaylistSongRelationship.songId = Songs.songId AND Songs.image_location IS NOT NULL\nGROUP BY Playlists.playlistId"
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT Playlists.playlistId,\n          Playlists.playlistName,\n          (\n              SELECT Songs.image_location\n              FROM PlaylistSongRelationship\n              JOIN Songs ON PlaylistSongRelationship.songId = Songs.songId\n              WHERE PlaylistSongRelationship.playlistId = Playlists.playlistId\n                    AND Songs.image_location IS NOT NULL\n              LIMIT 1\n          ) AS playlistCoverImageLocation\nFROM Playlists"
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '71618ed0666fcc4a562779ea9f4cea6e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '74b7ab679feffed3df33d94878ce9a50')"
     ]
   }
 }
