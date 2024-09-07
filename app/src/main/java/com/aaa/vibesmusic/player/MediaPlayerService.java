@@ -542,8 +542,11 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     public void terminateSelf() {
         this.unregisterReceiver(this.noisyReceiver);
         this.dispose();
-        if(Objects.nonNull(this.session))
+        if(Objects.nonNull(this.session)) {
+            this.session.setActive(false);
             this.session.release();
+            this.session = null;
+        }
         if(Objects.nonNull(this.notification))
             this.notification.close();
 
