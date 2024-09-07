@@ -1,11 +1,6 @@
 package com.aaa.vibesmusic.ui.activity
 
-import android.content.ComponentName
-import android.content.Intent
-import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.IBinder
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.EnterTransition
@@ -31,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,32 +42,18 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
-import com.aaa.vibesmusic.perms.PermissionsUtil
-import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.anim.PlayingSongScreenAnim
-import com.aaa.vibesmusic.ui.songimport.ImportSongsScreen
 import com.aaa.vibesmusic.ui.library.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playing.PlayingSongScreen
 import com.aaa.vibesmusic.ui.playlist.PlaylistScreen
 import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
+import com.aaa.vibesmusic.ui.songimport.ImportSongsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import java.lang.IllegalArgumentException
 
-class MainActivity : AppCompatActivity(), ServiceConnection {
-    private lateinit var mediaPlayerService: MediaPlayerService
-
-    override fun onStart() {
-        super.onStart()
-        if(!this::mediaPlayerService.isInitialized) {
-            val serviceIntent: Intent = Intent(this.applicationContext, MediaPlayerService::class.java)
-            this.application.bindService(serviceIntent, this, BIND_AUTO_CREATE)
-            this.application.startService(serviceIntent)
-        }
-    }
-
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -257,19 +237,4 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
             }
         }
     }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == PermissionsUtil.POST_NOTIF_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if(this.mediaPlayerService.isPlaying)
-                this.mediaPlayerService.showNotification()
-        }
-    }
-
-    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-        val binder = service as MediaPlayerService.MediaPlayerServiceBinder
-        this.mediaPlayerService = binder.mediaPlayerService
-    }
-
-    override fun onServiceDisconnected(name: ComponentName?) {}
 }
