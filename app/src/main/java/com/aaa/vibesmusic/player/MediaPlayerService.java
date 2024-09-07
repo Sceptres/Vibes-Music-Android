@@ -1,13 +1,16 @@
 package com.aaa.vibesmusic.player;
 
 import android.Manifest;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -63,6 +66,16 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
     private MediaControlNotification notification;
     private MediaPlayer.OnPreparedListener preparedListener;
     private SongsPlayedListener songsPlayedListener;
+
+    /**
+     *
+     * @param context The {@link Context} to bind the service to
+     * @param serviceConnection The {@link ServiceConnection} of this binding operation
+     */
+    public static void bindTo(Context context, ServiceConnection serviceConnection) {
+        Intent serviceIntent = new Intent(context, MediaPlayerService.class);
+        context.bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE);
+    }
 
     public MediaPlayerService() {
         this.songPlayer = new SongPlayer();
@@ -198,9 +211,11 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
         this.timeThread = new MediaTimeThread(this.player);
 
-        this.session = new MediaSessionHolder(this.getApplicationContext(), this);
-        this.session.setActive(true);
-        this.setSessionToken(this.session.getSessionToken());
+        if(Objects.isNull(this.session)) {
+            this.session = new MediaSessionHolder(this.getApplicationContext(), this);
+            this.session.setActive(true);
+            this.setSessionToken(this.session.getSessionToken());
+        }
 
         IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         this.registerReceiver(this.noisyReceiver, filter);
@@ -246,6 +261,14 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
 
     /**
      *
+     * @return True if the seeker thread is paused. False otherwise
+     */
+    public boolean isSeekerPaused() {
+        return this.timeThread.isPaused();
+    }
+
+    /**
+     *
      * @param time The time in milliseconds to seek to in the {@link Song}
      */
     public void seekTo(int time) {
@@ -253,7 +276,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         this.timeThread.pause();
         this.player.seekTo(time);
         this.player.start();
-        this.timeThread.unpause();
+        this.resumeSeekListener();
         if(Objects.nonNull(this.session))
             this.session.setMediaPlaybackState(this.session.getState(), time);
     }
@@ -265,7 +288,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             if(!this.timeThread.isAlive()) {
                 this.timeThread.start();
             } else {
-                this.timeThread.unpause();
+                this.resumeSeekListener();
             }
             this.songPlayer.play();
             this.runPreparedListener();
@@ -273,7 +296,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             if(Objects.nonNull(this.notification) && !this.notification.isNotified())
                 this.notification.show();
             if(Objects.nonNull(this.session))
-                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.player.getCurrentPosition());
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.getCurrentPosition());
         }
     }
 
@@ -284,7 +307,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.songPlayer.stop();
             this.timeThread.pause();
             if(Objects.nonNull(this.session))
-                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_STOPPED, this.player.getCurrentPosition());
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_STOPPED, this.getCurrentPosition());
             this.runPreparedListener();
         }
     }
@@ -295,9 +318,9 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             int resumeTime = this.songPlayer.resume();
             this.player.seekTo(resumeTime);
             this.player.start();
-            this.timeThread.unpause();
+            this.resumeSeekListener();
             if(Objects.nonNull(this.session))
-                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.player.getCurrentPosition());
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.getCurrentPosition());
             this.runPreparedListener();
             if(Objects.nonNull(this.notification))
                 this.notification.updateNotification();
@@ -311,10 +334,10 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         if(this.player.isPlaying()) {
             this.player.pause();
             this.timeThread.pause();
-            int pauseTime = this.player.getCurrentPosition();
+            int pauseTime = this.getCurrentPosition();
             this.songPlayer.pause(pauseTime);
             if(Objects.nonNull(this.session))
-                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, this.player.getCurrentPosition());
+                this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, this.getCurrentPosition());
             this.runPreparedListener();
             if(Objects.nonNull(this.notification))
                 this.notification.updateNotification();
@@ -466,7 +489,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         Song currentSong = this.songPlayer.getCurrentSong();
         if(Objects.nonNull(this.session)) {
             this.session.setSong(currentSong);
-            this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.player.getCurrentPosition());
+            this.session.setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, this.getCurrentPosition());
         }
         if(Objects.nonNull(this.notification))
             this.notification.updateNotification();
@@ -515,6 +538,24 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         return AudioManager.AUDIOFOCUS_REQUEST_GRANTED == this.audioManager.abandonAudioFocus(this);
     }
 
+    /**
+     * Cleans up and terminates this service
+     */
+    public void terminateSelf() {
+        this.unregisterReceiver(this.noisyReceiver);
+        this.dispose();
+        if(Objects.nonNull(this.session)) {
+            this.session.setActive(false);
+            this.session.release();
+            this.session = null;
+        }
+        if(Objects.nonNull(this.notification))
+            this.notification.close();
+
+        this.stopForeground(Service.STOP_FOREGROUND_REMOVE);
+        this.stopSelf();
+    }
+
     @Override
     public void dispose() {
         if(Objects.nonNull(this.player)) {
@@ -523,20 +564,8 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
             this.stop();
             this.player.release();
             this.player = null;
-            if(Objects.nonNull(this.session))
-                this.session.release();
-            if(Objects.nonNull(this.notification))
-                this.notification.close();
-            this.unregisterReceiver(this.noisyReceiver);
+            this.releaseAudioFocus();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.dispose();
-        this.stopSelf();
-        this.releaseAudioFocus();
     }
 
     @Override
