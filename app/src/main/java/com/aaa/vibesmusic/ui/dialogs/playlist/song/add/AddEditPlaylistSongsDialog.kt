@@ -89,10 +89,12 @@ fun AddEditPlaylistSongsDialog(
                 val dialogButtons: List<DialogButton> = listOf(
                     DialogButton(
                         btnTxt = "Cancel",
+                        isEnabled = true,
                         onClick = closer
                     ),
                     DialogButton(
                         btnTxt = if(addEditPlaylistSongsState.playlistSongs.songs.isEmpty()) "Add" else "Update",
+                        isEnabled = true,
                         onClick = {
                             addEditPlaylistSongsState.addEditPlaylistSongs()
                             closer()

@@ -16,6 +16,10 @@ class EditPlaylistDialogState(val context: Context, playlist: PlaylistView) {
 
     val playlistNameEditState: MutableState<String> = mutableStateOf(playlist.playlistName)
 
+    fun validatePlaylistName(): Boolean {
+        return this.playlistNameEditState.value.isNotBlank()
+    }
+
     fun updatePlaylist(playlist: PlaylistView, onSuccess: () -> Unit, onFail: (Throwable) -> Unit) {
         val newPlaylist: Playlist = Playlist(
             playlist.playlistId,

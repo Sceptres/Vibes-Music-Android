@@ -25,7 +25,13 @@ fun EditFieldLabel(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EditField(valueState: MutableState<String>, placeholderText: String, modifier: Modifier = Modifier) {
+fun EditField(
+    valueState: MutableState<String>,
+    placeholderText: String,
+    validator: Boolean,
+    validatorErrorMsg: String,
+    modifier: Modifier = Modifier
+) {
     TextField(
         value = valueState.value,
         onValueChange = { newValue -> valueState.value = newValue },
@@ -45,7 +51,13 @@ fun EditField(valueState: MutableState<String>, placeholderText: String, modifie
             unfocusedTextColor = Color.White,
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent
-        )
+            disabledContainerColor = Color.Transparent,
+            errorTextColor = Color.Red,
+            errorContainerColor = Color.Transparent,
+        ),
+        isError = !validator
     )
+
+    if(!validator)
+        Text(text = validatorErrorMsg, color = Color.Red)
 }

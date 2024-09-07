@@ -15,6 +15,10 @@ class AddPlaylistDialogState(val context: Context) {
     val playlistNameState: MutableState<String> = mutableStateOf("")
 
 
+    fun validatePlaylistName(): Boolean {
+        return this.playlistNameState.value.isNotBlank()
+    }
+
     fun addPlaylist(onSuccess: () -> Unit, onFail: (Throwable) -> Unit) {
         val newPlaylist = Playlist(
             this.playlistNameState.value
