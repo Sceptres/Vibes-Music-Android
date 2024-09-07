@@ -31,7 +31,7 @@ public class MediaControlNotification {
     private static final String CHANNEL_ID = "media_playback_channel";
 
     private final Context appContext;
-    private final MediaPlayerService service;
+    private MediaPlayerService service;
     private boolean isNotified;
     private NotificationCompat.Builder notificationBuilder;
 
@@ -61,6 +61,7 @@ public class MediaControlNotification {
 
         Bitmap art = BitmapFactory.decodeResource(appContext.getResources(), R.drawable.music_cover_image);
         this.notificationBuilder = this.createNotificationBuilder("Not Playing", "No Artist", art);
+        this.service.startForeground(NOTIFICATION_ID, this.notificationBuilder.build());
     }
 
     /**
