@@ -36,6 +36,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
+import com.aaa.vibesmusic.database.views.PlaylistView
 import java.util.Objects
 
 @Composable
@@ -45,7 +46,7 @@ fun PlaylistCard(
     onOptionsClick: () -> Unit,
     PlaylistMenu: @Composable () -> Unit
 ) {
-    val playlist: Playlist = playlistSongs.playlist
+    val playlist: PlaylistView = playlistSongs.playlist
     val songs: List<Song> = playlistSongs.songs
 
     val transparent = colorResource(id = R.color.transparent)
@@ -72,7 +73,7 @@ fun PlaylistCard(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(playlist.coverImageLocation ?: R.drawable.music_cover_image)
+                        .data(playlist.playlistCoverImageLocation ?: R.drawable.music_cover_image)
                         .crossfade(true)
                         .build(),
                     contentDescription = "Playlist Cover",
@@ -106,7 +107,7 @@ fun PlaylistCard(
             }
 
             Text(
-                text = playlist.name,
+                text = playlist.playlistName,
                 color = Color.White,
                 fontSize = 20.sp,
                 maxLines = 1,

@@ -17,8 +17,7 @@ class AddPlaylistDialogState(val context: Context) {
 
     fun addPlaylist(onSuccess: () -> Unit, onFail: (Throwable) -> Unit) {
         val newPlaylist = Playlist(
-            this.playlistNameState.value,
-            null
+            this.playlistNameState.value
         )
 
         this.disposables.add(

@@ -9,6 +9,7 @@ import com.aaa.vibesmusic.database.data.playlist.PlaylistDao;
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationshipDao;
+import com.aaa.vibesmusic.database.views.PlaylistView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +24,8 @@ public class DatabaseUtil {
      * @return The {@link List} of {@link PlaylistSongRelationship} entities
      */
     public static List<PlaylistSongRelationship> convertPlaylistSongs(PlaylistSongs playlistSongs) {
-        return DatabaseUtil.convertPlaylistSongs(playlistSongs.getPlaylist(), playlistSongs.getSongs());
+        Playlist playlist = PlaylistView.toPlaylist(playlistSongs.getPlaylist());
+        return DatabaseUtil.convertPlaylistSongs(playlist, playlistSongs.getSongs());
     }
 
     /**
@@ -46,7 +48,9 @@ public class DatabaseUtil {
     @Transaction
     private static void upsertPlaylistSongHelper(VibesMusicDatabase db, PlaylistSongs playlistSongs) {
         PlaylistDao playlistDao = db.playlistDao();
-        playlistDao.upsertPlaylistSingle(playlistSongs.getPlaylist());
+
+        Playlist playlist = PlaylistView.toPlaylist(playlistSongs.getPlaylist());
+        playlistDao.upsertPlaylistSingle(playlist);
 
         List<PlaylistSongRelationship> songRelationships = DatabaseUtil.convertPlaylistSongs(playlistSongs);
         PlaylistSongRelationshipDao songRelationshipDao = db.playlistSongRelationshipDao();
@@ -76,7 +80,9 @@ public class DatabaseUtil {
         playlistSongRelationshipDao.deletePlaylistSongRelationshipSingle(playlistSongRelationships);
 
         PlaylistDao playlistDao = db.playlistDao();
-        playlistDao.deletePlaylistSingle(playlistSongs.getPlaylist());
+
+        Playlist playlist = PlaylistView.toPlaylist(playlistSongs.getPlaylist());
+        playlistDao.deletePlaylistSingle(playlist);
     }
 
     /**
