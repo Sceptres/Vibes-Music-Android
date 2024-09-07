@@ -6,6 +6,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.material3.SnackbarHostState
@@ -26,6 +27,7 @@ import com.aaa.vibesmusic.metadata.retriever.SongMetadataRetriever
 import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.UIUtil
+import com.aaa.vibesmusic.ui.notification.ImportSongsNotification
 import com.aaa.vibesmusic.ui.songimport.result.ImportSongsActivityResultContract
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -37,11 +39,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Objects
 
-class ImportSongsScreenViewModel(application: Application, val globalScope: CoroutineScope) : AndroidViewModel(application) {
+class ImportSongsScreenViewModel(application: Application, private val globalScope: CoroutineScope) : AndroidViewModel(application) {
     companion object {
         fun getFactory(scope: CoroutineScope): ViewModelProvider.Factory {
             return viewModelFactory {
@@ -125,7 +128,14 @@ class ImportSongsScreenViewModel(application: Application, val globalScope: Coro
         snackBarScope: CoroutineScope
     ) {
         this.globalScope.launch(Dispatchers.IO) {
-            val importedSongs: List<Song> = importSongsFromUris(uris)
+            val importNotification: ImportSongsNotification =
+                ImportSongsNotification(getApplication())
+            importNotification.show()
+
+            val importedSongs: List<Song> = importSongsFromUris(uris, importNotification)
+
+            importNotification.update("Updating database......", 0)
+            delay(1000)
 
             if(existingSongs > 0) {
                 UIUtil.showSnackBar(
@@ -133,7 +143,10 @@ class ImportSongsScreenViewModel(application: Application, val globalScope: Coro
                     snackBarScope = snackBarScope,
                     message = getExistingSongsMsg()
                 )
+                importNotification.update("Found $existingSongs songs that have already been imported. Ignoring...", 100)
             }
+
+            delay(1000)
 
             if (failedSongs > 0) {
                 UIUtil.showSnackBar(
@@ -141,6 +154,7 @@ class ImportSongsScreenViewModel(application: Application, val globalScope: Coro
                     snackBarScope = snackBarScope,
                     message = getFailedSongsMsg()
                 )
+                importNotification.update("Failed to import $existingSongs songs. Please try again!", 100)
             }
 
             // Were there any songs imported to be added to the database?
@@ -150,18 +164,23 @@ class ImportSongsScreenViewModel(application: Application, val globalScope: Coro
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
+                            val importedSongsCount: Int = uris.size - failedSongs - existingSongs
+
                             UIUtil.showSnackBar(
                                 snackBarState = snackBarState,
                                 snackBarScope = snackBarScope,
-                                message = "Successfully imported ${uris.size - failedSongs - existingSongs} songs."
+                                message = "Successfully imported $importedSongsCount songs."
                             )
                             failedSongs = 0
                             existingSongs = 0
+
+                            importNotification.update("Imported $importedSongsCount songs successfully!", 100)
+                            importNotification.close()
                         }
                 )
             } else {
-                failedSongs = 0
-                existingSongs = 0
+                delay(1000)
+                importNotification.close()
             }
         }
     }
@@ -219,13 +238,18 @@ class ImportSongsScreenViewModel(application: Application, val globalScope: Coro
      * @param uris The [List] of [Uri]s that have been chosen by the user
      * @return The [List] of [Song]s that were imported to the application
      */
-    private fun importSongsFromUris(uris: List<Uri>): List<Song> {
+    private fun importSongsFromUris(uris: List<Uri>, importSongNotification: ImportSongsNotification): List<Song> {
         val songs: MutableList<Song> = ArrayList()
-        for (uri in uris) {
+        for (i in uris.indices) {
+            Log.d("INDEX", i.toString())
+            val uri: Uri = uris[i]
             try {
+                importSongNotification.update("Retrieving song ${i+1}/${uris.size}", 0)
                 SongMetadataRetriever(this.getApplication(), uri).use { retriever ->
                     val metaData = retriever.getAllMetaData()
+                    importSongNotification.update("Retrieving song ${i+1}/${uris.size}", 50)
                     val song = parseUri(uri, metaData)
+                    importSongNotification.update("Importing song ${i+1}/${uris.size} file into library", 100)
                     songs.add(song)
                 }
             } catch (e: IOException) {

@@ -14,15 +14,15 @@ import androidx.core.app.NotificationManagerCompat;
 import com.aaa.vibesmusic.R;
 import com.aaa.vibesmusic.perms.PermissionsUtil;
 
-public class ImportLocalSongsNotification {
+public class ImportSongsNotification {
     public static final int NOTIFICATION_ID = 11112222;
-    private static final String CHANNEL_ID = "import_local_songs_notification";
+    private static final String CHANNEL_ID = "import_songs_notification";
 
     private final Context context;
     private boolean isNotified;
     private NotificationCompat.Builder notificationBuilder;
 
-    public ImportLocalSongsNotification(@NonNull Context appContext) {
+    public ImportSongsNotification(@NonNull Context appContext) {
         this.context = appContext;
         this.isNotified = false;
         this.notificationBuilder = this.createNotificationBuilder("", 0);
@@ -30,7 +30,7 @@ public class ImportLocalSongsNotification {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Song Import";
             String description = "Song import progress";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_MAX;
 
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
@@ -43,9 +43,9 @@ public class ImportLocalSongsNotification {
     }
 
     private NotificationCompat.Builder createNotificationBuilder(String contentText, int progress) {
-        return new NotificationCompat.Builder(this.context, ImportLocalSongsNotification.CHANNEL_ID)
+        return new NotificationCompat.Builder(this.context, ImportSongsNotification.CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                .setContentTitle("Importing Local Songs...")
+                .setContentTitle("Importing Songs...")
                 .setContentText(contentText)
                 .setProgress(100, progress, false)
                 .setOngoing(true);
@@ -60,7 +60,7 @@ public class ImportLocalSongsNotification {
     }
 
     public void close() {
-        if(PermissionsUtil.hasPermission(this.context, Manifest.permission.POST_NOTIFICATIONS)) {
+        if(this.isNotified && PermissionsUtil.hasPermission(this.context, Manifest.permission.POST_NOTIFICATIONS)) {
             this.isNotified = false;
             NotificationManagerCompat.from(this.context).cancel(NOTIFICATION_ID);
         }
@@ -74,13 +74,5 @@ public class ImportLocalSongsNotification {
     public void update(String contentStr, int progress) {
         this.notificationBuilder = this.createNotificationBuilder(contentStr, progress);
         this.show();
-    }
-
-    /**
-     *
-     * @return True if this notification is displayed, false otherwise
-     */
-    public boolean isNotified() {
-        return this.isNotified;
     }
 }
