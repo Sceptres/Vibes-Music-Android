@@ -144,23 +144,6 @@ fun SelectSongItem(
                         .wrapContentHeight()
                 )
             }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(vertical = 5.dp)
-            ) {
-                Text(
-                    text = Song.calculateDuration(song.duration),
-                    color = Color.White,
-                    fontSize = 11.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .wrapContentHeight()
-                )
-            }
         }
     }
 }
