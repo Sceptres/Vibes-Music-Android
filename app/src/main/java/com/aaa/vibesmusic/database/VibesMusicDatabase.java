@@ -100,7 +100,13 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
 
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase db) {
-            db.execSQL("ALTER TABLE `Playlists` DROP COLUMN playlistCoverImageLocation;");
+            db.execSQL("CREATE TABLE IF NOT EXISTS `Playlists_new` (`playlistId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `playlistName` TEXT NOT NULL)");
+            db.execSQL("INSERT INTO `Playlists_new` (playlistId, playlistName) " +
+                    "SELECT playlistId, playlistName FROM `Playlists`;");
+            db.execSQL("DROP TABLE `Playlists`;");
+            db.execSQL("ALTER TABLE `Playlists_new` RENAME TO `Playlists`;");
+            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_Playlists_playlistName` ON `Playlists` (`playlistName`)");
+
             db.execSQL("CREATE VIEW `PlaylistView` AS SELECT Playlists.playlistId,\n"
                     + "          Playlists.playlistName,\n"
                     + "          (\n"
