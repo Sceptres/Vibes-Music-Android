@@ -241,7 +241,6 @@ class ImportSongsScreenViewModel(application: Application, private val globalSco
     private fun importSongsFromUris(uris: List<Uri>, importSongNotification: ImportSongsNotification): List<Song> {
         val songs: MutableList<Song> = ArrayList()
         for (i in uris.indices) {
-            Log.d("INDEX", i.toString())
             val uri: Uri = uris[i]
             try {
                 importSongNotification.update("Retrieving song ${i+1}/${uris.size}", 0)
