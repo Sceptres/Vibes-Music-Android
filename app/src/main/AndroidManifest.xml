@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".VibesMusicApp"
@@ -30,6 +31,11 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-1417462071241776~6452970545" />
+
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            tools:replace="android:resource"
+            android:resource="@xml/gma_ad_services_config" />
 
         <service
             android:name=".player.MediaPlayerService"
