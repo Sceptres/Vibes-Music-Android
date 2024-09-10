@@ -4,6 +4,8 @@ import androidx.room.DatabaseView;
 
 import com.aaa.vibesmusic.database.data.playlist.Playlist;
 
+import java.util.Objects;
+
 @DatabaseView(
         """
         SELECT Playlists.playlistId,
@@ -49,5 +51,18 @@ public class PlaylistView {
 
     public String getPlaylistCoverImageLocation() {
         return this.playlistCoverImageLocation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlaylistView that = (PlaylistView) o;
+        return playlistId == that.playlistId && Objects.equals(playlistName, that.playlistName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(playlistId, playlistName);
     }
 }
