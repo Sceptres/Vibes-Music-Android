@@ -4,6 +4,7 @@ import androidx.room.Transaction;
 
 import com.aaa.vibesmusic.database.VibesMusicDatabase;
 import com.aaa.vibesmusic.database.data.music.Song;
+import com.aaa.vibesmusic.database.data.music.SongPlaylists;
 import com.aaa.vibesmusic.database.data.playlist.Playlist;
 import com.aaa.vibesmusic.database.data.playlist.PlaylistDao;
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs;
@@ -30,6 +31,19 @@ public class DatabaseUtil {
 
     /**
      *
+     * @param songPlaylists The {@link SongPlaylists} to convert
+     * @return The {@link List} of {@link PlaylistSongRelationship} entities
+     */
+    public static List<PlaylistSongRelationship> convertSongPlaylists(SongPlaylists songPlaylists) {
+        Song song = songPlaylists.getSong();
+        List<Playlist> playlists = songPlaylists.getPlaylists().stream()
+                .map(PlaylistView::toPlaylist)
+                .collect(Collectors.toList());
+        return DatabaseUtil.convertPlaylistSongs(song, playlists);
+    }
+
+    /**
+     *
      * @param playlist The {@link Playlist} the {@link List} of {@link Song}s belong to
      * @param songs The {@link List} of {@link Song}s
      * @return The {@link List} of {@link PlaylistSongRelationship}s that represent the given {@link Playlist} and {@link Song}s in the database
@@ -37,6 +51,18 @@ public class DatabaseUtil {
     public static List<PlaylistSongRelationship> convertPlaylistSongs(Playlist playlist, List<Song> songs) {
         return songs.stream()
                 .map(ps -> new PlaylistSongRelationship(playlist.getPlaylistId(), ps.getSongId()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     *
+     * @param song The {@link Song} that belongs to the {@link List} of {@link Playlist}s
+     * @param playlists The {@link List} of {@link Playlist}s that own the give {@link Song}
+     * @return The {@link List} of {@link PlaylistSongRelationship}s that represent the given {@link Song} and {@link Playlist}s in the database
+     */
+    public static List<PlaylistSongRelationship> convertPlaylistSongs(Song song, List<Playlist> playlists) {
+        return playlists.stream()
+                .map(playlist -> new PlaylistSongRelationship(playlist.getPlaylistId(), song.getSongId()))
                 .collect(Collectors.toList());
     }
 
@@ -54,7 +80,7 @@ public class DatabaseUtil {
 
         List<PlaylistSongRelationship> songRelationships = DatabaseUtil.convertPlaylistSongs(playlistSongs);
         PlaylistSongRelationshipDao songRelationshipDao = db.playlistSongRelationshipDao();
-        songRelationshipDao.upsertPlaylistSongRelationshipsSingle(songRelationships);
+        songRelationshipDao.upsertPlaylistSongRelationshipsMain(songRelationships);
     }
 
     /**
@@ -75,10 +101,6 @@ public class DatabaseUtil {
      */
     @Transaction
     private static void deletePlaylistSongHelper(VibesMusicDatabase db, PlaylistSongs playlistSongs) {
-        PlaylistSongRelationshipDao playlistSongRelationshipDao = db.playlistSongRelationshipDao();
-        List<PlaylistSongRelationship> playlistSongRelationships = DatabaseUtil.convertPlaylistSongs(playlistSongs);
-        playlistSongRelationshipDao.deletePlaylistSongRelationshipSingle(playlistSongRelationships);
-
         PlaylistDao playlistDao = db.playlistDao();
 
         Playlist playlist = PlaylistView.toPlaylist(playlistSongs.getPlaylist());
@@ -93,6 +115,51 @@ public class DatabaseUtil {
      */
     public static Completable deletePlaylistSong(VibesMusicDatabase db, PlaylistSongs playlistSongs) {
         return Completable.fromAction(() -> DatabaseUtil.deletePlaylistSongHelper(db, playlistSongs))
+                .subscribeOn(Schedulers.from(db.getQueryExecutor()));
+    }
+
+    /**
+     *
+     * @param db The {@link VibesMusicDatabase} instance of the app
+     * @param songPlaylists The {@link SongPlaylists} instance to upsert
+     * @param removedPlaylists The {@link List} of {@link PlaylistView} representing the {@link Playlist}s
+     *                         that have been removed from the {@link SongPlaylists}. It is the job of
+     *                         whoever is making this request to keep track of what has been removed.
+     */
+    @Transaction
+    private static void upsertSongPlaylistsHelper(
+            VibesMusicDatabase db,
+            SongPlaylists songPlaylists,
+            List<PlaylistView> removedPlaylists
+    ) {
+        List<PlaylistSongRelationship> newPlaylistSongsRel = DatabaseUtil.convertSongPlaylists(songPlaylists);
+        db.playlistSongRelationshipDao().upsertPlaylistSongRelationshipsMain(newPlaylistSongsRel);
+
+        List<Playlist> playlists = removedPlaylists.stream()
+                .map(PlaylistView::toPlaylist)
+                .collect(Collectors.toList());
+        List<PlaylistSongRelationship> deletedPlaylistSongRel = DatabaseUtil.convertPlaylistSongs(
+                songPlaylists.getSong(),
+                playlists
+        );
+        db.playlistSongRelationshipDao().deletePlaylistSongRelationshipMain(deletedPlaylistSongRel);
+    }
+
+    /**
+     *
+     * @param db The {@link VibesMusicDatabase} instance of the app
+     * @param songPlaylists The {@link SongPlaylists} instance to upsert
+     * @param removedPlaylists The {@link List} of {@link PlaylistView} representing the {@link Playlist}s
+     *                         that have been removed from the {@link SongPlaylists}. It is the job of
+     *                         whoever is making this request to keep track of what has been removed.
+     * @return The {@link Completable} of the {@link Transaction} to delete the {@link PlaylistSongs}
+     */
+    public static Completable upsertSongPlaylists(
+            VibesMusicDatabase db,
+            SongPlaylists songPlaylists,
+            List<PlaylistView> removedPlaylists
+    ) {
+        return Completable.fromAction(() -> DatabaseUtil.upsertSongPlaylistsHelper(db, songPlaylists, removedPlaylists))
                 .subscribeOn(Schedulers.from(db.getQueryExecutor()));
     }
 }
