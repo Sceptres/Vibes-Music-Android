@@ -49,6 +49,7 @@ import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playing.PlayingSongScreen
 import com.aaa.vibesmusic.ui.playlist.PlaylistScreen
 import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
+import com.aaa.vibesmusic.ui.playlistselect.AddSongToPlaylistScreen
 import com.aaa.vibesmusic.ui.songimport.ImportSongsScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -189,18 +190,39 @@ class MainActivity : AppCompatActivity() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Screens.MusicLibrary.route,
+                startDestination = "library_nav",
                 modifier = Modifier.padding(innerPadding),
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None }
             ) {
-                composable(route = Screens.MusicLibrary.route) {
-                    statusBarColorSetter(backgroundColor)
-                    MusicLibraryScreen(
-                        snackBarState = snackBarHostState,
-                        snackBarScope = snackBarScope,
-                        openPlayingSongScreen = openPlayingSongScreen
-                    )
+                navigation(
+                    startDestination = Screens.MusicLibrary.route,
+                    route = "library_nav"
+                ) {
+                    composable(route = Screens.MusicLibrary.route) {
+                        statusBarColorSetter(backgroundColor)
+                        MusicLibraryScreen(
+                            navController = navController,
+                            snackBarState = snackBarHostState,
+                            snackBarScope = snackBarScope,
+                            openPlayingSongScreen = openPlayingSongScreen
+                        )
+                    }
+
+                    composable(
+                        route = Screens.ADD_SONG_TO_PLAYLIST_PATH,
+                        arguments = listOf(navArgument("songId") { type = NavType.IntType })
+                    ) { backStack ->
+                        val songId: Int = backStack.arguments?.getInt("songId") ?:
+                            throw IllegalArgumentException("Missing {songId} argument")
+                        statusBarColorSetter(backgroundColor)
+                        AddSongToPlaylistScreen(
+                            songId = songId,
+                            navController = navController,
+                            snackBarState = snackBarHostState,
+                            snackBarScope = snackBarScope
+                        )
+                    }
                 }
 
                 composable(route = Screens.ImportMusic.route) {
