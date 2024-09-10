@@ -19,6 +19,7 @@ import com.aaa.vibesmusic.database.data.playlist.PlaylistDao;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationshipDao;
 import com.aaa.vibesmusic.database.views.PlaylistView;
+import com.aaa.vibesmusic.database.views.PlaylistViewDao;
 
 import java.util.Objects;
 
@@ -71,6 +72,8 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
     public abstract SongDao songDao();
 
     public abstract PlaylistDao playlistDao();
+
+    public abstract PlaylistViewDao playlistViewDao();
 
     public abstract PlaylistSongRelationshipDao playlistSongRelationshipDao();
 
