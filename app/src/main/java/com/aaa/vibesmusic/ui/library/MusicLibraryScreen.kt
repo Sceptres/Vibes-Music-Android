@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
@@ -30,6 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun MusicLibraryScreen(
+    navController: NavController,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope,
     openPlayingSongScreen: () -> Unit
@@ -82,6 +84,7 @@ fun MusicLibraryScreen(
                         song = song,
                         expanded = expandedState.value,
                         closer = { expandedState.value = false },
+                        navController = navController,
                         snackBarState = snackBarState,
                         snackBarScope = snackBarScope
                     )
