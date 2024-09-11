@@ -23,6 +23,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.library.composables.MusicLibrarySongDropdown
@@ -78,6 +79,8 @@ fun MusicLibraryScreen(
                     { index ->
                         viewModel.onSongClick(notificationPermissionRequest, currentContext, index)
                         openPlayingSongScreen()
+
+                        UIUtil.showReviewDialog(currentContext)
                     }
                 ) { expandedState, song ->
                     MusicLibrarySongDropdown(

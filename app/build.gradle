@@ -88,4 +88,8 @@ dependencies {
     // Firebase analytics dependencies
     implementation platform('com.google.firebase:firebase-bom:33.2.0')
     implementation 'com.google.firebase:firebase-analytics'
+
+    // Google in-app review dependencies
+    implementation 'com.google.android.play:review:2.0.1'
+    implementation 'com.google.android.play:review-ktx:2.0.1'
 }
