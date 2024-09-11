@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.library.composables
+package com.aaa.vibesmusic.ui.musiclibrary.composables
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable

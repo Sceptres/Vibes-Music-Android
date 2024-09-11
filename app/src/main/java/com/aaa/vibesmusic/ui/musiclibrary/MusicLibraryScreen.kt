@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.library
+package com.aaa.vibesmusic.ui.musiclibrary
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,7 +26,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
-import com.aaa.vibesmusic.ui.library.composables.MusicLibrarySongDropdown
+import com.aaa.vibesmusic.ui.musiclibrary.composables.MusicLibrarySongDropdown
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import kotlinx.coroutines.CoroutineScope
 
