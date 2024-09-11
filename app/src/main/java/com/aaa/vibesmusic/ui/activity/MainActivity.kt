@@ -51,6 +51,7 @@ import com.aaa.vibesmusic.ui.playlist.PlaylistScreen
 import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
 import com.aaa.vibesmusic.ui.playlistselect.AddSongToPlaylistScreen
 import com.aaa.vibesmusic.ui.songimport.ImportSongsScreen
+import com.aaa.vibesmusic.ui.songselect.AddEditPlaylistSongsScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -260,6 +261,19 @@ class MainActivity : AppCompatActivity() {
                             openPlayingSongScreen = openPlayingSongScreen,
                             snackBarState = snackBarHostState,
                             snackBarScope = snackBarScope
+                        )
+                    }
+
+                    composable(
+                        route = Screens.ADD_EDIT_PLAYLIST_SONGS_PATH,
+                        arguments = listOf(navArgument("playlistId") { type = NavType.IntType })
+                    ) { backStack ->
+                        val playlistId: Int = backStack.arguments?.getInt("playlistId") ?:
+                        throw IllegalArgumentException("Missing {playlistId} argument")
+                        statusBarColorSetter(backgroundColor)
+                        AddEditPlaylistSongsScreen(
+                            playlistId = playlistId,
+                            navController = navController
                         )
                     }
                 }

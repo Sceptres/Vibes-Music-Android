@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
+import com.aaa.vibesmusic.ui.common.OvalTextButton
 import com.aaa.vibesmusic.ui.common.PlaylistsSelectGrid
 import com.aaa.vibesmusic.ui.nav.Screens
 import kotlinx.coroutines.CoroutineScope
@@ -81,22 +82,20 @@ fun AddSongToPlaylistScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                TextButton(
+                OvalTextButton(
+                    text = "Cancel",
+                    color = Color.Gray,
                     onClick = closer,
-                    border = BorderStroke(3.dp, Color.Gray),
                     modifier = Modifier
                         .padding(start = 10.dp, top = 5.dp)
                         .weight(1f)
-                ) {
-                    Text(
-                        text = "Cancel",
-                        color = Color.Gray
-                    )
-                }
+                )
 
                 val song: String = addSongToPlaylistScreenViewModel.songPlaylists?.song?.name ?: ""
 
-                TextButton(
+                OvalTextButton(
+                    text = "Done",
+                    color = colorResource(id = R.color.blue_selected),
                     onClick = {
                         closer()
                         addSongToPlaylistScreenViewModel.onComplete(
@@ -116,16 +115,10 @@ fun AddSongToPlaylistScreen(
                             }
                         )
                     },
-                    border = BorderStroke(3.dp, colorResource(id = R.color.blue_selected)),
                     modifier = Modifier
                         .padding(end = 10.dp, top = 5.dp)
                         .weight(1f)
-                ) {
-                    Text(
-                        text = "Done",
-                        color = colorResource(id = R.color.blue_selected)
-                    )
-                }
+                )
             }
         }
     }
