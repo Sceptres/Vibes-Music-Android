@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.database.views.PlaylistView
+import com.aaa.vibesmusic.database.views.playlist.PlaylistView
 
 data class SelectPlaylist(val playlist: PlaylistView) {
     val checkedState: MutableState<Boolean> = mutableStateOf(false)

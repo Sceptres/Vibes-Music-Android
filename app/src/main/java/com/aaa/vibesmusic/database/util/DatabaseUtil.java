@@ -10,7 +10,7 @@ import com.aaa.vibesmusic.database.data.playlist.PlaylistDao;
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationshipDao;
-import com.aaa.vibesmusic.database.views.PlaylistView;
+import com.aaa.vibesmusic.database.views.playlist.PlaylistView;
 
 import java.util.List;
 import java.util.stream.Collectors;

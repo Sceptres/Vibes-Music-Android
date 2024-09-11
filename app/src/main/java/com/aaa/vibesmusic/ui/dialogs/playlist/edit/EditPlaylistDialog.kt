@@ -28,8 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.database.data.playlist.Playlist
-import com.aaa.vibesmusic.database.views.PlaylistView
+import com.aaa.vibesmusic.database.views.playlist.PlaylistView
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.dialogs.common.DialogButton
 import com.aaa.vibesmusic.ui.dialogs.common.DialogButtons

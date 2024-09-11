@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.database.views;
+package com.aaa.vibesmusic.database.views.playlist;
 
 import androidx.room.DatabaseView;
 

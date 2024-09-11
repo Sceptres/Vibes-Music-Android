@@ -18,8 +18,8 @@ import com.aaa.vibesmusic.database.data.playlist.Playlist;
 import com.aaa.vibesmusic.database.data.playlist.PlaylistDao;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationshipDao;
-import com.aaa.vibesmusic.database.views.PlaylistView;
-import com.aaa.vibesmusic.database.views.PlaylistViewDao;
+import com.aaa.vibesmusic.database.views.playlist.PlaylistView;
+import com.aaa.vibesmusic.database.views.playlist.PlaylistViewDao;
 
 import java.util.Objects;
 
