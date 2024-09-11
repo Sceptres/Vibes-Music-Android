@@ -45,6 +45,7 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.anim.PlayingSongScreenAnim
 import com.aaa.vibesmusic.ui.artists.ArtistsScreen
+import com.aaa.vibesmusic.ui.library.LibraryScreen
 import com.aaa.vibesmusic.ui.musiclibrary.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playing.PlayingSongScreen
@@ -198,9 +199,16 @@ class MainActivity : AppCompatActivity() {
                 exitTransition = { ExitTransition.None }
             ) {
                 navigation(
-                    startDestination = Screens.MUSIC_LIBRARY_PATH,
+                    startDestination = Screens.LIBRARY_PATH,
                     route = Screens.LIBRARY_NAV_PATH
                 ) {
+                    composable(route = Screens.LIBRARY_PATH) {
+                        statusBarColorSetter(backgroundColor)
+                        LibraryScreen(
+                            navController = navController
+                        )
+                    }
+
                     composable(route = Screens.MUSIC_LIBRARY_PATH) {
                         statusBarColorSetter(backgroundColor)
                         MusicLibraryScreen(
