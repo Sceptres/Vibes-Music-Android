@@ -1,7 +1,6 @@
 package com.aaa.vibesmusic.ui.playlistselect
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -12,9 +11,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.SongPlaylists
-import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship
 import com.aaa.vibesmusic.database.util.DatabaseUtil
-import com.aaa.vibesmusic.database.views.PlaylistView
+import com.aaa.vibesmusic.database.views.playlist.PlaylistView
 import com.aaa.vibesmusic.ui.common.SelectPlaylist
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

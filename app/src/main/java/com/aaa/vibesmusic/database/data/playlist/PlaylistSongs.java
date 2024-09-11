@@ -7,7 +7,7 @@ import androidx.room.Relation;
 
 import com.aaa.vibesmusic.database.data.music.Song;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship;
-import com.aaa.vibesmusic.database.views.PlaylistView;
+import com.aaa.vibesmusic.database.views.playlist.PlaylistView;
 
 import java.util.List;
 
