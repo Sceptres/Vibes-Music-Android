@@ -44,6 +44,7 @@ android {
 }
 
 dependencies {
+    // Jetpack Compose dependencies
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.material:material'
     implementation 'androidx.compose.runtime:runtime'
@@ -60,6 +61,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     implementation 'androidx.compose.ui:ui-tooling'
 
+    // Core dependencies
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
@@ -68,16 +70,18 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
+    // Room dependencies
     def room_version = "2.6.1"
-
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-rxjava3:$room_version")
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
+    // Admob dependencies
     implementation 'com.google.android.gms:play-services-ads:23.3.0'
 
+    // Media player dependencies
     implementation "androidx.media:media:1.7.0"
     implementation "androidx.media3:media3-exoplayer:1.4.1"
 
