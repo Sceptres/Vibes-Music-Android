@@ -42,9 +42,9 @@ fun AddSongToPlaylistScreen(
     )
 
     val closer: () -> Unit = {
-        navController.navigate(Screens.MusicLibrary.route) {
+        navController.navigate(Screens.MUSIC_LIBRARY_PATH) {
             // Insure AddSongToPlaylistsScreen not left in the back stack
-            popUpTo(Screens.MusicLibrary.route) { inclusive = false }
+            popUpTo(Screens.MUSIC_LIBRARY_PATH) { inclusive = false }
             launchSingleTop = true
         }
     }

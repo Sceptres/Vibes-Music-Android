@@ -44,9 +44,9 @@ fun PlaylistScreen(
     val currentContext: Context = LocalContext.current
 
     val closer: () -> Unit = {
-        navController.navigate(Screens.Playlists.route) {
+        navController.navigate(Screens.PLAYLISTS_PATH) {
             // Insure PlaylistScreen not left in the back stack
-            popUpTo(Screens.Playlists.route) { inclusive = false }
+            popUpTo(Screens.PLAYLISTS_PATH) { inclusive = false }
             launchSingleTop = true
         }
     }
