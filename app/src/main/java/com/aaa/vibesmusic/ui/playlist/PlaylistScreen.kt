@@ -11,11 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,10 +22,8 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
-import com.aaa.vibesmusic.ui.dialogs.playlist.song.add.AddEditPlaylistSongsDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playlist.composables.PlaylistTopBar
@@ -54,17 +47,6 @@ fun PlaylistScreen(
             // Insure PlaylistScreen not left in the back stack
             popUpTo(Screens.Playlists.route) { inclusive = false }
             launchSingleTop = true
-        }
-    }
-
-    var addEditDialogState: Boolean by remember { mutableStateOf(false) }
-
-    when {
-        addEditDialogState -> {
-            AddEditPlaylistSongsDialog(
-                closer = { addEditDialogState = false },
-                playlistSongs = playlistScreenViewModel.playlistSongs!!
-            )
         }
     }
 
@@ -95,7 +77,10 @@ fun PlaylistScreen(
                 PlaylistTopBar(
                     text = playlistScreenViewModel.playlistSongs?.playlist?.playlistName ?: "Playlist Name",
                     onBackArrowPressed = closer,
-                    onAddEditPressed = { addEditDialogState = true },
+                    onAddEditPressed = {
+                        val addEditPath: String = Screens.ADD_EDIT_PLAYLIST_SONGS_PATH.replace("{playlistId}", playlistId.toString())
+                        navController.navigate(addEditPath)
+                    },
                     addEditButtonSrcGenerator = @Composable {
                         if(playlistScreenViewModel.playlistSongs?.songs?.isNotEmpty() == true)
                             painterResource(id = R.drawable.edit)
