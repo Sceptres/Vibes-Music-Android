@@ -22,6 +22,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
@@ -94,6 +95,7 @@ fun PlaylistScreen(
                     onItemClick = {index ->
                         playlistScreenViewModel.onSongClicked(notificationPermLauncher, currentContext, index)
                         openPlayingSongScreen()
+                        UIUtil.showReviewDialog(currentContext)
                     },
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
                 ) { expandedState, song ->
