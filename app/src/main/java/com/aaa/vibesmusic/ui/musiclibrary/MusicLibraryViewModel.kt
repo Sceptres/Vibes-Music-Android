@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.library
+package com.aaa.vibesmusic.ui.musiclibrary
 
 import android.Manifest
 import android.app.Application
