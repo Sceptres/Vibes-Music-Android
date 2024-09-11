@@ -1,7 +1,9 @@
 package com.aaa.vibesmusic.ui
 
+import android.content.Context
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import com.aaa.vibesmusic.review.ReviewDialogManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -25,6 +27,14 @@ class UIUtil {
                     duration = duration
                 )
             }
+        }
+
+        /**
+         * @param context The [Context] to show the [ReviewDialogManager]
+         */
+        fun showReviewDialog(context: Context) {
+            val reviewDialogManager: ReviewDialogManager = ReviewDialogManager(context)
+            reviewDialogManager.launchReviewDialog()
         }
     }
 }

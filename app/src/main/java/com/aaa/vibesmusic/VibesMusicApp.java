@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -54,6 +55,8 @@ public class VibesMusicApp extends Application implements Application.ActivityLi
         this.manager = new PreferencesManager(this);
         this.registerActivityLifecycleCallbacks(this);
         MobileAds.initialize(this, initializationStatus -> {});
+
+        this.manager.incrementNumSessions();
     }
 
     @Override
