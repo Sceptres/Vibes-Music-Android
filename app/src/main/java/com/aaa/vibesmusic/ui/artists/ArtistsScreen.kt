@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.artist
+package com.aaa.vibesmusic.ui.artists
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -21,7 +21,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.ui.artist.composables.ArtistGrid
+import com.aaa.vibesmusic.ui.artists.composables.ArtistGrid
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 
 @Composable

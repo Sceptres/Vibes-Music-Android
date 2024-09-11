@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.artist.composables
+package com.aaa.vibesmusic.ui.artists.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

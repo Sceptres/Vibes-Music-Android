@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.artist
+package com.aaa.vibesmusic.ui.artists
 
 import android.app.Application
 import androidx.compose.runtime.mutableStateListOf
