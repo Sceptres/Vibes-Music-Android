@@ -46,6 +46,9 @@ public interface SongDao {
     @Query("SELECT * FROM Songs;")
     LiveData<List<Song>> getSongs();
 
+    @Query("SELECT * FROM Songs WHERE artist=:artist")
+    LiveData<List<Song>> getArtistSongs(String artist);
+
     @Query("SELECT * FROM Songs WHERE songId=:id")
     Single<Song> getSongById(int id);
 
