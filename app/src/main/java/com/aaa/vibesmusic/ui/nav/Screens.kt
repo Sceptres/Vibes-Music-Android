@@ -11,6 +11,7 @@ sealed class Screens(val route: String, @StringRes val screenNavText: Int, @Draw
         const val PLAYLISTS_NAV_PATH: String = "playlists_nav"
 
         // Screen paths
+        const val LIBRARY_PATH: String = "library"
         const val MUSIC_LIBRARY_PATH: String = "music_library"
         const val IMPORT_MUSIC_PATH: String = "import_music"
         const val PLAYLISTS_PATH: String = "playlists"
