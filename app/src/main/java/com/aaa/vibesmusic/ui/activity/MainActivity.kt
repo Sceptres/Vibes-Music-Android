@@ -192,16 +192,16 @@ class MainActivity : AppCompatActivity() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = "library_nav",
+                startDestination = Screens.LIBRARY_NAV_PATH,
                 modifier = Modifier.padding(innerPadding),
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None }
             ) {
                 navigation(
-                    startDestination = Screens.MusicLibrary.route,
-                    route = "library_nav"
+                    startDestination = Screens.MUSIC_LIBRARY_PATH,
+                    route = Screens.LIBRARY_NAV_PATH
                 ) {
-                    composable(route = Screens.MusicLibrary.route) {
+                    composable(route = Screens.MUSIC_LIBRARY_PATH) {
                         statusBarColorSetter(backgroundColor)
                         MusicLibraryScreen(
                             navController = navController,
@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity() {
 
                 navigation(
                     startDestination = Screens.PLAYLISTS_PATH,
-                    route = "playlists_nav"
+                    route = Screens.PLAYLISTS_NAV_PATH
                 ) {
                     composable(route = Screens.PLAYLISTS_PATH) {
                         statusBarColorSetter(backgroundColor)
