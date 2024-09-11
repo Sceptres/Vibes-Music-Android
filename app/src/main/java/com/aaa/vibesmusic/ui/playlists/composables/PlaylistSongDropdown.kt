@@ -15,6 +15,7 @@ import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.ui.common.CustomDropdown
 import com.aaa.vibesmusic.ui.common.CustomDropdownMenuItem
 import com.aaa.vibesmusic.ui.dialogs.playlist.song.remove.DeletePlaylistSongDialog
+import com.aaa.vibesmusic.ui.dialogs.song.delete.DeleteSongDialog
 import com.aaa.vibesmusic.ui.dialogs.song.edit.EditSongDialog
 import kotlinx.coroutines.CoroutineScope
 
@@ -29,6 +30,7 @@ fun PlaylistSongDropdown(
     modifier: Modifier = Modifier
 ) {
     var editDialogState: Boolean by remember { mutableStateOf(false) }
+    var deleteSongDialogState: Boolean by remember { mutableStateOf(false) }
     var removeSongState: Boolean by remember { mutableStateOf(false) }
 
     when {
@@ -36,6 +38,14 @@ fun PlaylistSongDropdown(
             EditSongDialog(
                 song = song,
                 closer = { editDialogState = false },
+                snackBarState = snackBarState,
+                snackBarScope = snackBarScope
+            )
+        }
+        deleteSongDialogState -> {
+            DeleteSongDialog(
+                song = song,
+                closer = { deleteSongDialogState = false },
                 snackBarState = snackBarState,
                 snackBarScope = snackBarScope
             )
@@ -61,6 +71,14 @@ fun PlaylistSongDropdown(
             onClick = {
                 closer()
                 editDialogState = true
+            }
+        )
+
+        CustomDropdownMenuItem(
+            text = stringResource(id = R.string.delete),
+            onClick = {
+                closer()
+                deleteSongDialogState = true
             }
         )
 
