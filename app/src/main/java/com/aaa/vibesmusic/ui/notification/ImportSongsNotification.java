@@ -34,6 +34,9 @@ public class ImportSongsNotification {
 
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
+            channel.setSound(null, null);
+            channel.enableVibration(false);
+            channel.enableLights(false);
 
             NotificationManager notificationManager = appContext.getSystemService(NotificationManager.class);
             if (notificationManager != null) {
@@ -49,6 +52,7 @@ public class ImportSongsNotification {
                 .setContentText(contentText)
                 .setProgress(100, progress, false)
                 .setPriority(NotificationManager.IMPORTANCE_MAX)
+                .setDefaults(0)
                 .setOngoing(true);
     }
 
