@@ -44,7 +44,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.anim.PlayingSongScreenAnim
-import com.aaa.vibesmusic.ui.artist.ArtistsScreen
+import com.aaa.vibesmusic.ui.artists.ArtistsScreen
 import com.aaa.vibesmusic.ui.library.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.playing.PlayingSongScreen
