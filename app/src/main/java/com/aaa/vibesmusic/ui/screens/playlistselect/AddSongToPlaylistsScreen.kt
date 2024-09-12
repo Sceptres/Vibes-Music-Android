@@ -1,6 +1,7 @@
 package com.aaa.vibesmusic.ui.screens.playlistselect
 
-import androidx.compose.foundation.BorderStroke
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,18 +22,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.OvalTextButton
 import com.aaa.vibesmusic.ui.common.PlaylistsSelectGrid
-import com.aaa.vibesmusic.ui.nav.Screens
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun AddSongToPlaylistScreen(
     songId: Int,
-    navController: NavController,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
@@ -41,12 +38,10 @@ fun AddSongToPlaylistScreen(
         factory = AddSongToPlaylistScreenViewModel.getFactory(songId)
     )
 
+    val onBackPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
     val closer: () -> Unit = {
-        navController.navigate(Screens.MUSIC_LIBRARY_PATH) {
-            // Insure AddSongToPlaylistsScreen not left in the back stack
-            popUpTo(Screens.MUSIC_LIBRARY_PATH) { inclusive = false }
-            launchSingleTop = true
-        }
+        onBackPressedDispatcher?.onBackPressed()
     }
 
     Box(

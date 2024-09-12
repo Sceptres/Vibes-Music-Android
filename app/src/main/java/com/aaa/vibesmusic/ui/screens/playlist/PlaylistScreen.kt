@@ -1,7 +1,8 @@
 package com.aaa.vibesmusic.ui.screens.playlist
 
 import android.content.Context
-import androidx.activity.compose.BackHandler
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -43,16 +44,10 @@ fun PlaylistScreen(
     val notificationPermLauncher: ManagedActivityResultLauncher<String, Boolean> = playlistScreenViewModel.getNotificationsPermissionLauncher()
     val currentContext: Context = LocalContext.current
 
-    val closer: () -> Unit = {
-        navController.navigate(Screens.PLAYLISTS_PATH) {
-            // Insure PlaylistScreen not left in the back stack
-            popUpTo(Screens.PLAYLISTS_PATH) { inclusive = false }
-            launchSingleTop = true
-        }
-    }
+    val onBackPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
-    BackHandler {
-        closer()
+    val closer: () -> Unit = {
+        onBackPressedDispatcher?.onBackPressed()
     }
 
     ConstraintLayout(

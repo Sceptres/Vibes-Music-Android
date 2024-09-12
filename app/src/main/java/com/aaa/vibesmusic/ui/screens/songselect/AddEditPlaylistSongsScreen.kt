@@ -1,5 +1,7 @@
 package com.aaa.vibesmusic.ui.screens.songselect
 
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,19 +31,15 @@ import com.aaa.vibesmusic.ui.nav.Screens
 @Composable
 fun AddEditPlaylistSongsScreen(
     playlistId: Int,
-    navController: NavController
 ) {
     val addEditPlaylistSongsScreenViewModel: AddEditPlaylistSongsScreenViewModel = viewModel(
         factory = AddEditPlaylistSongsScreenViewModel.getFactory(playlistId)
     )
 
+    val onBackPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
     val closer: () -> Unit = {
-        val playlistPath = Screens.PLAYLIST_PATH.replace("{playlistId}", playlistId.toString())
-        navController.navigate(playlistPath) {
-            // Insure AddEditPlaylistSongsScreen not left in the back stack
-            popUpTo(playlistPath) { inclusive = false }
-            launchSingleTop = true
-        }
+        onBackPressedDispatcher?.onBackPressed()
     }
 
     Box(
