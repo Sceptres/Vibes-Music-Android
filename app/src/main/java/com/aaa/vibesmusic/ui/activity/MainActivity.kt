@@ -2,6 +2,9 @@ package com.aaa.vibesmusic.ui.activity
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.EnterTransition
@@ -290,6 +293,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 composable(route = Screens.ImportMusic.route) {
+                    BackHandler {}
+
                     statusBarColorSetter(backgroundColor)
                     ImportSongsScreen(
                         globalScope = globalCoroutineScope,
@@ -303,6 +308,8 @@ class MainActivity : AppCompatActivity() {
                     route = Screens.PLAYLISTS_NAV_PATH
                 ) {
                     composable(route = Screens.PLAYLISTS_PATH) {
+                        BackHandler {}
+
                         statusBarColorSetter(backgroundColor)
                         PlaylistsScreen(
                             navController = navController,
