@@ -49,6 +49,8 @@ import com.aaa.vibesmusic.ui.screens.artists.ArtistsScreen
 import com.aaa.vibesmusic.ui.screens.library.LibraryScreen
 import com.aaa.vibesmusic.ui.screens.musiclibrary.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.screens.album.AlbumScreen
+import com.aaa.vibesmusic.ui.screens.albums.AlbumsScreen
 import com.aaa.vibesmusic.ui.screens.artist.ArtistScreen
 import com.aaa.vibesmusic.ui.screens.playing.PlayingSongScreen
 import com.aaa.vibesmusic.ui.screens.playlist.PlaylistScreen
@@ -226,6 +228,7 @@ class MainActivity : AppCompatActivity() {
                         statusBarColorSetter(backgroundColor)
                         ArtistsScreen(
                             navController = navController,
+                            openPlayingSongScreen = openPlayingSongScreen
                         )
                     }
 
@@ -238,6 +241,32 @@ class MainActivity : AppCompatActivity() {
                         statusBarColorSetter(foregroundColor)
                         ArtistScreen(
                             artistName = Uri.decode(artistName),
+                            navController = navController,
+                            snackBarState = snackBarHostState,
+                            snackBarScope = snackBarScope,
+                            openPlayingSongScreen = openPlayingSongScreen
+                        )
+                    }
+
+                    composable(
+                        route = Screens.ALBUMS_PATH
+                    ) {
+                        statusBarColorSetter(backgroundColor)
+                        AlbumsScreen(
+                            navController = navController,
+                            openPlayingSongScreen = openPlayingSongScreen
+                        )
+                    }
+
+                    composable(
+                        route = Screens.ALBUM_PATH,
+                        arguments = listOf(navArgument("albumName") { type = NavType.StringType })
+                    ) { backStack ->
+                        val albumName: String = backStack.arguments?.getString("albumName") ?:
+                            throw IllegalArgumentException("Missing {albumName} argument")
+                        statusBarColorSetter(foregroundColor)
+                        AlbumScreen(
+                            albumName = Uri.decode(albumName),
                             navController = navController,
                             snackBarState = snackBarHostState,
                             snackBarScope = snackBarScope,

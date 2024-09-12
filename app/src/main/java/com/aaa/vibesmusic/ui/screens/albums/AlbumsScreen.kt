@@ -1,8 +1,6 @@
-package com.aaa.vibesmusic.ui.screens.artists
+package com.aaa.vibesmusic.ui.screens.albums
 
 import android.net.Uri
-import android.util.Base64
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,16 +24,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
-import com.aaa.vibesmusic.ui.screens.artists.composables.ArtistGrid
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.screens.albums.composables.AlbumsGrid
 
 @Composable
-fun ArtistsScreen(
+fun AlbumsScreen(
     navController: NavController,
     openPlayingSongScreen: () -> Unit
 ) {
-    val artistsScreenViewModel: ArtistsScreenViewModel = viewModel(factory = ArtistsScreenViewModel.FACTORY)
+    val albumsScreenViewModel: AlbumsScreenViewModel = viewModel(
+        factory = AlbumsScreenViewModel.FACTORY
+    )
 
     ConstraintLayout(
         modifier = Modifier
@@ -62,7 +62,7 @@ fun ArtistsScreen(
                     .padding(horizontal = 10.dp, vertical = 5.dp)
             ) {
                 Text(
-                    text = "Artists",
+                    text = "Albums",
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Light,
                     fontSize = 50.sp,
@@ -71,19 +71,18 @@ fun ArtistsScreen(
                         .padding(start = 10.dp, top = 5.dp)
                 )
 
-                ArtistGrid(
-                    artists = artistsScreenViewModel.artists,
-                    onItemClick = { artistView ->
-                        val artistName: String = Uri.encode(artistView.artist)
-                        val artistPath: String = Screens.ARTIST_PATH.replace("{artistName}", artistName)
-                        navController.navigate(artistPath)
+                AlbumsGrid(
+                    albums = albumsScreenViewModel.albums,
+                    onItemClick = { albumView ->
+                        val albumNameEncoded: String = Uri.encode(albumView.album)
+                        val albumScreenPath: String = Screens.ALBUM_PATH.replace("{albumName}", albumNameEncoded)
+                        navController.navigate(albumScreenPath)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 )
             }
-
             PlayingSongsButton(
                 onClick = openPlayingSongScreen,
                 modifier = Modifier
@@ -94,7 +93,7 @@ fun ArtistsScreen(
         }
 
         AdmobBanner(
-            adId = "ca-app-pub-1417462071241776/2727044840",
+            adId = "ca-app-pub-1417462071241776/6908455713",
             modifier = Modifier
                 .constrainAs(adView) {
                     start.linkTo(parent.start)

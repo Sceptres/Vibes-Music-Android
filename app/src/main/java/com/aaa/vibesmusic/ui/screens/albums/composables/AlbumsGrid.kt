@@ -1,19 +1,14 @@
-package com.aaa.vibesmusic.ui.screens.artists.composables
+package com.aaa.vibesmusic.ui.screens.albums.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,29 +26,29 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.database.views.artist.ArtistView
+import com.aaa.vibesmusic.database.views.album.AlbumView
 import com.aaa.vibesmusic.ui.common.TwoColumnGrid
 
 @Composable
-fun ArtistGrid(
-    artists: List<ArtistView>,
-    onItemClick: (ArtistView) -> Unit,
+fun AlbumsGrid(
+    albums: List<AlbumView>,
+    onItemClick: (AlbumView) -> Unit,
     modifier: Modifier = Modifier
 ) {
     TwoColumnGrid(
-        items = artists,
+        items = albums,
         modifier = modifier
-    ) { artist ->
-        ArtistCard(
-            artist = artist,
-            onClick = { onItemClick(artist) }
+    ) { album ->
+        AlbumCard(
+            album,
+            onClick = { onItemClick(album) }
         )
     }
 }
 
 @Composable
-fun ArtistCard(
-    artist: ArtistView,
+fun AlbumCard(
+    album: AlbumView,
     onClick: () -> Unit
 ) {
     Box(
@@ -77,7 +72,7 @@ fun ArtistCard(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(artist.artistCoverImage ?: R.drawable.music_cover_image)
+                        .data(album.albumCoverImage ?: R.drawable.music_cover_image)
                         .crossfade(true)
                         .build(),
                     contentDescription = "Playlist Cover",
@@ -89,7 +84,7 @@ fun ArtistCard(
             }
 
             Text(
-                text = artist.artist,
+                text = album.album,
                 color = Color.White,
                 fontSize = 20.sp,
                 maxLines = 1,
