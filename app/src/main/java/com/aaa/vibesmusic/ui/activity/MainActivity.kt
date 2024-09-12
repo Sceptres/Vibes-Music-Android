@@ -228,6 +228,7 @@ class MainActivity : AppCompatActivity() {
                         statusBarColorSetter(backgroundColor)
                         ArtistsScreen(
                             navController = navController,
+                            openPlayingSongScreen = openPlayingSongScreen
                         )
                     }
 
@@ -252,7 +253,8 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         statusBarColorSetter(backgroundColor)
                         AlbumsScreen(
-                            navController = navController
+                            navController = navController,
+                            openPlayingSongScreen = openPlayingSongScreen
                         )
                     }
 
