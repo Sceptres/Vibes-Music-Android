@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -22,13 +23,15 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.screens.albums.composables.AlbumsGrid
 
 @Composable
 fun AlbumsScreen(
-    navController: NavController
+    navController: NavController,
+    openPlayingSongScreen: () -> Unit
 ) {
     val albumsScreenViewModel: AlbumsScreenViewModel = viewModel(
         factory = AlbumsScreenViewModel.FACTORY
@@ -80,6 +83,13 @@ fun AlbumsScreen(
                         .weight(1f)
                 )
             }
+            PlayingSongsButton(
+                onClick = openPlayingSongScreen,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 10.dp, bottom = 10.dp)
+                    .wrapContentSize()
+            )
         }
 
         AdmobBanner(
