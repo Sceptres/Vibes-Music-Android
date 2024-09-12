@@ -26,9 +26,10 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
+import com.aaa.vibesmusic.ui.viewmodel.PlayerServiceViewModel
 import io.reactivex.disposables.CompositeDisposable
 
-class ArtistScreenViewModel(application: Application, private val artist: String) : AndroidViewModel(application) {
+class ArtistScreenViewModel(application: Application, private val artist: String) : PlayerServiceViewModel(application) {
     companion object {
         fun getFactory(artist: String): ViewModelProvider.Factory {
             return viewModelFactory {
@@ -42,19 +43,6 @@ class ArtistScreenViewModel(application: Application, private val artist: String
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    private var playerService: MediaPlayerService? by mutableStateOf(null)
-    private val serviceConnection: ServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as MediaPlayerService.MediaPlayerServiceBinder
-            playerService = binder.mediaPlayerService
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            playerService = null
-        }
-
-    }
-
     val artistSongs: MutableList<Song> = mutableStateListOf()
     private val artistSongsLiveData: LiveData<List<Song>> = this.getArtistSongsLiveData()
     private val artistSongsObserver: Observer<List<Song>> = Observer {
@@ -63,28 +51,20 @@ class ArtistScreenViewModel(application: Application, private val artist: String
     }
 
     init {
-        this.initPlayerService()
         this.artistSongsLiveData.observeForever(this.artistSongsObserver)
-        Log.d("ARTIST", this.artist)
-    }
-
-    private fun initPlayerService() {
-        this.playerService ?: run {
-            MediaPlayerService.bindTo(super.getApplication(), this.serviceConnection)
-        }
     }
 
     fun onSongClicked(launcher: ManagedActivityResultLauncher<String, Boolean>, context: Context, index: Int) {
         if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        this.playerService?.setSongs(this.artistSongs, index)
+        super.playerService?.setSongs(this.artistSongs, index)
     }
 
     @Composable
     fun getNotificationsPermissionLauncher(): ManagedActivityResultLauncher<String, Boolean> {
         return rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
-            if(playerService?.isPlaying == true && isGranted) {
-                playerService?.showNotification()
+            if(super.playerService?.isPlaying == true && isGranted) {
+                super.playerService?.showNotification()
             }
         }
     }
@@ -97,6 +77,5 @@ class ArtistScreenViewModel(application: Application, private val artist: String
         super.onCleared()
         this.artistSongsLiveData.removeObserver(this.artistSongsObserver)
         this.disposables.clear()
-        getApplication<Application>().unbindService(this.serviceConnection)
     }
 }
