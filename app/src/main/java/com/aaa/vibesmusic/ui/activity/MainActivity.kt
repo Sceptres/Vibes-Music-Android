@@ -49,6 +49,7 @@ import com.aaa.vibesmusic.ui.screens.artists.ArtistsScreen
 import com.aaa.vibesmusic.ui.screens.library.LibraryScreen
 import com.aaa.vibesmusic.ui.screens.musiclibrary.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.screens.albums.AlbumsScreen
 import com.aaa.vibesmusic.ui.screens.artist.ArtistScreen
 import com.aaa.vibesmusic.ui.screens.playing.PlayingSongScreen
 import com.aaa.vibesmusic.ui.screens.playlist.PlaylistScreen
@@ -242,6 +243,15 @@ class MainActivity : AppCompatActivity() {
                             snackBarState = snackBarHostState,
                             snackBarScope = snackBarScope,
                             openPlayingSongScreen = openPlayingSongScreen
+                        )
+                    }
+
+                    composable(
+                        route = Screens.ALBUMS_PATH
+                    ) {
+                        statusBarColorSetter(backgroundColor)
+                        AlbumsScreen(
+                            navController = navController
                         )
                     }
 
