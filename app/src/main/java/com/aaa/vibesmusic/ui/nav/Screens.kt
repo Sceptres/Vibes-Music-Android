@@ -19,6 +19,7 @@ sealed class Screens(val route: String, @StringRes val screenNavText: Int, @Draw
         const val ADD_SONG_TO_PLAYLIST_PATH: String = "$MUSIC_LIBRARY_PATH/add_song_to_playlist/{songId}"
         const val ADD_EDIT_PLAYLIST_SONGS_PATH: String = "$PLAYLISTS_PATH/add_edit_playlist_songs/{playlistId}"
         const val ARTISTS_PATH: String = "artists"
+        const val ARTIST_PATH: String = "$ARTISTS_PATH/{artistName}"
 
         val SCREENS = arrayOf(
             Playlists,
