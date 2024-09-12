@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.screens.albums
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
+import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.screens.albums.composables.AlbumsGrid
 
 @Composable
@@ -68,7 +70,11 @@ fun AlbumsScreen(
 
                 AlbumsGrid(
                     albums = albumsScreenViewModel.albums,
-                    onItemClick = {},
+                    onItemClick = { albumView ->
+                        val albumNameEncoded: String = Uri.encode(albumView.album)
+                        val albumScreenPath: String = Screens.ALBUM_PATH.replace("{albumName}", albumNameEncoded)
+                        navController.navigate(albumScreenPath)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)

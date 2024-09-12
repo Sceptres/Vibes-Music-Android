@@ -21,6 +21,7 @@ sealed class Screens(val route: String, @StringRes val screenNavText: Int, @Draw
         const val ARTISTS_PATH: String = "artists"
         const val ARTIST_PATH: String = "$ARTISTS_PATH/{artistName}"
         const val ALBUMS_PATH: String = "albums"
+        const val ALBUM_PATH: String = "$ALBUMS_PATH/{albumName}"
 
         val SCREENS = arrayOf(
             Playlists,
