@@ -254,6 +254,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
      */
     private void setSong(Song song) {
         try {
+            this.stop();
             this.player.reset();
             this.player.setDataSource(song.getLocation());
             this.player.prepareAsync();
