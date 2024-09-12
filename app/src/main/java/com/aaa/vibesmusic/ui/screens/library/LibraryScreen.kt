@@ -99,6 +99,15 @@ fun LibraryScreen(
                     },
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
+
+                LibraryButton(
+                    text = "Albums",
+                    icon = painterResource(id = R.drawable.album),
+                    onClick = {
+                        navController.navigate(Screens.ALBUMS_PATH)
+                    },
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                )
             }
 
             PlayingSongsButton(
