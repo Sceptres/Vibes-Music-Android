@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.common
+package com.aaa.vibesmusic.ui.screens.artists.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -18,8 +17,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,17 +31,13 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.database.views.playlist.PlaylistView
-
-data class SelectPlaylist(val playlist: PlaylistView) {
-    val checkedState: MutableState<Boolean> = mutableStateOf(false)
-}
+import com.aaa.vibesmusic.database.views.artist.ArtistView
 
 @Composable
-fun PlaylistsSelectGrid(
-    playlistList: List<SelectPlaylist>,
-    onCheckedChange: (SelectPlaylist, Boolean) -> Unit,
-    modifier: Modifier = Modifier,
+fun ArtistGrid(
+    artists: List<ArtistView>,
+    onItemClick: (ArtistView) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -53,34 +46,23 @@ fun PlaylistsSelectGrid(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier
     ) {
-        items(playlistList) { playlist ->
-
-            PlaylistSelectCard(
-                playlist = playlist.playlist,
-                checked = playlist.checkedState.value,
-                onClick = {
-                    playlist.checkedState.value = !playlist.checkedState.value
-                },
-                onCheckedChange = {
-                    onCheckedChange(playlist, it)
-                    playlist.checkedState.value = it
-                }
+        items(artists) { artist ->
+            ArtistCard(
+                artist = artist,
+                onClick = { onItemClick(artist) }
             )
         }
     }
 }
 
 @Composable
-fun PlaylistSelectCard(
-    playlist: PlaylistView,
-    checked: Boolean,
-    onClick: () -> Unit,
-    onCheckedChange: (Boolean) -> Unit,
+fun ArtistCard(
+    artist: ArtistView,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .wrapContentSize()
-            .height(300.dp)
             .clip(RoundedCornerShape(30.dp))
             .background(colorResource(id = R.color.foreground_color))
             .padding(10.dp)
@@ -99,7 +81,7 @@ fun PlaylistSelectCard(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(playlist.playlistCoverImageLocation ?: R.drawable.music_cover_image)
+                        .data(artist.artistCoverImage ?: R.drawable.music_cover_image)
                         .crossfade(true)
                         .build(),
                     contentDescription = "Playlist Cover",
@@ -108,17 +90,10 @@ fun PlaylistSelectCard(
                         .fillMaxSize()
                         .clip(RoundedCornerShape(30.dp))
                 )
-
-                CustomCheckBox(
-                    checked = checked,
-                    onCheckedChange = onCheckedChange,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                )
             }
 
             Text(
-                text = playlist.playlistName,
+                text = artist.artist,
                 color = Color.White,
                 fontSize = 20.sp,
                 maxLines = 1,

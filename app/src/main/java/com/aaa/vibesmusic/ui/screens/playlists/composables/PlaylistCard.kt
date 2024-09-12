@@ -1,25 +1,21 @@
-package com.aaa.vibesmusic.ui.common
+package com.aaa.vibesmusic.ui.screens.playlists.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -34,49 +31,22 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.views.playlist.PlaylistView
 
-data class SelectPlaylist(val playlist: PlaylistView) {
-    val checkedState: MutableState<Boolean> = mutableStateOf(false)
-}
-
 @Composable
-fun PlaylistsSelectGrid(
-    playlistList: List<SelectPlaylist>,
-    onCheckedChange: (SelectPlaylist, Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(top = 20.dp, bottom = 60.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = modifier
-    ) {
-        items(playlistList) { playlist ->
-
-            PlaylistSelectCard(
-                playlist = playlist.playlist,
-                checked = playlist.checkedState.value,
-                onClick = {
-                    playlist.checkedState.value = !playlist.checkedState.value
-                },
-                onCheckedChange = {
-                    onCheckedChange(playlist, it)
-                    playlist.checkedState.value = it
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun PlaylistSelectCard(
-    playlist: PlaylistView,
-    checked: Boolean,
+fun PlaylistCard(
+    playlistSongs: PlaylistSongs,
     onClick: () -> Unit,
-    onCheckedChange: (Boolean) -> Unit,
+    onOptionsClick: () -> Unit,
+    PlaylistMenu: @Composable () -> Unit
 ) {
+    val playlist: PlaylistView = playlistSongs.playlist
+    val songs: List<Song> = playlistSongs.songs
+
+    val transparent = colorResource(id = R.color.transparent)
+
     Box(
         modifier = Modifier
             .wrapContentSize()
@@ -109,12 +79,27 @@ fun PlaylistSelectCard(
                         .clip(RoundedCornerShape(30.dp))
                 )
 
-                CustomCheckBox(
-                    checked = checked,
-                    onCheckedChange = onCheckedChange,
+                Column(
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                )
+                        .wrapContentSize()
+                ) {
+                    IconButton(
+                        onClick = onOptionsClick,
+                        modifier = Modifier
+                            .size(45.dp)
+                            .padding(end = 10.dp)
+                            .background(transparent)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.options_btn),
+                            contentDescription = "Options",
+                            tint = Color.White
+                        )
+                    }
+                    PlaylistMenu()
+                }
             }
 
             Text(
@@ -128,6 +113,39 @@ fun PlaylistSelectCard(
                     .padding(top = 10.dp)
                     .align(Alignment.CenterHorizontally)
             )
+
+            Text(
+                text = getPlaylistLengthString(songs),
+                color = Color.White,
+                fontSize = 15.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(top = 5.dp, bottom = 10.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
         }
     }
+}
+
+/**
+ *
+ * @param songs The {@link List} of {@link Song}s to get the length of
+ * @return The string representation of the playlist length
+ */
+private fun getPlaylistLengthString(songs: List<Song>): String {
+    var sum: Long = songs.sumOf { it.duration.toLong() }
+
+    val hours: Long = sum / 3600000
+    sum -= hours * 3600000
+
+    val minutes: Long = Math.round(sum / 60000f).toLong()
+
+    val stringBuilder: StringBuilder = StringBuilder()
+
+    if(hours != 0L)
+        stringBuilder.append("$hours hours, ")
+
+    stringBuilder.append("$minutes mins")
+
+    return stringBuilder.toString()
 }
