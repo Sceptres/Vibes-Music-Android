@@ -25,9 +25,9 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
+import com.aaa.vibesmusic.ui.common.TopBar
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
-import com.aaa.vibesmusic.ui.screens.playlist.composables.PlaylistTopBar
 import com.aaa.vibesmusic.ui.screens.playlist.composables.PlaylistSongDropdown
 import kotlinx.coroutines.CoroutineScope
 
@@ -75,14 +75,14 @@ fun PlaylistScreen(
                 .fillMaxSize()
         ) {
             Column {
-                PlaylistTopBar(
+                TopBar(
                     text = playlistScreenViewModel.playlistSongs?.playlist?.playlistName ?: "Playlist Name",
-                    onBackArrowPressed = closer,
-                    onAddEditPressed = {
+                    onBackArrowClicked = closer,
+                    onRightButtonClicked = {
                         val addEditPath: String = Screens.ADD_EDIT_PLAYLIST_SONGS_PATH.replace("{playlistId}", playlistId.toString())
                         navController.navigate(addEditPath)
                     },
-                    addEditButtonSrcGenerator = @Composable {
+                    rightButtonSrcGenerator = @Composable {
                         if(playlistScreenViewModel.playlistSongs?.songs?.isNotEmpty() == true)
                             painterResource(id = R.drawable.edit)
                         else
