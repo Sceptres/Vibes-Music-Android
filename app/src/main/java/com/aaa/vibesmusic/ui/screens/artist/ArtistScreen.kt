@@ -51,9 +51,9 @@ fun ArtistScreen(
     val currentContext: Context = LocalContext.current
     val onBackPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
-    var deleteArtistDialog: Boolean by remember { mutableStateOf(false) }
-
     val notificationPermLauncher: ManagedActivityResultLauncher<String, Boolean> = artistScreenViewModel.getNotificationsPermissionLauncher()
+
+    var deleteArtistDialog: Boolean by remember { mutableStateOf(false) }
 
     val closer: () -> Unit = {
         onBackPressedDispatcher?.onBackPressed()
