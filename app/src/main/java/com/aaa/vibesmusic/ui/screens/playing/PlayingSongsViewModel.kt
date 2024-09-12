@@ -19,7 +19,6 @@ import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.PlayStatus
 import com.aaa.vibesmusic.player.mode.PlayMode
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode
-import java.util.Objects
 
 class PlayingSongsViewModel(application: Application) : AndroidViewModel(application) {
     companion object {

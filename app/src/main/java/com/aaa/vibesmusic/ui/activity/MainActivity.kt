@@ -2,9 +2,7 @@ package com.aaa.vibesmusic.ui.activity
 
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.EnterTransition
@@ -48,13 +46,13 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.anim.PlayingSongScreenAnim
-import com.aaa.vibesmusic.ui.screens.artists.ArtistsScreen
-import com.aaa.vibesmusic.ui.screens.library.LibraryScreen
-import com.aaa.vibesmusic.ui.screens.musiclibrary.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.screens.album.AlbumScreen
 import com.aaa.vibesmusic.ui.screens.albums.AlbumsScreen
 import com.aaa.vibesmusic.ui.screens.artist.ArtistScreen
+import com.aaa.vibesmusic.ui.screens.artists.ArtistsScreen
+import com.aaa.vibesmusic.ui.screens.library.LibraryScreen
+import com.aaa.vibesmusic.ui.screens.musiclibrary.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.screens.playing.PlayingSongScreen
 import com.aaa.vibesmusic.ui.screens.playlist.PlaylistScreen
 import com.aaa.vibesmusic.ui.screens.playlists.PlaylistsScreen

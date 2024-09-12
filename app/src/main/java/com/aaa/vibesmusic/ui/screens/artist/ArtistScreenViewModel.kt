@@ -2,20 +2,12 @@ package com.aaa.vibesmusic.ui.screens.artist
 
 import android.Manifest
 import android.app.Application
-import android.content.ComponentName
 import android.content.Context
-import android.content.ServiceConnection
-import android.os.IBinder
-import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +17,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.perms.PermissionsUtil
-import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.ui.viewmodel.PlayerServiceViewModel
 import io.reactivex.disposables.CompositeDisposable
 

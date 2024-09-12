@@ -1,8 +1,6 @@
 package com.aaa.vibesmusic.ui.screens.artists
 
 import android.net.Uri
-import android.util.Base64
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,9 +24,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
-import com.aaa.vibesmusic.ui.screens.artists.composables.ArtistGrid
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.screens.artists.composables.ArtistGrid
 
 @Composable
 fun ArtistsScreen(

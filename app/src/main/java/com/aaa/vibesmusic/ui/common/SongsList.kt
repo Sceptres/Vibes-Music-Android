@@ -38,7 +38,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
-import java.util.Objects
 
 @Composable
 fun SongsList(

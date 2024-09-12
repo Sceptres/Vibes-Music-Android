@@ -6,7 +6,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.material3.SnackbarHostState
@@ -28,7 +27,6 @@ import com.aaa.vibesmusic.monetization.Ads
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.notification.ImportSongsNotification
-import com.aaa.vibesmusic.ui.screens.songimport.result.ImportSongsActivityResultContract
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
