@@ -32,6 +32,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.views.artist.ArtistView
+import com.aaa.vibesmusic.ui.common.TwoColumnGrid
 
 @Composable
 fun ArtistGrid(
@@ -39,19 +40,14 @@ fun ArtistGrid(
     onItemClick: (ArtistView) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(top = 20.dp, bottom = 60.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+    TwoColumnGrid(
+        items = artists,
         modifier = modifier
-    ) {
-        items(artists) { artist ->
-            ArtistCard(
-                artist = artist,
-                onClick = { onItemClick(artist) }
-            )
-        }
+    ) { artist ->
+        ArtistCard(
+            artist = artist,
+            onClick = { onItemClick(artist) }
+        )
     }
 }
 
