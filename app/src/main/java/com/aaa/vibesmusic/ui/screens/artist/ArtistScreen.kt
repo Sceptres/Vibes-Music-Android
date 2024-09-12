@@ -30,10 +30,10 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
+import com.aaa.vibesmusic.ui.common.TopBar
 import com.aaa.vibesmusic.ui.dialogs.song.artist.delete.ArtistDeleteDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.screens.musiclibrary.composables.MusicLibrarySongDropdown
-import com.aaa.vibesmusic.ui.screens.playlist.composables.PlaylistTopBar
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -95,11 +95,11 @@ fun ArtistScreen(
                 .fillMaxSize()
         ) {
             Column {
-                PlaylistTopBar(
+                TopBar(
                     text = artistName,
-                    onBackArrowPressed = closer,
-                    onAddEditPressed = { deleteArtistDialog = true },
-                    addEditButtonSrcGenerator = @Composable {
+                    onBackArrowClicked = closer,
+                    onRightButtonClicked = { deleteArtistDialog = true },
+                    rightButtonSrcGenerator = @Composable {
                         painterResource(id = R.drawable.delete)
                     }
                 )

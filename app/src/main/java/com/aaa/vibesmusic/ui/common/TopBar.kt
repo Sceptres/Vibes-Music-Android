@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.screens.playlist.composables
+package com.aaa.vibesmusic.ui.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,11 +28,11 @@ import androidx.compose.ui.unit.sp
 import com.aaa.vibesmusic.R
 
 @Composable
-fun PlaylistTopBar(
+fun TopBar(
     text: String,
-    onBackArrowPressed: () -> Unit,
-    onAddEditPressed: () -> Unit,
-    addEditButtonSrcGenerator: @Composable () -> Painter,
+    onBackArrowClicked: () -> Unit,
+    onRightButtonClicked: () -> Unit,
+    rightButtonSrcGenerator: @Composable () -> Painter,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -52,7 +52,7 @@ fun PlaylistTopBar(
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
-                    onClick = onBackArrowPressed
+                    onClick = onBackArrowClicked
                 )
         )
 
@@ -70,7 +70,7 @@ fun PlaylistTopBar(
         Spacer(modifier = Modifier.width(10.dp))
 
         Image(
-            painter = addEditButtonSrcGenerator(),
+            painter = rightButtonSrcGenerator(),
             contentDescription = "Back arrow",
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -79,7 +79,7 @@ fun PlaylistTopBar(
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
-                    onClick = onAddEditPressed
+                    onClick = onRightButtonClicked
                 )
         )
     }
