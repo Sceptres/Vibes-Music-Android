@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.activity
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -44,14 +45,17 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.anim.PlayingSongScreenAnim
-import com.aaa.vibesmusic.ui.library.MusicLibraryScreen
+import com.aaa.vibesmusic.ui.screens.artists.ArtistsScreen
+import com.aaa.vibesmusic.ui.screens.library.LibraryScreen
+import com.aaa.vibesmusic.ui.screens.musiclibrary.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.Screens
-import com.aaa.vibesmusic.ui.playing.PlayingSongScreen
-import com.aaa.vibesmusic.ui.playlist.PlaylistScreen
-import com.aaa.vibesmusic.ui.playlists.PlaylistsScreen
-import com.aaa.vibesmusic.ui.playlistselect.AddSongToPlaylistScreen
-import com.aaa.vibesmusic.ui.songimport.ImportSongsScreen
-import com.aaa.vibesmusic.ui.songselect.AddEditPlaylistSongsScreen
+import com.aaa.vibesmusic.ui.screens.artist.ArtistScreen
+import com.aaa.vibesmusic.ui.screens.playing.PlayingSongScreen
+import com.aaa.vibesmusic.ui.screens.playlist.PlaylistScreen
+import com.aaa.vibesmusic.ui.screens.playlists.PlaylistsScreen
+import com.aaa.vibesmusic.ui.screens.playlistselect.AddSongToPlaylistScreen
+import com.aaa.vibesmusic.ui.screens.songimport.ImportSongsScreen
+import com.aaa.vibesmusic.ui.screens.songselect.AddEditPlaylistSongsScreen
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -191,18 +195,49 @@ class MainActivity : AppCompatActivity() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = "library_nav",
+                startDestination = Screens.LIBRARY_NAV_PATH,
                 modifier = Modifier.padding(innerPadding),
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None }
             ) {
                 navigation(
-                    startDestination = Screens.MusicLibrary.route,
-                    route = "library_nav"
+                    startDestination = Screens.LIBRARY_PATH,
+                    route = Screens.LIBRARY_NAV_PATH
                 ) {
-                    composable(route = Screens.MusicLibrary.route) {
+                    composable(route = Screens.LIBRARY_PATH) {
+                        statusBarColorSetter(backgroundColor)
+                        LibraryScreen(
+                            navController = navController,
+                            openPlaylingSongScreen = openPlayingSongScreen
+                        )
+                    }
+
+                    composable(route = Screens.MUSIC_LIBRARY_PATH) {
                         statusBarColorSetter(backgroundColor)
                         MusicLibraryScreen(
+                            navController = navController,
+                            snackBarState = snackBarHostState,
+                            snackBarScope = snackBarScope,
+                            openPlayingSongScreen = openPlayingSongScreen
+                        )
+                    }
+
+                    composable(route = Screens.ARTISTS_PATH) {
+                        statusBarColorSetter(backgroundColor)
+                        ArtistsScreen(
+                            navController = navController,
+                        )
+                    }
+
+                    composable(
+                        route = Screens.ARTIST_PATH,
+                        arguments = listOf(navArgument("artistName") { type = NavType.StringType })
+                    ) { backStack ->
+                        val artistName: String = backStack.arguments?.getString("artistName") ?:
+                            throw IllegalArgumentException("Missing {artistName} argument")
+                        statusBarColorSetter(foregroundColor)
+                        ArtistScreen(
+                            artistName = Uri.decode(artistName),
                             navController = navController,
                             snackBarState = snackBarHostState,
                             snackBarScope = snackBarScope,
@@ -219,7 +254,6 @@ class MainActivity : AppCompatActivity() {
                         statusBarColorSetter(backgroundColor)
                         AddSongToPlaylistScreen(
                             songId = songId,
-                            navController = navController,
                             snackBarState = snackBarHostState,
                             snackBarScope = snackBarScope
                         )
@@ -237,7 +271,7 @@ class MainActivity : AppCompatActivity() {
 
                 navigation(
                     startDestination = Screens.PLAYLISTS_PATH,
-                    route = "playlists_nav"
+                    route = Screens.PLAYLISTS_NAV_PATH
                 ) {
                     composable(route = Screens.PLAYLISTS_PATH) {
                         statusBarColorSetter(backgroundColor)
@@ -273,7 +307,6 @@ class MainActivity : AppCompatActivity() {
                         statusBarColorSetter(backgroundColor)
                         AddEditPlaylistSongsScreen(
                             playlistId = playlistId,
-                            navController = navController
                         )
                     }
                 }

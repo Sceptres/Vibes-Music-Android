@@ -43,8 +43,14 @@ public interface SongDao {
     @Delete
     Completable deleteSong(Song song);
 
+    @Query("DELETE FROM Songs WHERE artist = :artistName")
+    Completable deleteByArtist(String artistName);
+
     @Query("SELECT * FROM Songs;")
     LiveData<List<Song>> getSongs();
+
+    @Query("SELECT * FROM Songs WHERE artist=:artist")
+    LiveData<List<Song>> getArtistSongs(String artist);
 
     @Query("SELECT * FROM Songs WHERE songId=:id")
     Single<Song> getSongById(int id);

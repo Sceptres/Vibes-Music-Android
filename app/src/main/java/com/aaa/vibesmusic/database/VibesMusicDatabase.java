@@ -18,15 +18,17 @@ import com.aaa.vibesmusic.database.data.playlist.Playlist;
 import com.aaa.vibesmusic.database.data.playlist.PlaylistDao;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationshipDao;
-import com.aaa.vibesmusic.database.views.PlaylistView;
-import com.aaa.vibesmusic.database.views.PlaylistViewDao;
+import com.aaa.vibesmusic.database.views.artist.ArtistView;
+import com.aaa.vibesmusic.database.views.artist.ArtistViewDao;
+import com.aaa.vibesmusic.database.views.playlist.PlaylistView;
+import com.aaa.vibesmusic.database.views.playlist.PlaylistViewDao;
 
 import java.util.Objects;
 
 @Database(
         entities = {Song.class, Playlist.class, PlaylistSongRelationship.class},
-        views = {PlaylistView.class},
-        version = 4,
+        views = {PlaylistView.class, ArtistView.class},
+        version = 5,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = VibesMusicDatabase.SongTableRenameIdColumnMigration.class)
         }
@@ -63,13 +65,16 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
         ).allowMainThreadQueries()
                 .addMigrations(
                         new PlaylistTablesCreationMigration(),
-                        new PlaylistImgTableMigration()
+                        new PlaylistImgTableMigration(),
+                        new ArtistViewMigration()
                 ).build();
     }
 
     protected VibesMusicDatabase() {}
 
     public abstract SongDao songDao();
+
+    public abstract ArtistViewDao artistViewDao();
 
     public abstract PlaylistDao playlistDao();
 
@@ -121,6 +126,26 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
                     + "              LIMIT 1\n"
                     + "          ) AS playlistCoverImageLocation\n"
                     + "FROM Playlists");
+        }
+    }
+
+    static class ArtistViewMigration extends Migration {
+        public ArtistViewMigration() {
+            super(4, 5);
+        }
+
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("CREATE VIEW `ArtistView` AS SELECT s1.artist as artist,\n"
+                    + "           (\n"
+                    + "                SELECT Songs.image_location\n"
+                    + "                FROM Songs\n"
+                    + "                WHERE s1.artist = Songs.artist\n"
+                    + "                     AND Songs.image_location IS NOT NULL\n"
+                    + "                LIMIT 1\n"
+                    + "           ) AS artistCoverImage\n"
+                    + "    FROM Songs AS s1\n"
+                    + "    GROUP BY s1.artist");
         }
     }
 }
