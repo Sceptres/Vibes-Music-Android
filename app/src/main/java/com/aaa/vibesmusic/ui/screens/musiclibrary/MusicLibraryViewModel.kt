@@ -25,8 +25,9 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.player.MediaPlayerService
+import com.aaa.vibesmusic.ui.viewmodel.PlayerServiceViewModel
 
-class MusicLibraryViewModel(application: Application) : AndroidViewModel(application) {
+class MusicLibraryViewModel(application: Application) : PlayerServiceViewModel(application) {
 
     var db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
 
@@ -37,34 +38,11 @@ class MusicLibraryViewModel(application: Application) : AndroidViewModel(applica
         songs.clear()
         songs.addAll(value)
 
-        this.playerService?.updateSongs(value)
-    }
-
-    // Player service
-    var playerService: MediaPlayerService? by mutableStateOf(null)
-
-    private val serviceConnection: ServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as MediaPlayerService.MediaPlayerServiceBinder
-            playerService = binder.mediaPlayerService
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            playerService = null
-        }
+        super.playerService?.updateSongs(value)
     }
 
     init {
         this.songsLiveData.observeForever(this.songsObserver)
-
-        // Initialize player service
-        this.initPlayerService()
-    }
-    private fun initPlayerService() {
-        this.playerService ?: run {
-            Log.d("CALLED", "BINDING TO SERVICE")
-            MediaPlayerService.bindTo(super.getApplication(), serviceConnection)
-        }
     }
 
     private fun getSongsFromDatabase(): LiveData<List<Song>> {
@@ -74,14 +52,14 @@ class MusicLibraryViewModel(application: Application) : AndroidViewModel(applica
     fun onSongClick(launcher: ManagedActivityResultLauncher<String, Boolean>, context: Context, index: Int) {
         if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        this.playerService?.setSongs(this.songs, index)
+        super.playerService?.setSongs(this.songs, index)
     }
 
     @Composable
     fun getNotificationsPermissionLauncher(): ManagedActivityResultLauncher<String, Boolean> {
         return rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
-            if(playerService?.isPlaying == true && isGranted) {
-                playerService?.showNotification()
+            if(super.playerService?.isPlaying == true && isGranted) {
+                super.playerService?.showNotification()
             }
         }
     }
@@ -89,7 +67,6 @@ class MusicLibraryViewModel(application: Application) : AndroidViewModel(applica
     override fun onCleared() {
         super.onCleared()
         this.songsLiveData.removeObserver(this.songsObserver)
-        getApplication<Application>().unbindService(this.serviceConnection)
     }
 
     companion object {
