@@ -31,7 +31,7 @@ public class MediaControlNotification {
     private static final String CHANNEL_ID = "media_playback_channel";
 
     private final Context appContext;
-    private MediaPlayerService service;
+    private final MediaPlayerService service;
     private boolean isNotified;
     private NotificationCompat.Builder notificationBuilder;
 

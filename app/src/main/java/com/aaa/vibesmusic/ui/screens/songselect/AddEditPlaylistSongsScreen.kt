@@ -22,11 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.common.OvalTextButton
 import com.aaa.vibesmusic.ui.common.SelectSongsList
-import com.aaa.vibesmusic.ui.nav.Screens
 
 @Composable
 fun AddEditPlaylistSongsScreen(
