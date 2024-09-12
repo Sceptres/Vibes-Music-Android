@@ -254,7 +254,6 @@ class MainActivity : AppCompatActivity() {
                         statusBarColorSetter(backgroundColor)
                         AddSongToPlaylistScreen(
                             songId = songId,
-                            navController = navController,
                             snackBarState = snackBarHostState,
                             snackBarScope = snackBarScope
                         )
@@ -308,7 +307,6 @@ class MainActivity : AppCompatActivity() {
                         statusBarColorSetter(backgroundColor)
                         AddEditPlaylistSongsScreen(
                             playlistId = playlistId,
-                            navController = navController
                         )
                     }
                 }
