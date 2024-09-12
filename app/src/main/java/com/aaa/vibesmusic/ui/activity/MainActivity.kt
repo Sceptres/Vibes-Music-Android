@@ -207,7 +207,8 @@ class MainActivity : AppCompatActivity() {
                     composable(route = Screens.LIBRARY_PATH) {
                         statusBarColorSetter(backgroundColor)
                         LibraryScreen(
-                            navController = navController
+                            navController = navController,
+                            openPlaylingSongScreen = openPlayingSongScreen
                         )
                     }
 
