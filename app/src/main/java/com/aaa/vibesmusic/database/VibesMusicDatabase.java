@@ -18,6 +18,8 @@ import com.aaa.vibesmusic.database.data.playlist.Playlist;
 import com.aaa.vibesmusic.database.data.playlist.PlaylistDao;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship;
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationshipDao;
+import com.aaa.vibesmusic.database.views.album.AlbumView;
+import com.aaa.vibesmusic.database.views.album.AlbumViewDao;
 import com.aaa.vibesmusic.database.views.artist.ArtistView;
 import com.aaa.vibesmusic.database.views.artist.ArtistViewDao;
 import com.aaa.vibesmusic.database.views.playlist.PlaylistView;
@@ -27,8 +29,8 @@ import java.util.Objects;
 
 @Database(
         entities = {Song.class, Playlist.class, PlaylistSongRelationship.class},
-        views = {PlaylistView.class, ArtistView.class},
-        version = 5,
+        views = {PlaylistView.class, ArtistView.class, AlbumView.class},
+        version = 6,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = VibesMusicDatabase.SongTableRenameIdColumnMigration.class)
         }
@@ -66,7 +68,8 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
                 .addMigrations(
                         new PlaylistTablesCreationMigration(),
                         new PlaylistImgTableMigration(),
-                        new ArtistViewMigration()
+                        new ArtistViewMigration(),
+                        new AlbumViewMigration()
                 ).build();
     }
 
@@ -75,6 +78,8 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
     public abstract SongDao songDao();
 
     public abstract ArtistViewDao artistViewDao();
+
+    public abstract AlbumViewDao albumViewDao();
 
     public abstract PlaylistDao playlistDao();
 
@@ -146,6 +151,26 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
                     + "           ) AS artistCoverImage\n"
                     + "    FROM Songs AS s1\n"
                     + "    GROUP BY s1.artist");
+        }
+    }
+
+    static class AlbumViewMigration extends Migration {
+        public AlbumViewMigration() {
+            super(5, 6);
+        }
+
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("CREATE VIEW `AlbumView` AS SELECT s1.albumName as album,\n"
+                    + "           (\n"
+                    + "                SELECT Songs.image_location\n"
+                    + "                FROM Songs\n"
+                    + "                WHERE s1.albumName = Songs.albumName\n"
+                    + "                     AND Songs.image_location IS NOT NULL\n"
+                    + "                LIMIT 1\n"
+                    + "           ) AS albumCoverImage\n"
+                    + "    FROM Songs AS s1\n"
+                    + "    GROUP BY s1.albumName");
         }
     }
 }
