@@ -22,13 +22,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.ui.common.EmptySongsListWarning
 import com.aaa.vibesmusic.ui.common.OvalTextButton
 import com.aaa.vibesmusic.ui.common.SelectSongsList
 
 @Composable
 fun AddEditPlaylistSongsScreen(
     playlistId: Int,
+    navController: NavController
 ) {
     val addEditPlaylistSongsScreenViewModel: AddEditPlaylistSongsScreenViewModel = viewModel(
         factory = AddEditPlaylistSongsScreenViewModel.getFactory(playlistId)
@@ -70,14 +73,28 @@ fun AddEditPlaylistSongsScreen(
                 )
             }
 
-            SelectSongsList(
-                songs = addEditPlaylistSongsScreenViewModel.selectSongs,
-                onCheckedChange = { song, isChecked -> addEditPlaylistSongsScreenViewModel.onCheckChanged(song, isChecked)},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(top = 20.dp, start = 10.dp, end = 10.dp),
-            )
+            if(addEditPlaylistSongsScreenViewModel.selectSongs.isNotEmpty()) {
+                SelectSongsList(
+                    songs = addEditPlaylistSongsScreenViewModel.selectSongs,
+                    onCheckedChange = { song, isChecked ->
+                        addEditPlaylistSongsScreenViewModel.onCheckChanged(
+                            song,
+                            isChecked
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(top = 20.dp, start = 10.dp, end = 10.dp),
+                )
+            } else {
+                EmptySongsListWarning(
+                    navController = navController,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 20.dp, start = 10.dp, end = 10.dp)
+                )
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
