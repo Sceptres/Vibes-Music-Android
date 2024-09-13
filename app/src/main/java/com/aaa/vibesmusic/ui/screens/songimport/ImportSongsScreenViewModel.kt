@@ -23,7 +23,7 @@ import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.exceptions.SongAlreadyExistsException
 import com.aaa.vibesmusic.metadata.SongMetaData
 import com.aaa.vibesmusic.metadata.retriever.SongMetadataRetriever
-import com.aaa.vibesmusic.monetization.Ads
+import com.aaa.vibesmusic.ui.monetization.Ads
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.notification.ImportSongsNotification
@@ -94,7 +94,13 @@ class ImportSongsScreenViewModel(application: Application, private val globalSco
         onAdFailedToShow: () -> Unit,
         onAdFailedToLoad: () -> Unit
     ) {
-        Ads.loadInterstitial(context, Ads.IMPORT_MUSIC_AD_ID, object : InterstitialAdLoadCallback() {
+        Ads.loadInterstitial(
+            context,
+            Ads.IMPORT_MUSIC_AD_ID,
+            {
+                onAdFailedToLoad()
+            },
+            object : InterstitialAdLoadCallback() {
             override fun onAdLoaded(p0: InterstitialAd) {
                 super.onAdLoaded(p0)
                 p0.fullScreenContentCallback = object : FullScreenContentCallback() {
