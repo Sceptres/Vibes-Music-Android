@@ -341,6 +341,7 @@ class MainActivity : AppCompatActivity() {
                         statusBarColorSetter(backgroundColor)
                         AddEditPlaylistSongsScreen(
                             playlistId = playlistId,
+                            navController = navController
                         )
                     }
                 }

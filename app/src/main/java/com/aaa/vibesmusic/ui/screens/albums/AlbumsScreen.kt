@@ -23,6 +23,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.ui.common.EmptySongsListWarning
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
@@ -71,17 +72,27 @@ fun AlbumsScreen(
                         .padding(start = 10.dp, top = 5.dp)
                 )
 
-                AlbumsGrid(
-                    albums = albumsScreenViewModel.albums,
-                    onItemClick = { albumView ->
-                        val albumNameEncoded: String = Uri.encode(albumView.album)
-                        val albumScreenPath: String = Screens.ALBUM_PATH.replace("{albumName}", albumNameEncoded)
-                        navController.navigate(albumScreenPath)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                )
+                if(albumsScreenViewModel.albums.isNotEmpty()) {
+                    AlbumsGrid(
+                        albums = albumsScreenViewModel.albums,
+                        onItemClick = { albumView ->
+                            val albumNameEncoded: String = Uri.encode(albumView.album)
+                            val albumScreenPath: String =
+                                Screens.ALBUM_PATH.replace("{albumName}", albumNameEncoded)
+                            navController.navigate(albumScreenPath)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                } else {
+                    EmptySongsListWarning(
+                        navController = navController,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 20.dp, start = 10.dp, end = 10.dp)
+                    )
+                }
             }
             PlayingSongsButton(
                 onClick = openPlayingSongScreen,
