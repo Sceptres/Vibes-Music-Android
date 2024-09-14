@@ -208,7 +208,6 @@ class MainActivity : AppCompatActivity() {
                     snackBarHostState = snackBarHostState,
                     snackBarScope = snackBarScope,
                     statusBarColorSetter = statusBarColorSetter,
-                    openPlayingSongScreen = openPlayingSongScreen,
                     modifier = Modifier
                         .constrainAs(navHost) {
                             top.linkTo(parent.top)
@@ -240,7 +239,6 @@ class MainActivity : AppCompatActivity() {
         snackBarHostState: SnackbarHostState,
         snackBarScope: CoroutineScope,
         statusBarColorSetter: (Color) -> Unit,
-        openPlayingSongScreen: () -> Unit,
         modifier: Modifier = Modifier
     ) {
         val backgroundColor: Color = colorResource(id = R.color.background_color)
@@ -268,7 +266,6 @@ class MainActivity : AppCompatActivity() {
                         navController = navController,
                         snackBarState = snackBarHostState,
                         snackBarScope = snackBarScope,
-                        openPlayingSongScreen = openPlayingSongScreen
                     )
                 }
 
@@ -289,7 +286,6 @@ class MainActivity : AppCompatActivity() {
                         navController = navController,
                         snackBarState = snackBarHostState,
                         snackBarScope = snackBarScope,
-                        openPlayingSongScreen = openPlayingSongScreen
                     )
                 }
 
@@ -312,7 +308,6 @@ class MainActivity : AppCompatActivity() {
                         navController = navController,
                         snackBarState = snackBarHostState,
                         snackBarScope = snackBarScope,
-                        openPlayingSongScreen = openPlayingSongScreen
                     )
                 }
 
@@ -367,7 +362,6 @@ class MainActivity : AppCompatActivity() {
                     PlaylistScreen(
                         playlistId = playlistId,
                         navController = navController,
-                        openPlayingSongScreen = openPlayingSongScreen,
                         snackBarState = snackBarHostState,
                         snackBarScope = snackBarScope
                     )

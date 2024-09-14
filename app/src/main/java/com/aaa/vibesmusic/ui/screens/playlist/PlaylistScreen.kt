@@ -36,7 +36,6 @@ import kotlinx.coroutines.CoroutineScope
 fun PlaylistScreen(
     playlistId: Int,
     navController: NavController,
-    openPlayingSongScreen: () -> Unit,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
@@ -98,7 +97,6 @@ fun PlaylistScreen(
                                 currentContext,
                                 index
                             )
-                            openPlayingSongScreen()
                             UIUtil.showReviewDialog(currentContext)
                         },
                         modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)

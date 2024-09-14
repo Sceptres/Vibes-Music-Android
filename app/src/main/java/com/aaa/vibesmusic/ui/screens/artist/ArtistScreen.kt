@@ -41,7 +41,6 @@ fun ArtistScreen(
     navController: NavController,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope,
-    openPlayingSongScreen: () -> Unit
 ) {
     val artistScreenViewModel: ArtistScreenViewModel = viewModel(
         factory = ArtistScreenViewModel.getFactory(artistName)
@@ -107,7 +106,6 @@ fun ArtistScreen(
                     songs = artistScreenViewModel.artistSongs,
                     onItemClick = {index ->
                         artistScreenViewModel.onSongClicked(notificationPermLauncher, currentContext, index)
-                        openPlayingSongScreen()
                         UIUtil.showReviewDialog(currentContext)
                     },
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
