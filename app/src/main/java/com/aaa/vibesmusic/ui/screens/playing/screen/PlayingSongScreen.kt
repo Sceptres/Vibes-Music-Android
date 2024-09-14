@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.screens.playing
+package com.aaa.vibesmusic.ui.screens.playing.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -32,12 +32,13 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
-import com.aaa.vibesmusic.ui.screens.playing.composables.PlayControls
-import com.aaa.vibesmusic.ui.screens.playing.composables.TimeBar
+import com.aaa.vibesmusic.ui.screens.playing.screen.composables.PlayControls
+import com.aaa.vibesmusic.ui.screens.playing.screen.composables.TimeBar
 
 @Composable
 fun PlayingSongScreen(closeScreen: () -> Unit) {
     val playingSongViewModel: PlayingSongsViewModel = viewModel(factory = PlayingSongsViewModel.FACTORY)
+    playingSongViewModel.connectToPlayerService()
     val song: Song? = playingSongViewModel.currentSong
 
     BackHandler {

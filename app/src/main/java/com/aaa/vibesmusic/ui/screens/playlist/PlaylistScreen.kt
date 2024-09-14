@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -26,7 +25,6 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.EmptyListWarning
-import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.common.TopBar
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
@@ -38,7 +36,6 @@ import kotlinx.coroutines.CoroutineScope
 fun PlaylistScreen(
     playlistId: Int,
     navController: NavController,
-    openPlayingSongScreen: () -> Unit,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope
 ) {
@@ -100,7 +97,6 @@ fun PlaylistScreen(
                                 currentContext,
                                 index
                             )
-                            openPlayingSongScreen()
                             UIUtil.showReviewDialog(currentContext)
                         },
                         modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
@@ -126,14 +122,6 @@ fun PlaylistScreen(
                     )
                 }
             }
-
-            PlayingSongsButton(
-                onClick = openPlayingSongScreen,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 10.dp, bottom = 10.dp)
-                    .wrapContentSize()
-            )
         }
 
         AdmobBanner(

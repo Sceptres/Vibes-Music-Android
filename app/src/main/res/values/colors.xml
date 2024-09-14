@@ -10,6 +10,7 @@
     <color name="blue_selected">#4c60f5</color>
     <color name="background_color">#131010</color>
     <color name="navbar_color">#090808</color>
+    <color name="player_bar_color">#0C0A0A</color>
     <color name="foreground_color">#0E0C0C</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="gray">#757575</color>
