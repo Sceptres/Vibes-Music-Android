@@ -56,11 +56,7 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as MediaPlayerService.MediaPlayerServiceBinder
             playerService = binder.mediaPlayerService
-            playerService!!.setPreparedListener{ preparedListener(it) }
-            playerService!!.setOnSeekListener{ seekListener(it) }
-
-            // Call prepared listeners once to update states when service first connected
-            preparedListener(null)
+            connectToPlayerService()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -80,6 +76,16 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
 
     private fun isPlayerServiceNotEmpty(): Boolean {
         return this.playerService?.isEmpty == false
+    }
+
+    fun connectToPlayerService() {
+        this.playerService?.let { mediaPlayerService ->
+            mediaPlayerService.setPreparedListener{ preparedListener(it) }
+            mediaPlayerService.setOnSeekListener{ seekListener(it) }
+
+            // Call prepared listeners once to update states when service first connected
+            this.preparedListener(null)
+        }
     }
 
     fun pausePlayToggle() {

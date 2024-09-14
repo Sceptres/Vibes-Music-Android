@@ -45,6 +45,7 @@ fun PlayingSongBar(
     val playingSongBarState: PlayingSongBarState by remember {
         mutableStateOf(PlayingSongBarState(context))
     }
+    playingSongBarState.connectToPlayerService()
 
     Box(
         modifier = modifier
