@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.screens.playing
+package com.aaa.vibesmusic.ui.screens.playing.screen
 
 import android.app.Application
 import android.content.ComponentName

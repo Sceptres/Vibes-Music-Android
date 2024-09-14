@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.screens.playing.composables
+package com.aaa.vibesmusic.ui.screens.playing.screen.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
