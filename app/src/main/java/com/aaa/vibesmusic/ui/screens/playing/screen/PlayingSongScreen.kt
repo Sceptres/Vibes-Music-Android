@@ -38,6 +38,7 @@ import com.aaa.vibesmusic.ui.screens.playing.screen.composables.TimeBar
 @Composable
 fun PlayingSongScreen(closeScreen: () -> Unit) {
     val playingSongViewModel: PlayingSongsViewModel = viewModel(factory = PlayingSongsViewModel.FACTORY)
+    playingSongViewModel.connectToPlayerService()
     val song: Song? = playingSongViewModel.currentSong
 
     BackHandler {

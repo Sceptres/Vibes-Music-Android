@@ -38,11 +38,6 @@ class PlayingSongBarState(private val context: Context) {
             val binder = service as MediaPlayerService.MediaPlayerServiceBinder
             playerService = binder.mediaPlayerService
 
-            playerService!!.setPreparedListener{ preparedListener(it) }
-            playerService!!.setOnSeekListener{ seekListener(it) }
-
-            // Call prepared listeners once to update states when service first connected
-            preparedListener(null)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -62,6 +57,16 @@ class PlayingSongBarState(private val context: Context) {
 
     private fun isPlayerServiceNotEmpty(): Boolean {
         return this.playerService?.isEmpty == false
+    }
+
+    fun connectToPlayerService() {
+        this.playerService?.let { mediaPlayerService ->
+            mediaPlayerService.setPreparedListener{ preparedListener(it) }
+            mediaPlayerService.setOnSeekListener{ seekListener(it) }
+
+            // Call prepared listeners once to update states when service first connected
+            preparedListener(null)
+        }
     }
 
     fun pausePlayToggle() {

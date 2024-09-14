@@ -2,7 +2,6 @@ package com.aaa.vibesmusic.ui.activity
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -222,7 +221,7 @@ class MainActivity : AppCompatActivity() {
                 )
 
                 PlayingSongBar(
-                    onClick = { Log.d("CLICCKED", "CLaksbfak") },
+                    onClick = { openPlayingSongScreen() },
                     modifier = Modifier
                         .constrainAs(playingSongBar) {
                             start.linkTo(parent.start)
