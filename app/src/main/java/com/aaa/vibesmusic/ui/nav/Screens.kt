@@ -11,16 +11,16 @@ sealed class Screens(val route: String, @StringRes val screenNavText: Int, @Draw
         const val PLAYLISTS_NAV_PATH: String = "playlists_nav"
 
         // Screen paths
-        const val LIBRARY_PATH: String = "library"
-        const val MUSIC_LIBRARY_PATH: String = "music_library"
+        const val LIBRARY_PATH: String = "$LIBRARY_NAV_PATH/library"
+        const val MUSIC_LIBRARY_PATH: String = "$LIBRARY_PATH/music_library"
         const val IMPORT_MUSIC_PATH: String = "import_music"
-        const val PLAYLISTS_PATH: String = "playlists"
-        const val PLAYLIST_PATH: String = "playlist/{playlistId}"
+        const val PLAYLISTS_PATH: String = "$PLAYLISTS_NAV_PATH/playlists"
+        const val PLAYLIST_PATH: String = "$PLAYLISTS_PATH/{playlistId}"
         const val ADD_SONG_TO_PLAYLIST_PATH: String = "$MUSIC_LIBRARY_PATH/add_song_to_playlist/{songId}"
         const val ADD_EDIT_PLAYLIST_SONGS_PATH: String = "$PLAYLISTS_PATH/add_edit_playlist_songs/{playlistId}"
-        const val ARTISTS_PATH: String = "artists"
+        const val ARTISTS_PATH: String = "$LIBRARY_PATH/artists"
         const val ARTIST_PATH: String = "$ARTISTS_PATH/{artistName}"
-        const val ALBUMS_PATH: String = "albums"
+        const val ALBUMS_PATH: String = "$LIBRARY_PATH/albums"
         const val ALBUM_PATH: String = "$ALBUMS_PATH/{albumName}"
 
         val SCREENS = arrayOf(
