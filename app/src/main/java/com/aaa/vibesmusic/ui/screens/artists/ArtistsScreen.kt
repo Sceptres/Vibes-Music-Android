@@ -28,10 +28,7 @@ import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.screens.artists.composables.ArtistGrid
 
 @Composable
-fun ArtistsScreen(
-    navController: NavController,
-    openPlayingSongScreen: () -> Unit
-) {
+fun ArtistsScreen(navController: NavController, ) {
     val artistsScreenViewModel: ArtistsScreenViewModel = viewModel(factory = ArtistsScreenViewModel.FACTORY)
 
     ConstraintLayout(

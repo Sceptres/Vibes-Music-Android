@@ -28,10 +28,7 @@ import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.screens.albums.composables.AlbumsGrid
 
 @Composable
-fun AlbumsScreen(
-    navController: NavController,
-    openPlayingSongScreen: () -> Unit
-) {
+fun AlbumsScreen(navController: NavController) {
     val albumsScreenViewModel: AlbumsScreenViewModel = viewModel(
         factory = AlbumsScreenViewModel.FACTORY
     )

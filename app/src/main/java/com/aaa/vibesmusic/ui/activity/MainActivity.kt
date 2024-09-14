@@ -260,10 +260,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 composable(route = Screens.LIBRARY_PATH) {
                     statusBarColorSetter(backgroundColor)
-                    LibraryScreen(
-                        navController = navController,
-                        openPlaylingSongScreen = openPlayingSongScreen
-                    )
+                    LibraryScreen(navController = navController)
                 }
 
                 composable(route = Screens.MUSIC_LIBRARY_PATH) {
@@ -278,10 +275,7 @@ class MainActivity : AppCompatActivity() {
 
                 composable(route = Screens.ARTISTS_PATH) {
                     statusBarColorSetter(backgroundColor)
-                    ArtistsScreen(
-                        navController = navController,
-                        openPlayingSongScreen = openPlayingSongScreen
-                    )
+                    ArtistsScreen(navController = navController,)
                 }
 
                 composable(
@@ -304,10 +298,7 @@ class MainActivity : AppCompatActivity() {
                     route = Screens.ALBUMS_PATH
                 ) {
                     statusBarColorSetter(backgroundColor)
-                    AlbumsScreen(
-                        navController = navController,
-                        openPlayingSongScreen = openPlayingSongScreen
-                    )
+                    AlbumsScreen(navController = navController)
                 }
 
                 composable(
