@@ -35,7 +35,6 @@ fun MusicLibraryScreen(
     navController: NavController,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope,
-    openPlayingSongScreen: () -> Unit
 ) {
     val viewModel: MusicLibraryViewModel = viewModel(factory = MusicLibraryViewModel.FACTORY)
     val currentContext = LocalContext.current
@@ -83,8 +82,6 @@ fun MusicLibraryScreen(
                                 currentContext,
                                 index
                             )
-                            openPlayingSongScreen()
-
                             UIUtil.showReviewDialog(currentContext)
                         }
                     ) { expandedState, song ->

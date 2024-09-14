@@ -41,7 +41,6 @@ fun AlbumScreen(
     navController: NavController,
     snackBarState: SnackbarHostState,
     snackBarScope: CoroutineScope,
-    openPlayingSongScreen: () -> Unit
 ) {
     val albumScreenViewModel: AlbumScreenViewModel = viewModel(
         factory = AlbumScreenViewModel.getFactory(albumName)
@@ -107,7 +106,6 @@ fun AlbumScreen(
                     songs = albumScreenViewModel.albumSongs,
                     onItemClick = {index ->
                         albumScreenViewModel.onSongClicked(notificationPermLauncher, currentContext, index)
-                        openPlayingSongScreen()
                         UIUtil.showReviewDialog(currentContext)
                     },
                     modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
