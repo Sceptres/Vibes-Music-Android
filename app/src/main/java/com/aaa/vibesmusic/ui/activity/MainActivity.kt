@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -53,7 +55,8 @@ import com.aaa.vibesmusic.ui.screens.artist.ArtistScreen
 import com.aaa.vibesmusic.ui.screens.artists.ArtistsScreen
 import com.aaa.vibesmusic.ui.screens.library.LibraryScreen
 import com.aaa.vibesmusic.ui.screens.musiclibrary.MusicLibraryScreen
-import com.aaa.vibesmusic.ui.screens.playing.PlayingSongScreen
+import com.aaa.vibesmusic.ui.screens.playing.bar.PlayingSongBar
+import com.aaa.vibesmusic.ui.screens.playing.screen.PlayingSongScreen
 import com.aaa.vibesmusic.ui.screens.playlist.PlaylistScreen
 import com.aaa.vibesmusic.ui.screens.playlists.PlaylistsScreen
 import com.aaa.vibesmusic.ui.screens.playlistselect.AddSongToPlaylistScreen
@@ -139,8 +142,6 @@ class MainActivity : AppCompatActivity() {
         openPlayingSongScreen: () -> Unit
     ) {
         val navBarColor: Color = colorResource(id = R.color.navbar_color)
-        val backgroundColor: Color = colorResource(id = R.color.background_color)
-        val foregroundColor: Color = colorResource(id = R.color.foreground_color)
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -196,154 +197,187 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         ) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = Screens.LIBRARY_NAV_PATH,
-                modifier = Modifier.padding(innerPadding),
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None }
+            ConstraintLayout(
+                modifier = Modifier.padding(innerPadding)
             ) {
-                navigation(
-                    startDestination = Screens.LIBRARY_PATH,
-                    route = Screens.LIBRARY_NAV_PATH
-                ) {
-                    composable(route = Screens.LIBRARY_PATH) {
-                        statusBarColorSetter(backgroundColor)
-                        LibraryScreen(
-                            navController = navController,
-                            openPlaylingSongScreen = openPlayingSongScreen
-                        )
-                    }
+                val (navHost, playingSongBar) = createRefs()
 
-                    composable(route = Screens.MUSIC_LIBRARY_PATH) {
-                        statusBarColorSetter(backgroundColor)
-                        MusicLibraryScreen(
-                            navController = navController,
-                            snackBarState = snackBarHostState,
-                            snackBarScope = snackBarScope,
-                            openPlayingSongScreen = openPlayingSongScreen
-                        )
-                    }
+                NavHost(
+                    navController = navController,
+                    globalCoroutineScope = globalCoroutineScope,
+                    snackBarHostState = snackBarHostState,
+                    snackBarScope = snackBarScope,
+                    statusBarColorSetter = statusBarColorSetter,
+                    modifier = Modifier
+                        .constrainAs(navHost) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(playingSongBar.top)
+                            width = Dimension.preferredWrapContent
+                            height = Dimension.preferredWrapContent
+                        }
+                )
 
-                    composable(route = Screens.ARTISTS_PATH) {
-                        statusBarColorSetter(backgroundColor)
-                        ArtistsScreen(
-                            navController = navController,
-                            openPlayingSongScreen = openPlayingSongScreen
-                        )
-                    }
+                PlayingSongBar(
+                    onClick = { openPlayingSongScreen() },
+                    modifier = Modifier
+                        .constrainAs(playingSongBar) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(parent.bottom)
+                        }
+                )
+            }
+        }
+    }
 
-                    composable(
-                        route = Screens.ARTIST_PATH,
-                        arguments = listOf(navArgument("artistName") { type = NavType.StringType })
-                    ) { backStack ->
-                        val artistName: String = backStack.arguments?.getString("artistName") ?:
-                            throw IllegalArgumentException("Missing {artistName} argument")
-                        statusBarColorSetter(foregroundColor)
-                        ArtistScreen(
-                            artistName = Uri.decode(artistName),
-                            navController = navController,
-                            snackBarState = snackBarHostState,
-                            snackBarScope = snackBarScope,
-                            openPlayingSongScreen = openPlayingSongScreen
-                        )
-                    }
+    @Composable
+    private fun NavHost(
+        navController: NavHostController,
+        globalCoroutineScope: CoroutineScope,
+        snackBarHostState: SnackbarHostState,
+        snackBarScope: CoroutineScope,
+        statusBarColorSetter: (Color) -> Unit,
+        modifier: Modifier = Modifier
+    ) {
+        val backgroundColor: Color = colorResource(id = R.color.background_color)
+        val foregroundColor: Color = colorResource(id = R.color.foreground_color)
 
-                    composable(
-                        route = Screens.ALBUMS_PATH
-                    ) {
-                        statusBarColorSetter(backgroundColor)
-                        AlbumsScreen(
-                            navController = navController,
-                            openPlayingSongScreen = openPlayingSongScreen
-                        )
-                    }
-
-                    composable(
-                        route = Screens.ALBUM_PATH,
-                        arguments = listOf(navArgument("albumName") { type = NavType.StringType })
-                    ) { backStack ->
-                        val albumName: String = backStack.arguments?.getString("albumName") ?:
-                            throw IllegalArgumentException("Missing {albumName} argument")
-                        statusBarColorSetter(foregroundColor)
-                        AlbumScreen(
-                            albumName = Uri.decode(albumName),
-                            navController = navController,
-                            snackBarState = snackBarHostState,
-                            snackBarScope = snackBarScope,
-                            openPlayingSongScreen = openPlayingSongScreen
-                        )
-                    }
-
-                    composable(
-                        route = Screens.ADD_SONG_TO_PLAYLIST_PATH,
-                        arguments = listOf(navArgument("songId") { type = NavType.IntType })
-                    ) { backStack ->
-                        val songId: Int = backStack.arguments?.getInt("songId") ?:
-                            throw IllegalArgumentException("Missing {songId} argument")
-                        statusBarColorSetter(backgroundColor)
-                        AddSongToPlaylistScreen(
-                            songId = songId,
-                            snackBarState = snackBarHostState,
-                            snackBarScope = snackBarScope
-                        )
-                    }
+        NavHost(
+            navController = navController,
+            startDestination = Screens.LIBRARY_NAV_PATH,
+            modifier = modifier,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
+            navigation(
+                startDestination = Screens.LIBRARY_PATH,
+                route = Screens.LIBRARY_NAV_PATH
+            ) {
+                composable(route = Screens.LIBRARY_PATH) {
+                    statusBarColorSetter(backgroundColor)
+                    LibraryScreen(navController = navController)
                 }
 
-                composable(route = Screens.ImportMusic.route) {
+                composable(route = Screens.MUSIC_LIBRARY_PATH) {
+                    statusBarColorSetter(backgroundColor)
+                    MusicLibraryScreen(
+                        navController = navController,
+                        snackBarState = snackBarHostState,
+                        snackBarScope = snackBarScope,
+                    )
+                }
+
+                composable(route = Screens.ARTISTS_PATH) {
+                    statusBarColorSetter(backgroundColor)
+                    ArtistsScreen(navController = navController,)
+                }
+
+                composable(
+                    route = Screens.ARTIST_PATH,
+                    arguments = listOf(navArgument("artistName") { type = NavType.StringType })
+                ) { backStack ->
+                    val artistName: String = backStack.arguments?.getString("artistName") ?:
+                    throw IllegalArgumentException("Missing {artistName} argument")
+                    statusBarColorSetter(foregroundColor)
+                    ArtistScreen(
+                        artistName = Uri.decode(artistName),
+                        navController = navController,
+                        snackBarState = snackBarHostState,
+                        snackBarScope = snackBarScope,
+                    )
+                }
+
+                composable(
+                    route = Screens.ALBUMS_PATH
+                ) {
+                    statusBarColorSetter(backgroundColor)
+                    AlbumsScreen(navController = navController)
+                }
+
+                composable(
+                    route = Screens.ALBUM_PATH,
+                    arguments = listOf(navArgument("albumName") { type = NavType.StringType })
+                ) { backStack ->
+                    val albumName: String = backStack.arguments?.getString("albumName") ?:
+                    throw IllegalArgumentException("Missing {albumName} argument")
+                    statusBarColorSetter(foregroundColor)
+                    AlbumScreen(
+                        albumName = Uri.decode(albumName),
+                        navController = navController,
+                        snackBarState = snackBarHostState,
+                        snackBarScope = snackBarScope,
+                    )
+                }
+
+                composable(
+                    route = Screens.ADD_SONG_TO_PLAYLIST_PATH,
+                    arguments = listOf(navArgument("songId") { type = NavType.IntType })
+                ) { backStack ->
+                    val songId: Int = backStack.arguments?.getInt("songId") ?:
+                    throw IllegalArgumentException("Missing {songId} argument")
+                    statusBarColorSetter(backgroundColor)
+                    AddSongToPlaylistScreen(
+                        songId = songId,
+                        snackBarState = snackBarHostState,
+                        snackBarScope = snackBarScope
+                    )
+                }
+            }
+
+            composable(route = Screens.ImportMusic.route) {
+                BackHandler {}
+
+                statusBarColorSetter(backgroundColor)
+                ImportSongsScreen(
+                    globalScope = globalCoroutineScope,
+                    snackBarState = snackBarHostState,
+                    snackBarScope = snackBarScope
+                )
+            }
+
+            navigation(
+                startDestination = Screens.PLAYLISTS_PATH,
+                route = Screens.PLAYLISTS_NAV_PATH
+            ) {
+                composable(route = Screens.PLAYLISTS_PATH) {
                     BackHandler {}
 
                     statusBarColorSetter(backgroundColor)
-                    ImportSongsScreen(
-                        globalScope = globalCoroutineScope,
+                    PlaylistsScreen(
+                        navController = navController,
                         snackBarState = snackBarHostState,
                         snackBarScope = snackBarScope
                     )
                 }
 
-                navigation(
-                    startDestination = Screens.PLAYLISTS_PATH,
-                    route = Screens.PLAYLISTS_NAV_PATH
-                ) {
-                    composable(route = Screens.PLAYLISTS_PATH) {
-                        BackHandler {}
+                composable(
+                    route = Screens.PLAYLIST_PATH,
+                    arguments = listOf(navArgument("playlistId") { type = NavType.IntType })
+                ) {backStack ->
+                    val playlistId: Int = backStack.arguments?.getInt("playlistId") ?:
+                    throw IllegalArgumentException("Missing {playlistId} argument")
+                    statusBarColorSetter(foregroundColor)
+                    PlaylistScreen(
+                        playlistId = playlistId,
+                        navController = navController,
+                        snackBarState = snackBarHostState,
+                        snackBarScope = snackBarScope
+                    )
+                }
 
-                        statusBarColorSetter(backgroundColor)
-                        PlaylistsScreen(
-                            navController = navController,
-                            snackBarState = snackBarHostState,
-                            snackBarScope = snackBarScope
-                        )
-                    }
-
-                    composable(
-                        route = Screens.PLAYLIST_PATH,
-                        arguments = listOf(navArgument("playlistId") { type = NavType.IntType })
-                    ) {backStack ->
-                        val playlistId: Int = backStack.arguments?.getInt("playlistId") ?:
-                        throw IllegalArgumentException("Missing {playlistId} argument")
-                        statusBarColorSetter(foregroundColor)
-                        PlaylistScreen(
-                            playlistId = playlistId,
-                            navController = navController,
-                            openPlayingSongScreen = openPlayingSongScreen,
-                            snackBarState = snackBarHostState,
-                            snackBarScope = snackBarScope
-                        )
-                    }
-
-                    composable(
-                        route = Screens.ADD_EDIT_PLAYLIST_SONGS_PATH,
-                        arguments = listOf(navArgument("playlistId") { type = NavType.IntType })
-                    ) { backStack ->
-                        val playlistId: Int = backStack.arguments?.getInt("playlistId") ?:
-                        throw IllegalArgumentException("Missing {playlistId} argument")
-                        statusBarColorSetter(backgroundColor)
-                        AddEditPlaylistSongsScreen(
-                            playlistId = playlistId,
-                            navController = navController
-                        )
-                    }
+                composable(
+                    route = Screens.ADD_EDIT_PLAYLIST_SONGS_PATH,
+                    arguments = listOf(navArgument("playlistId") { type = NavType.IntType })
+                ) { backStack ->
+                    val playlistId: Int = backStack.arguments?.getInt("playlistId") ?:
+                    throw IllegalArgumentException("Missing {playlistId} argument")
+                    statusBarColorSetter(backgroundColor)
+                    AddEditPlaylistSongsScreen(
+                        playlistId = playlistId,
+                        navController = navController
+                    )
                 }
             }
         }
