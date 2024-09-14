@@ -24,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
+import com.aaa.vibesmusic.ui.common.EmptySongsListWarning
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
@@ -73,23 +74,36 @@ fun MusicLibraryScreen(
                         .padding(start = 10.dp, top = 5.dp)
                 )
 
-                SongsList(
-                    songs = viewModel.songs,
-                    modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp),
-                    { index ->
-                        viewModel.onSongClick(notificationPermissionRequest, currentContext, index)
-                        openPlayingSongScreen()
+                if(viewModel.songs.isNotEmpty()) {
+                    SongsList(
+                        songs = viewModel.songs,
+                        modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp),
+                        { index ->
+                            viewModel.onSongClick(
+                                notificationPermissionRequest,
+                                currentContext,
+                                index
+                            )
+                            openPlayingSongScreen()
 
-                        UIUtil.showReviewDialog(currentContext)
+                            UIUtil.showReviewDialog(currentContext)
+                        }
+                    ) { expandedState, song ->
+                        MusicLibrarySongDropdown(
+                            song = song,
+                            expanded = expandedState.value,
+                            closer = { expandedState.value = false },
+                            navController = navController,
+                            snackBarState = snackBarState,
+                            snackBarScope = snackBarScope
+                        )
                     }
-                ) { expandedState, song ->
-                    MusicLibrarySongDropdown(
-                        song = song,
-                        expanded = expandedState.value,
-                        closer = { expandedState.value = false },
+                } else {
+                    EmptySongsListWarning(
                         navController = navController,
-                        snackBarState = snackBarState,
-                        snackBarScope = snackBarScope
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 20.dp, start = 10.dp, end = 10.dp)
                     )
                 }
             }
