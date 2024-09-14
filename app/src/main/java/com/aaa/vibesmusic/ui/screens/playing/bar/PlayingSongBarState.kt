@@ -37,7 +37,7 @@ class PlayingSongBarState(private val context: Context) {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as MediaPlayerService.MediaPlayerServiceBinder
             playerService = binder.mediaPlayerService
-
+            connectToPlayerService()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
