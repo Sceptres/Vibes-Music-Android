@@ -23,7 +23,9 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
+import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.UIUtil
+import com.aaa.vibesmusic.ui.common.EmptyListWarning
 import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.common.TopBar
@@ -45,6 +47,11 @@ fun PlaylistScreen(
     val currentContext: Context = LocalContext.current
 
     val onBackPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
+    val openSelectSongsScreen: () -> Unit = {
+        val addEditPath: String = Screens.ADD_EDIT_PLAYLIST_SONGS_PATH.replace("{playlistId}", playlistId.toString())
+        navController.navigate(addEditPath)
+    }
 
     val closer: () -> Unit = {
         onBackPressedDispatcher?.onBackPressed()
@@ -73,10 +80,7 @@ fun PlaylistScreen(
                 TopBar(
                     text = playlistScreenViewModel.playlistSongs?.playlist?.playlistName ?: "Playlist Name",
                     onBackArrowClicked = closer,
-                    onRightButtonClicked = {
-                        val addEditPath: String = Screens.ADD_EDIT_PLAYLIST_SONGS_PATH.replace("{playlistId}", playlistId.toString())
-                        navController.navigate(addEditPath)
-                    },
+                    onRightButtonClicked = openSelectSongsScreen,
                     rightButtonSrcGenerator = @Composable {
                         if(playlistScreenViewModel.playlistSongs?.songs?.isNotEmpty() == true)
                             painterResource(id = R.drawable.edit)
@@ -85,22 +89,40 @@ fun PlaylistScreen(
                     }
                 )
 
-                SongsList(
-                    songs = playlistScreenViewModel.getPlaylistSongs(),
-                    onItemClick = {index ->
-                        playlistScreenViewModel.onSongClicked(notificationPermLauncher, currentContext, index)
-                        openPlayingSongScreen()
-                        UIUtil.showReviewDialog(currentContext)
-                    },
-                    modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
-                ) { expandedState, song ->
-                    PlaylistSongDropdown(
-                        playlistSongs = playlistScreenViewModel.playlistSongs!!,
-                        song = song,
-                        expanded = expandedState.value,
-                        closer = { expandedState.value = false },
-                        snackBarState = snackBarState,
-                        snackBarScope = snackBarScope
+                val songs: List<Song> = playlistScreenViewModel.getPlaylistSongs()
+
+                if(songs.isNotEmpty()) {
+                    SongsList(
+                        songs = songs,
+                        onItemClick = { index ->
+                            playlistScreenViewModel.onSongClicked(
+                                notificationPermLauncher,
+                                currentContext,
+                                index
+                            )
+                            openPlayingSongScreen()
+                            UIUtil.showReviewDialog(currentContext)
+                        },
+                        modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)
+                    ) { expandedState, song ->
+                        PlaylistSongDropdown(
+                            playlistSongs = playlistScreenViewModel.playlistSongs!!,
+                            song = song,
+                            expanded = expandedState.value,
+                            closer = { expandedState.value = false },
+                            snackBarState = snackBarState,
+                            snackBarScope = snackBarScope
+                        )
+                    }
+                } else {
+                    EmptyListWarning(
+                        title = "Playlist Is Empty",
+                        description = "This playlist is empty and has no songs in it. Click here to add your first songs to this playlist!",
+                        icon = painterResource(id = R.drawable.plus),
+                        onClick = openSelectSongsScreen,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 20.dp, start = 10.dp, end = 10.dp)
                     )
                 }
             }
