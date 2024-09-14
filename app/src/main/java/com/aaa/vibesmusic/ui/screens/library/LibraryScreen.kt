@@ -32,10 +32,7 @@ import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
 
 @Composable
-fun LibraryScreen(
-    navController: NavController,
-    openPlaylingSongScreen: () -> Unit
-) {
+fun LibraryScreen(navController: NavController, ) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
