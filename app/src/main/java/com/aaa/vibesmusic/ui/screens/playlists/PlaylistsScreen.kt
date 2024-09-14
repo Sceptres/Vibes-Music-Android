@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
+import com.aaa.vibesmusic.ui.common.EmptyListWarning
 import com.aaa.vibesmusic.ui.dialogs.playlist.add.AddPlaylistDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
@@ -99,23 +100,36 @@ fun PlaylistsScreen(
                     modifier = Modifier.padding(top = 5.dp)
                 )
 
-                PlaylistsGrid(
-                    playlistSongsList = playlistsScreenViewModel.playlistSongs,
-                    onPlaylistItemClick = { playlistSongs ->
-                        val playlistId: Int = playlistSongs.playlist.playlistId
-                        val playlistPath: String = Screens.PLAYLIST_PATH.replace("{playlistId}", playlistId.toString())
-                        navController.navigate(playlistPath)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                ) { expandedState, playlistSongs ->
-                    PlaylistDropdown(
-                        playlistSongs = playlistSongs,
-                        expanded = expandedState.value,
-                        closer = { expandedState.value = false },
-                        snackBarState = snackBarState,
-                        snackBarScope = snackBarScope
+                if(playlistsScreenViewModel.playlistSongs.isNotEmpty()) {
+                    PlaylistsGrid(
+                        playlistSongsList = playlistsScreenViewModel.playlistSongs,
+                        onPlaylistItemClick = { playlistSongs ->
+                            val playlistId: Int = playlistSongs.playlist.playlistId
+                            val playlistPath: String =
+                                Screens.PLAYLIST_PATH.replace("{playlistId}", playlistId.toString())
+                            navController.navigate(playlistPath)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                    ) { expandedState, playlistSongs ->
+                        PlaylistDropdown(
+                            playlistSongs = playlistSongs,
+                            expanded = expandedState.value,
+                            closer = { expandedState.value = false },
+                            snackBarState = snackBarState,
+                            snackBarScope = snackBarScope
+                        )
+                    }
+                } else {
+                    EmptyListWarning(
+                        title = "Create Your First Playlist!",
+                        description = "There are currently no playlists in your library. Click here to create your first playlist!",
+                        icon = painterResource(id = R.drawable.plus),
+                        onClick = { addPlaylistDialogState = true },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 20.dp, start = 10.dp, end = 10.dp)
                     )
                 }
             }

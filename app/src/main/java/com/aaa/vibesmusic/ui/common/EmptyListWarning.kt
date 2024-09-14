@@ -29,7 +29,7 @@ fun EmptyListWarning(
     title: String,
     description: String,
     icon: Painter,
-    onClick: () -> Unit = {},
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
