@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.screens.playing.composables
+package com.aaa.vibesmusic.ui.screens.playing.screen.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

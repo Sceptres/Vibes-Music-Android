@@ -53,7 +53,7 @@ import com.aaa.vibesmusic.ui.screens.artist.ArtistScreen
 import com.aaa.vibesmusic.ui.screens.artists.ArtistsScreen
 import com.aaa.vibesmusic.ui.screens.library.LibraryScreen
 import com.aaa.vibesmusic.ui.screens.musiclibrary.MusicLibraryScreen
-import com.aaa.vibesmusic.ui.screens.playing.PlayingSongScreen
+import com.aaa.vibesmusic.ui.screens.playing.screen.PlayingSongScreen
 import com.aaa.vibesmusic.ui.screens.playlist.PlaylistScreen
 import com.aaa.vibesmusic.ui.screens.playlists.PlaylistsScreen
 import com.aaa.vibesmusic.ui.screens.playlistselect.AddSongToPlaylistScreen
