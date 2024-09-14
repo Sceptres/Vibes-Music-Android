@@ -25,7 +25,6 @@ import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.EmptySongsListWarning
-import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.screens.musiclibrary.composables.MusicLibrarySongDropdown
@@ -107,13 +106,6 @@ fun MusicLibraryScreen(
                     )
                 }
             }
-            PlayingSongsButton(
-                onClick = openPlayingSongScreen,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 10.dp, bottom = 10.dp)
-                    .wrapContentSize()
-            )
         }
         AdmobBanner(
             adId = "ca-app-pub-1417462071241776/9650528268",

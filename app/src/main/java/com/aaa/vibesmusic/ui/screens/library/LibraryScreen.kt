@@ -14,7 +14,6 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -29,7 +28,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
 
@@ -109,14 +107,6 @@ fun LibraryScreen(
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
             }
-
-            PlayingSongsButton(
-                onClick = openPlaylingSongScreen,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 10.dp, bottom = 10.dp)
-                    .wrapContentSize()
-            )
         }
 
         AdmobBanner(

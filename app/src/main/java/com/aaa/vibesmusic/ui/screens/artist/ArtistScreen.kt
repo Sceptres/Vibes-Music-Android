@@ -28,7 +28,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
-import com.aaa.vibesmusic.ui.common.PlayingSongsButton
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.common.TopBar
 import com.aaa.vibesmusic.ui.dialogs.song.artist.delete.ArtistDeleteDialog
@@ -123,14 +122,6 @@ fun ArtistScreen(
                     )
                 }
             }
-
-            PlayingSongsButton(
-                onClick = openPlayingSongScreen,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 10.dp, bottom = 10.dp)
-                    .wrapContentSize()
-            )
         }
 
         AdmobBanner(
