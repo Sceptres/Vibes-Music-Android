@@ -1,6 +1,7 @@
 package com.aaa.vibesmusic.ui.common
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -22,7 +23,8 @@ fun OvalTextButton(
     ) {
         Text(
             text = text,
-            color = color
+            color = color,
+            style = MaterialTheme.typography.labelMedium
         )
     }
 }
