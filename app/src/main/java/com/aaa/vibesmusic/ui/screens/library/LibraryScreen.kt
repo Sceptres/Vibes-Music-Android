@@ -29,10 +29,10 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
-import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.nav.navigateToAlbumsScreen
 import com.aaa.vibesmusic.ui.nav.navigateToArtistsScreen
 import com.aaa.vibesmusic.ui.nav.navigateToMusicLibraryScreen
+import com.aaa.vibesmusic.ui.nav.navigateToPlaylistsScreen
 
 @Composable
 fun LibraryScreen(navController: NavController, ) {
@@ -70,12 +70,8 @@ fun LibraryScreen(navController: NavController, ) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Text(
+                LibraryText(
                     text = "Music",
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 30.sp,
-                    color = Color.White,
                     modifier = Modifier
                         .padding(start = 10.dp, top = 5.dp)
                 )
@@ -106,6 +102,23 @@ fun LibraryScreen(navController: NavController, ) {
                     },
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                LibraryText(
+                    text = "Playlists",
+                    modifier = Modifier
+                        .padding(start = 10.dp, top = 5.dp)
+                )
+
+                LibraryButton(
+                    text = "Playlists",
+                    icon = painterResource(id = R.drawable.playlist),
+                    onClick = {
+                        navController.navigateToPlaylistsScreen()
+                    },
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                )
             }
         }
 
@@ -120,6 +133,21 @@ fun LibraryScreen(navController: NavController, ) {
                 .wrapContentSize()
         )
     }
+}
+
+@Composable
+private fun LibraryText(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = text,
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.Light,
+        fontSize = 30.sp,
+        color = Color.White,
+        modifier = modifier
+    )
 }
 
 @Composable
