@@ -14,5 +14,11 @@ val Typography = Typography(
         fontWeight = FontWeight.Light,
         fontSize = 50.sp,
         color = Color.White
+    ),
+    titleMedium = TextStyle(
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.Light,
+        fontSize = 30.sp,
+        color = Color.White
     )
 )
