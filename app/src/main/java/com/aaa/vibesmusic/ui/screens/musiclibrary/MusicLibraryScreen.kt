@@ -63,10 +63,7 @@ fun MusicLibraryScreen(
             ) {
                 Text(
                     text = "Music Library",
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 50.sp,
-                    color = Color.White,
+                    style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier
                         .padding(start = 10.dp, top = 5.dp)
                 )
