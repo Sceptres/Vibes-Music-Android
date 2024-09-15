@@ -117,8 +117,7 @@ fun SelectSongItem(
             ) {
                 Text(
                     text = song.name,
-                    color = Color.White,
-                    fontSize = 18.sp,
+                    style = MaterialTheme.typography.labelMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
