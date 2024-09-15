@@ -29,6 +29,7 @@ import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.common.TopBar
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.nav.navigateToAddEditPlaylistSongsScreen
 import com.aaa.vibesmusic.ui.screens.playlist.composables.PlaylistSongDropdown
 import kotlinx.coroutines.CoroutineScope
 
@@ -46,8 +47,7 @@ fun PlaylistScreen(
     val onBackPressedDispatcher: OnBackPressedDispatcher? = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
     val openSelectSongsScreen: () -> Unit = {
-        val addEditPath: String = Screens.ADD_EDIT_PLAYLIST_SONGS_PATH.replace("{playlistId}", playlistId.toString())
-        navController.navigate(addEditPath)
+        navController.navigateToAddEditPlaylistSongsScreen(playlistId)
     }
 
     val closer: () -> Unit = {

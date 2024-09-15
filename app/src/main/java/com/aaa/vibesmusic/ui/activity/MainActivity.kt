@@ -49,6 +49,7 @@ import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.anim.PlayingSongScreenAnim
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.nav.navItemNavigate
 import com.aaa.vibesmusic.ui.screens.album.AlbumScreen
 import com.aaa.vibesmusic.ui.screens.albums.AlbumsScreen
 import com.aaa.vibesmusic.ui.screens.artist.ArtistScreen
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         this.firebaseAnalytics = Firebase.analytics
+        this.firebaseAnalytics.setAnalyticsCollectionEnabled(false)
 
         VibesMusicDatabase.getInstance(applicationContext)
         StorageUtil.setup(this.applicationContext)
@@ -184,13 +186,7 @@ class MainActivity : AppCompatActivity() {
                             },
                             selected = isSelected,
                             onClick = {
-                                navController.navigate(screen.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
+                                navController.navItemNavigate(screen.route)
                             }
                         )
                     }

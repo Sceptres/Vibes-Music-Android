@@ -14,6 +14,7 @@ import com.aaa.vibesmusic.ui.common.CustomDropdownMenuItem
 import com.aaa.vibesmusic.ui.dialogs.song.delete.DeleteSongDialog
 import com.aaa.vibesmusic.ui.dialogs.song.edit.EditSongDialog
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.nav.navigateToAddSongToPlaylistScreen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -65,7 +66,7 @@ fun MusicLibrarySongDropdown(
             text = "Add to Playlist",
             onClick = {
                 closer()
-                navController.navigate(Screens.ADD_SONG_TO_PLAYLIST_PATH.replace("{songId}", song.songId.toString()))
+                navController.navigateToAddSongToPlaylistScreen(song.songId)
             }
         )
 

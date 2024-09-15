@@ -25,6 +25,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.common.EmptySongsListWarning
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.nav.navigateToAlbumScreen
 import com.aaa.vibesmusic.ui.screens.albums.composables.AlbumsGrid
 
 @Composable
@@ -71,10 +72,7 @@ fun AlbumsScreen(navController: NavController) {
                     AlbumsGrid(
                         albums = albumsScreenViewModel.albums,
                         onItemClick = { albumView ->
-                            val albumNameEncoded: String = Uri.encode(albumView.album)
-                            val albumScreenPath: String =
-                                Screens.ALBUM_PATH.replace("{albumName}", albumNameEncoded)
-                            navController.navigate(albumScreenPath)
+                            navController.navigateToAlbumScreen(albumView.album)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
