@@ -34,7 +34,8 @@ fun CustomDropdownMenuItem(
         text = {
             Text(
                 text = text,
-                color = Color.White
+                color = Color.White,
+                style = MaterialTheme.typography.bodyLarge
             )
         },
         onClick = { onClick() }
