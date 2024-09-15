@@ -26,8 +26,13 @@ val Typography = Typography(
     ),
     labelSmall = TextStyle(
         fontFamily = FontFamily.SansSerif,
-        fontWeight = FontWeight.Light,
+        fontWeight = FontWeight.Normal,
         textAlign = TextAlign.Start,
         fontSize = 15.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.Light,
+        fontSize = 13.sp
     )
 )
