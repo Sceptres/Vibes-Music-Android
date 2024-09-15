@@ -57,7 +57,9 @@ fun ConfirmAlertDialog(
                 )
             ) {
                 Text(
-                    text = dismissButtonText
+                    text = dismissButtonText,
+                    color = MaterialTheme.colorScheme.outline,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         },
@@ -72,7 +74,9 @@ fun ConfirmAlertDialog(
                 )
             ) {
                 Text(
-                    text = confirmButtonText
+                    text = confirmButtonText,
+                    color = MaterialTheme.colorScheme.outline,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
