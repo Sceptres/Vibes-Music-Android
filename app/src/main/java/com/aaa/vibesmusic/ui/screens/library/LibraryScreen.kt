@@ -30,6 +30,9 @@ import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.nav.navigateToAlbumsScreen
+import com.aaa.vibesmusic.ui.nav.navigateToArtistsScreen
+import com.aaa.vibesmusic.ui.nav.navigateToMusicLibraryScreen
 
 @Composable
 fun LibraryScreen(navController: NavController, ) {
@@ -81,7 +84,7 @@ fun LibraryScreen(navController: NavController, ) {
                     text = "Songs",
                     icon = painterResource(id = R.drawable.music_note),
                     onClick = {
-                        navController.navigate(Screens.MUSIC_LIBRARY_PATH)
+                        navController.navigateToMusicLibraryScreen()
                     },
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
@@ -90,7 +93,7 @@ fun LibraryScreen(navController: NavController, ) {
                     text = "Artists",
                     icon = painterResource(id = R.drawable.person),
                     onClick = {
-                        navController.navigate(Screens.ARTISTS_PATH)
+                        navController.navigateToArtistsScreen()
                     },
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
@@ -99,7 +102,7 @@ fun LibraryScreen(navController: NavController, ) {
                     text = "Albums",
                     icon = painterResource(id = R.drawable.album),
                     onClick = {
-                        navController.navigate(Screens.ALBUMS_PATH)
+                        navController.navigateToAlbumsScreen()
                     },
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )

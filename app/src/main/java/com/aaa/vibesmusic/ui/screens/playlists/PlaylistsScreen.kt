@@ -39,6 +39,7 @@ import com.aaa.vibesmusic.ui.common.EmptyListWarning
 import com.aaa.vibesmusic.ui.dialogs.playlist.add.AddPlaylistDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.nav.navigateToPlaylistScreen
 import com.aaa.vibesmusic.ui.screens.playlists.composables.PlaylistDropdown
 import com.aaa.vibesmusic.ui.screens.playlists.composables.PlaylistsGrid
 import kotlinx.coroutines.CoroutineScope
@@ -105,9 +106,7 @@ fun PlaylistsScreen(
                         playlistSongsList = playlistsScreenViewModel.playlistSongs,
                         onPlaylistItemClick = { playlistSongs ->
                             val playlistId: Int = playlistSongs.playlist.playlistId
-                            val playlistPath: String =
-                                Screens.PLAYLIST_PATH.replace("{playlistId}", playlistId.toString())
-                            navController.navigate(playlistPath)
+                            navController.navigateToPlaylistScreen(playlistId)
                         },
                         modifier = Modifier
                             .fillMaxWidth()

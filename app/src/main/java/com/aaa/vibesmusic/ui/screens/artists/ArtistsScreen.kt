@@ -25,6 +25,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.common.EmptySongsListWarning
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.Screens
+import com.aaa.vibesmusic.ui.nav.navigateToArtistScreen
 import com.aaa.vibesmusic.ui.screens.artists.composables.ArtistGrid
 
 @Composable
@@ -69,10 +70,7 @@ fun ArtistsScreen(navController: NavController, ) {
                     ArtistGrid(
                         artists = artistsScreenViewModel.artists,
                         onItemClick = { artistView ->
-                            val artistName: String = Uri.encode(artistView.artist)
-                            val artistPath: String =
-                                Screens.ARTIST_PATH.replace("{artistName}", artistName)
-                            navController.navigate(artistPath)
+                            navController.navigateToArtistScreen(artistView.artist)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
