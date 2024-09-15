@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -21,7 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -71,7 +71,7 @@ fun PlaylistSelectCard(
             .wrapContentSize()
             .height(300.dp)
             .clip(RoundedCornerShape(30.dp))
-            .background(colorResource(id = R.color.foreground_color))
+            .background(MaterialTheme.colorScheme.primary)
             .padding(10.dp)
             .clickable(onClick = onClick)
     ) {
@@ -83,7 +83,7 @@ fun PlaylistSelectCard(
             Box(
                 modifier = Modifier
                     .size(200.dp)
-                    .background(colorResource(id = R.color.foreground_color))
+                    .background(MaterialTheme.colorScheme.primary)
                     .align(Alignment.CenterHorizontally)
             ) {
                 AsyncImage(

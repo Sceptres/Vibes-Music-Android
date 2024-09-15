@@ -5,17 +5,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.aaa.vibesmusic.R
 
 @Composable
 fun ImportSongsMethodButton(
@@ -27,12 +26,12 @@ fun ImportSongsMethodButton(
     Button(
         onClick = onClick,
         colors = ButtonColors(
-            containerColor = colorResource(id = R.color.foreground_color),
+            containerColor = MaterialTheme.colorScheme.primary,
             contentColor = Color.White,
-            disabledContainerColor = colorResource(id = R.color.background_color),
+            disabledContainerColor = MaterialTheme.colorScheme.background,
             disabledContentColor = Color.Gray
         ),
-        border = BorderStroke(1.dp, colorResource(id = R.color.blue_selected)),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         modifier = modifier
     ) {
         Icon(

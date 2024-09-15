@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -38,7 +38,6 @@ import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.EmptyListWarning
 import com.aaa.vibesmusic.ui.dialogs.playlist.add.AddPlaylistDialog
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
-import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.nav.navigateToPlaylistScreen
 import com.aaa.vibesmusic.ui.screens.playlists.composables.PlaylistDropdown
 import com.aaa.vibesmusic.ui.screens.playlists.composables.PlaylistsGrid
@@ -71,7 +70,7 @@ fun PlaylistsScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.background_color))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         val (mainBody, adView) = createRefs()
 
@@ -135,7 +134,7 @@ fun PlaylistsScreen(
 
             FloatingActionButton(
                 onClick = { addPlaylistDialogState = true },
-                containerColor = colorResource(id = R.color.blue_selected),
+                containerColor = MaterialTheme.colorScheme.outline,
                 shape = CircleShape,
                 contentColor = Color.White,
                 modifier = Modifier

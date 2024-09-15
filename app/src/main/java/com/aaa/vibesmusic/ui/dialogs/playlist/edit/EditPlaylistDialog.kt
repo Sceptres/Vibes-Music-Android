@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,13 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.views.playlist.PlaylistView
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.dialogs.common.DialogButton
@@ -54,7 +53,7 @@ fun EditPlaylistDialog(
         Card(
             shape = RoundedCornerShape(30.dp),
             colors = CardColors(
-                containerColor = colorResource(id = R.color.navbar_color),
+                containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = Color.Unspecified,
                 disabledContainerColor = Color.Unspecified,
                 disabledContentColor = Color.Unspecified

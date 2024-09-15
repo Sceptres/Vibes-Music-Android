@@ -11,6 +11,7 @@ import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
@@ -28,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -43,7 +43,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.anim.PlayingSongScreenAnim
@@ -98,8 +97,8 @@ class MainActivity : ComponentActivity() {
         val snackBarScope: CoroutineScope = rememberCoroutineScope()
         val playingSongScreenState: MutableTransitionState<Boolean> = remember { MutableTransitionState(false) }
 
-        val backgroundColor: Color = colorResource(id = R.color.background_color)
-        val navBarColor: Color = colorResource(id = R.color.navbar_color)
+        val backgroundColor: Color = MaterialTheme.colorScheme.background
+        val navBarColor: Color = MaterialTheme.colorScheme.secondary
 
         var navBarColorState: Color by remember { mutableStateOf(backgroundColor) }
         var statusBarColorState: Color by remember { mutableStateOf(backgroundColor) }
@@ -144,7 +143,7 @@ class MainActivity : ComponentActivity() {
         globalCoroutineScope: CoroutineScope,
         openPlayingSongScreen: () -> Unit
     ) {
-        val navBarColor: Color = colorResource(id = R.color.navbar_color)
+        val navBarColor: Color = MaterialTheme.colorScheme.secondary
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -238,8 +237,8 @@ class MainActivity : ComponentActivity() {
         statusBarColorSetter: (Color) -> Unit,
         modifier: Modifier = Modifier
     ) {
-        val backgroundColor: Color = colorResource(id = R.color.background_color)
-        val foregroundColor: Color = colorResource(id = R.color.foreground_color)
+        val backgroundColor: Color = MaterialTheme.colorScheme.background
+        val foregroundColor: Color = MaterialTheme.colorScheme.primary
 
         NavHost(
             navController = navController,
