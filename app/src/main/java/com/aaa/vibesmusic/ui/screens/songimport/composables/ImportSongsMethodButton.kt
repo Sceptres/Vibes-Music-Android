@@ -42,10 +42,7 @@ fun ImportSongsMethodButton(
         )
         Text(
             text = text,
-            color = Color.White,
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Light,
-            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.labelSmall,
             modifier = Modifier
                 .padding(horizontal = 10.dp)
                 .weight(1f)
