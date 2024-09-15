@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -35,7 +36,7 @@ fun TimeBar(
         Text(
             text = Song.calculateDuration(valueState),
             color = Color.White,
-            fontSize = 13.sp
+            style = MaterialTheme.typography.bodyMedium
         )
 
         Slider(
@@ -71,7 +72,7 @@ fun TimeBar(
         Text(
             text = Song.calculateDuration(maxValue ?: 0),
             color = Color.White,
-            fontSize = 13.sp
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

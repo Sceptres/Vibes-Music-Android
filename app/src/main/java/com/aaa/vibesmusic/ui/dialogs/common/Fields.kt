@@ -1,6 +1,7 @@
 package com.aaa.vibesmusic.ui.dialogs.common
 
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -14,7 +15,7 @@ import androidx.compose.ui.unit.sp
 fun EditFieldLabel(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        fontSize = 15.sp,
+        style = MaterialTheme.typography.labelSmall,
         color = Color.White,
         modifier = modifier
     )
@@ -36,7 +37,7 @@ fun EditField(
             Text(
                 text = placeholderText,
                 color = Color.Gray,
-                fontSize = 13.sp,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .wrapContentSize()
             )
@@ -55,5 +56,9 @@ fun EditField(
     )
 
     if(!validator)
-        Text(text = validatorErrorMsg, color = Color.Red)
+        Text(
+            text = validatorErrorMsg,
+            color = Color.Red,
+            style = MaterialTheme.typography.bodyMedium
+        )
 }
