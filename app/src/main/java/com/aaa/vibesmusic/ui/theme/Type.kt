@@ -48,6 +48,6 @@ val Typography = Typography(
     bodySmall = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Light,
-        fontSize = 11.sp
+        fontSize = 12.sp
     )
 )
