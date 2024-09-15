@@ -116,7 +116,7 @@ fun SongListItem(
                 Text(
                     text = "${song.artist} · ${song.albumName}",
                     color = Color.White,
-                    fontSize = 11.sp,
+                    style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
@@ -134,7 +134,7 @@ fun SongListItem(
                 Text(
                     text = Song.calculateDuration(song.duration),
                     color = Color.White,
-                    fontSize = 11.sp,
+                    style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
