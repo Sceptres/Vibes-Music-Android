@@ -129,7 +129,7 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun onSliderValueChange(value: Int) {
-        if(this.isPlayerServiceNotEmpty()) {
+        if(this.isPlayerServiceNotEmpty() && this.playStatus == PlayStatus.PLAYING) {
             if(this.playerService?.isSeekerPaused == false)
                 this.playerService?.pauseSeekListener()
 
@@ -138,7 +138,7 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun onSliderValueChangeFinished() {
-        if(this.isPlayerServiceNotEmpty()) {
+        if(this.isPlayerServiceNotEmpty() && this.playStatus == PlayStatus.PLAYING) {
             this.playerService?.seekTo(this.seekBarValue)
         }
     }
