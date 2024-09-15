@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,7 +22,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.EmptySongsListWarning
 import com.aaa.vibesmusic.ui.common.SongsList
@@ -43,7 +42,7 @@ fun MusicLibraryScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(R.color.background_color))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         val (mainBody, adview) = createRefs()
 

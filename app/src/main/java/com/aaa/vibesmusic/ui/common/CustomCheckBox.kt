@@ -3,11 +3,10 @@ package com.aaa.vibesmusic.ui.common
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import com.aaa.vibesmusic.R
 
 @Composable
 fun CustomCheckBox(
@@ -21,7 +20,7 @@ fun CustomCheckBox(
         colors = CheckboxDefaults.colors().copy(
             checkedBorderColor = Color.White,
             uncheckedBorderColor = Color.White,
-            checkedBoxColor = colorResource(R.color.blue_selected)
+            checkedBoxColor = MaterialTheme.colorScheme.outline
         ),
         modifier = modifier
             .wrapContentSize()

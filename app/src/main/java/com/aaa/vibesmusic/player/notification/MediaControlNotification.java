@@ -15,7 +15,6 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import androidx.media.app.NotificationCompat.MediaStyle;
 import androidx.media.session.MediaButtonReceiver;
 
@@ -23,6 +22,7 @@ import com.aaa.vibesmusic.R;
 import com.aaa.vibesmusic.perms.PermissionsUtil;
 import com.aaa.vibesmusic.player.MediaPlayerService;
 import com.aaa.vibesmusic.player.PlayStatus;
+import com.aaa.vibesmusic.ui.theme.ColorKt;
 
 import java.util.Objects;
 
@@ -136,7 +136,7 @@ public class MediaControlNotification {
         PendingIntent prevPendingIntent = this.createPendingIntent(PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
         PendingIntent nextPendingIntent = this.createPendingIntent(PlaybackStateCompat.ACTION_SKIP_TO_NEXT);
 
-        int color = ContextCompat.getColor(this.appContext, R.color.background_color);
+        int color = (int) ColorKt.getBackgroundColor();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.appContext, CHANNEL_ID)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

@@ -11,19 +11,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.common.EmptySongsListWarning
 import com.aaa.vibesmusic.ui.common.OvalTextButton
 import com.aaa.vibesmusic.ui.common.SelectSongsList
@@ -46,7 +45,7 @@ fun AddEditPlaylistSongsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(R.color.background_color))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
@@ -64,12 +63,12 @@ fun AddEditPlaylistSongsScreen(
 
             TextButton(
                 onClick = { addEditPlaylistSongsScreenViewModel.toggleSelectAllSongs() },
-                border = BorderStroke(3.dp, colorResource(id = R.color.blue_selected)),
+                border = BorderStroke(3.dp, MaterialTheme.colorScheme.outline),
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp)
             ) {
                 Text(
                     text = if(!addEditPlaylistSongsScreenViewModel.selectAllSongsState) "Select All" else "Unselect All",
-                    color = colorResource(id = R.color.blue_selected)
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
 
@@ -111,7 +110,7 @@ fun AddEditPlaylistSongsScreen(
 
                 OvalTextButton(
                     text = if(addEditPlaylistSongsScreenViewModel.playlistSongs?.songs?.isEmpty() == true) "Add" else "Update",
-                    color = colorResource(R.color.blue_selected),
+                    color = MaterialTheme.colorScheme.outline,
                     onClick = {
                         addEditPlaylistSongsScreenViewModel.addEditPlaylistSongs()
                         closer()

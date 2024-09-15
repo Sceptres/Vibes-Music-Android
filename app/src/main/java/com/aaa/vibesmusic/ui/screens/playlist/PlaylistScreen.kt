@@ -10,11 +10,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -28,7 +28,6 @@ import com.aaa.vibesmusic.ui.common.EmptyListWarning
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.common.TopBar
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
-import com.aaa.vibesmusic.ui.nav.Screens
 import com.aaa.vibesmusic.ui.nav.navigateToAddEditPlaylistSongsScreen
 import com.aaa.vibesmusic.ui.screens.playlist.composables.PlaylistSongDropdown
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +56,7 @@ fun PlaylistScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.background_color))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         val (mainBody, adView) = createRefs()
 
