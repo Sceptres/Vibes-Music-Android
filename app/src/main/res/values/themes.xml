@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.VibesMusic" parent="android:Theme.Material.NoActionBar" />
+
+    <style name="Theme.VibesMusic.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/background_color</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.VibesMusic</item>
+    </style>
 </resources>
