@@ -233,7 +233,8 @@ class ImportSongsScreenViewModel(application: Application, private val globalSco
             artist,
             albumName,
             songImageLocation,
-            duration
+            duration,
+            false
         )
     }
 

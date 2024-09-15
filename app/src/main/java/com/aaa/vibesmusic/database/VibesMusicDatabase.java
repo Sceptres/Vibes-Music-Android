@@ -30,7 +30,7 @@ import java.util.Objects;
 @Database(
         entities = {Song.class, Playlist.class, PlaylistSongRelationship.class},
         views = {PlaylistView.class, ArtistView.class, AlbumView.class},
-        version = 6,
+        version = 7,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = VibesMusicDatabase.SongTableRenameIdColumnMigration.class)
         }
@@ -69,7 +69,8 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
                         new PlaylistTablesCreationMigration(),
                         new PlaylistImgTableMigration(),
                         new ArtistViewMigration(),
-                        new AlbumViewMigration()
+                        new AlbumViewMigration(),
+                        new SongFavouriteMigration()
                 ).build();
     }
 
@@ -171,6 +172,22 @@ public abstract class VibesMusicDatabase extends RoomDatabase {
                     + "           ) AS albumCoverImage\n"
                     + "    FROM Songs AS s1\n"
                     + "    GROUP BY s1.albumName");
+        }
+    }
+
+    static class SongFavouriteMigration extends Migration {
+        public SongFavouriteMigration() {
+            super(6, 7);
+        }
+
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase db) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS `Song_New` (`songId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `location` TEXT NOT NULL, `artist` TEXT NOT NULL, `albumName` TEXT NOT NULL, `image_location` TEXT, `duration` INTEGER NOT NULL, `is_favourite` INTEGER NOT NULL DEFAULT(0))");
+            db.execSQL("INSERT INTO `Song_New` (songId, name, location, artist, albumName, image_location, duration, is_favourite) " +
+                    "SELECT songId, name, location, artist, albumName, image_location, duration, 0 AS is_favourite FROM `Songs`;");
+            db.execSQL("DROP TABLE `Songs`;");
+            db.execSQL("ALTER TABLE `Song_New` RENAME TO `Songs`;");
+            db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_Songs_location` ON `Songs` (`location`)");
         }
     }
 }

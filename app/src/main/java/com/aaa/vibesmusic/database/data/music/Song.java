@@ -38,6 +38,9 @@ public class Song {
     @ColumnInfo(name="duration")
     private final int duration;
 
+    @ColumnInfo(name="is_favourite")
+    private final boolean isFavourite;
+
     public Song(
             int songId,
             @NonNull String name,
@@ -45,7 +48,8 @@ public class Song {
             @NonNull String artist,
             @NonNull  String albumName,
             String imageLocation,
-            int duration
+            int duration,
+            boolean isFavourite
     ) {
         this.songId = songId;
         this.name = name;
@@ -54,6 +58,7 @@ public class Song {
         this.artist = artist;
         this.albumName = albumName;
         this.duration = duration;
+        this.isFavourite = isFavourite;
     }
 
     @Ignore
@@ -63,9 +68,10 @@ public class Song {
             @NonNull String artist,
             @NonNull String albumName,
             String imageLocation,
-            int duration
+            int duration,
+            boolean isFavourite
     ) {
-        this(0, name, location, artist, albumName, imageLocation, duration);
+        this(0, name, location, artist, albumName, imageLocation, duration, isFavourite);
     }
 
     /**
@@ -156,6 +162,14 @@ public class Song {
      */
     public int getDuration() {
         return this.duration;
+    }
+
+    /**
+     *
+     * @return True if this {@link Song} is favourite. False otherwise.
+     */
+    public boolean isFavourite() {
+        return this.isFavourite;
     }
 
     @Override
