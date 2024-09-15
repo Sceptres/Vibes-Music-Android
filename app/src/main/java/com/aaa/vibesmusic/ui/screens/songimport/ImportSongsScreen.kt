@@ -49,10 +49,7 @@ fun ImportSongsScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.import_music),
-                color = Color.White,
-                fontSize = 50.sp,
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Light,
+                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier
                     .padding(top = 5.dp)
             )

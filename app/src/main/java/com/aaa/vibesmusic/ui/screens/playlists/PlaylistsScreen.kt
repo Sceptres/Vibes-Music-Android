@@ -93,10 +93,7 @@ fun PlaylistsScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.playlists),
-                    color = Color.White,
-                    fontSize = 50.sp,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Light,
+                    style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(top = 5.dp)
                 )
 
