@@ -35,7 +35,7 @@ import com.aaa.vibesmusic.ui.nav.navigateToMusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.navigateToPlaylistsScreen
 
 @Composable
-fun LibraryScreen(navController: NavController, ) {
+fun LibraryScreen(navController: NavController) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
