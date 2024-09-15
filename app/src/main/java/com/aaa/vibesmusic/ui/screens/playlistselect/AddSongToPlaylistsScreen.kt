@@ -10,17 +10,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.UIUtil
@@ -47,7 +44,7 @@ fun AddSongToPlaylistScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.background_color))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
@@ -56,10 +53,8 @@ fun AddSongToPlaylistScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.playlists),
+                style = MaterialTheme.typography.titleLarge,
                 color = Color.White,
-                fontSize = 50.sp,
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Light,
                 modifier = Modifier.padding(top = 5.dp)
             )
 
@@ -90,7 +85,7 @@ fun AddSongToPlaylistScreen(
 
                 OvalTextButton(
                     text = "Done",
-                    color = colorResource(id = R.color.blue_selected),
+                    color = MaterialTheme.colorScheme.outline,
                     onClick = {
                         closer()
                         addSongToPlaylistScreenViewModel.onComplete(

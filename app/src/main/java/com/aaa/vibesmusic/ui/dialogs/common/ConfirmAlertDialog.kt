@@ -3,13 +3,12 @@ package com.aaa.vibesmusic.ui.dialogs.common
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.sp
 import com.aaa.vibesmusic.R
 
 @Composable
@@ -17,7 +16,7 @@ fun ConfirmAlertDialog(
     title: String,
     text: String,
     iconTint: Color = Color.White,
-    backgroundColor: Color = colorResource(id = R.color.navbar_color),
+    backgroundColor: Color = MaterialTheme.colorScheme.secondary,
     onDismiss: () -> Unit = {},
     dismissButtonText: String = "Dismiss",
     onConfirm: () -> Unit = {},
@@ -36,14 +35,14 @@ fun ConfirmAlertDialog(
             Text(
                 text = title,
                 color = Color.White,
-                fontSize = 20.sp
+                style = MaterialTheme.typography.labelMedium
             )
         },
         text = {
             Text(
                 text = text,
                 color = Color.White,
-                fontSize = 16.sp
+                style = MaterialTheme.typography.labelSmall
             )
         },
         onDismissRequest = onDismiss,
@@ -52,7 +51,7 @@ fun ConfirmAlertDialog(
                 onClick = onDismiss,
                 colors = ButtonColors(
                     containerColor = Color.Transparent,
-                    contentColor = colorResource(id = R.color.blue_selected),
+                    contentColor = MaterialTheme.colorScheme.outline,
                     disabledContentColor = Color.Unspecified,
                     disabledContainerColor = Color.Unspecified
                 )
@@ -67,7 +66,7 @@ fun ConfirmAlertDialog(
                 onClick = onConfirm,
                 colors = ButtonColors(
                     containerColor = Color.Transparent,
-                    contentColor = colorResource(id = R.color.blue_selected),
+                    contentColor = MaterialTheme.colorScheme.outline,
                     disabledContentColor = Color.Unspecified,
                     disabledContainerColor = Color.Unspecified
                 )

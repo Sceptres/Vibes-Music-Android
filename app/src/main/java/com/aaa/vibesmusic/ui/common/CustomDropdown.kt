@@ -3,12 +3,11 @@ package com.aaa.vibesmusic.ui.common
 import androidx.compose.foundation.background
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import com.aaa.vibesmusic.R
 
 @Composable
 fun CustomDropdown(
@@ -20,7 +19,7 @@ fun CustomDropdown(
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismiss,
-        modifier = modifier.background(colorResource(id = R.color.navbar_color))
+        modifier = modifier.background(MaterialTheme.colorScheme.secondary)
     ) {
         content()
     }

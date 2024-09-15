@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,10 +26,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
@@ -51,7 +50,7 @@ fun PlayingSongBar(
         modifier = modifier
             .height(70.dp)
             .fillMaxWidth()
-            .background(colorResource(R.color.player_bar_color))
+            .background(MaterialTheme.colorScheme.tertiary)
             .clickable(onClick = onClick)
     ) {
         Column {
@@ -78,7 +77,7 @@ fun PlayingSongBar(
                 Text(
                     text = playingSongBarState.currentSong?.name ?: "Not Playing",
                     color = Color.White,
-                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.labelLarge,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f)

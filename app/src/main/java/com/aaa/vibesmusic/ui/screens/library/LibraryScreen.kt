@@ -12,18 +12,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
@@ -39,7 +35,7 @@ fun LibraryScreen(navController: NavController) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.background_color))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         val (mainBody, adView) = createRefs()
 
@@ -60,9 +56,7 @@ fun LibraryScreen(navController: NavController) {
             ) {
                 Text(
                     text = "Library",
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 50.sp,
+                    style = MaterialTheme.typography.titleLarge,
                     color = Color.White,
                     modifier = Modifier
                         .padding(start = 10.dp, top = 5.dp)
@@ -142,9 +136,7 @@ private fun LibraryText(
 ) {
     Text(
         text = text,
-        fontFamily = FontFamily.SansSerif,
-        fontWeight = FontWeight.Light,
-        fontSize = 30.sp,
+        style = MaterialTheme.typography.titleMedium,
         color = Color.White,
         modifier = modifier
     )
@@ -161,9 +153,9 @@ private fun LibraryButton(
         onClick = onClick,
         shape = RoundedCornerShape(5.dp),
         colors = ButtonColors(
-            containerColor = colorResource(id = R.color.foreground_color),
+            containerColor = MaterialTheme.colorScheme.primary,
             contentColor = Color.White,
-            disabledContainerColor = colorResource(id = R.color.background_color),
+            disabledContainerColor = MaterialTheme.colorScheme.background,
             disabledContentColor = Color.Gray
         ),
         modifier = modifier
@@ -176,10 +168,8 @@ private fun LibraryButton(
         )
         Text(
             text = text,
+            style = MaterialTheme.typography.labelSmall,
             color = Color.White,
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Light,
-            textAlign = TextAlign.Start,
             modifier = Modifier
                 .padding(horizontal = 10.dp)
                 .weight(1f)

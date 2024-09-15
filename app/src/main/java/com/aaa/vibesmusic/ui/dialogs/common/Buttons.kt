@@ -4,14 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.aaa.vibesmusic.R
 
 data class DialogButton(val btnTxt: String, val isEnabled: Boolean, val onClick: () -> Unit)
 
@@ -43,7 +42,7 @@ private fun Button(
         enabled = btn.isEnabled,
         colors = ButtonColors(
             containerColor = Color.Transparent,
-            contentColor = colorResource(id = R.color.blue_selected),
+            contentColor = MaterialTheme.colorScheme.outline,
             disabledContainerColor = Color.Transparent,
             disabledContentColor = Color.Gray
         ),
