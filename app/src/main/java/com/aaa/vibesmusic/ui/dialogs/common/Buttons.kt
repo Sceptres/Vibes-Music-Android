@@ -50,6 +50,8 @@ private fun Button(
     ) {
         Text(
             text = btn.btnTxt,
+            color = MaterialTheme.colorScheme.outline,
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

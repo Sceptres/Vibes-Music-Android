@@ -63,7 +63,8 @@ fun AddEditPlaylistSongsScreen(
             ) {
                 Text(
                     text = if(!addEditPlaylistSongsScreenViewModel.selectAllSongsState) "Select All" else "Unselect All",
-                    color = MaterialTheme.colorScheme.outline
+                    color = MaterialTheme.colorScheme.outline,
+                    style = MaterialTheme.typography.labelMedium
                 )
             }
 
