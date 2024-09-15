@@ -13,6 +13,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,7 @@ fun ImportSongsScreen(
             Text(
                 text = stringResource(id = R.string.import_music),
                 style = MaterialTheme.typography.titleLarge,
+                color = Color.White,
                 modifier = Modifier
                     .padding(top = 5.dp)
             )
@@ -53,6 +55,7 @@ fun ImportSongsScreen(
             Text(
                 text = stringResource(id = R.string.local),
                 style = MaterialTheme.typography.titleMedium,
+                color = Color.White,
                 modifier = Modifier
                     .padding(top = 5.dp)
             )

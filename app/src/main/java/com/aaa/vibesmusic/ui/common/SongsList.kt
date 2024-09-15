@@ -104,6 +104,7 @@ fun SongListItem(
                 Text(
                     text = song.name,
                     style = MaterialTheme.typography.labelMedium,
+                    color = Color.White,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier

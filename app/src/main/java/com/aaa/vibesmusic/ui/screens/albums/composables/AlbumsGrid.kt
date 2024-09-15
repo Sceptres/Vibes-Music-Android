@@ -86,6 +86,7 @@ fun AlbumCard(
             Text(
                 text = album.album,
                 style = MaterialTheme.typography.labelMedium,
+                color = Color.White,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

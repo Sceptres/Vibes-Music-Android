@@ -43,6 +43,7 @@ fun ImportSongsMethodButton(
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
+            color = Color.White,
             modifier = Modifier
                 .padding(horizontal = 10.dp)
                 .weight(1f)
