@@ -2,9 +2,9 @@ package com.aaa.vibesmusic.ui.activity
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.MutableTransitionState
@@ -35,7 +35,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -63,13 +62,14 @@ import com.aaa.vibesmusic.ui.screens.playlists.PlaylistsScreen
 import com.aaa.vibesmusic.ui.screens.playlistselect.AddSongToPlaylistScreen
 import com.aaa.vibesmusic.ui.screens.songimport.ImportSongsScreen
 import com.aaa.vibesmusic.ui.screens.songselect.AddEditPlaylistSongsScreen
+import com.aaa.vibesmusic.ui.theme.VibesMusicTheme
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +82,9 @@ class MainActivity : AppCompatActivity() {
         StorageUtil.setup(this.applicationContext)
 
         setContent {
-            VibesMusicApp()
+            VibesMusicTheme {
+                VibesMusicApp()
+            }
         }
     }
 
