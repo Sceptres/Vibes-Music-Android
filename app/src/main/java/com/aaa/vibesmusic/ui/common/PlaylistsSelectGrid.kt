@@ -68,7 +68,6 @@ fun PlaylistSelectCard(
     Box(
         modifier = Modifier
             .wrapContentSize()
-            .height(300.dp)
             .clip(RoundedCornerShape(30.dp))
             .background(MaterialTheme.colorScheme.primary)
             .padding(10.dp)
