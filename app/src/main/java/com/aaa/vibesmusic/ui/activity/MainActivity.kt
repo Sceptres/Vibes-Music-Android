@@ -16,6 +16,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -147,11 +148,6 @@ class MainActivity : ComponentActivity() {
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackBarHostState,
-                )
-            },
             bottomBar = {
                 NavigationBar(
                     containerColor = navBarColor,
@@ -198,7 +194,7 @@ class MainActivity : ComponentActivity() {
             ConstraintLayout(
                 modifier = Modifier.padding(innerPadding)
             ) {
-                val (navHost, playingSongBar) = createRefs()
+                val (navHost, snackbar, playingSongBar) = createRefs()
 
                 NavHost(
                     navController = navController,
@@ -216,6 +212,20 @@ class MainActivity : ComponentActivity() {
                             height = Dimension.preferredWrapContent
                         }
                 )
+
+                SnackbarHost(
+                    hostState = snackBarHostState,
+                    modifier = Modifier.constrainAs(snackbar) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(playingSongBar.top)
+                    }
+                ) {
+                    Snackbar(
+                        snackbarData = it,
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+                }
 
                 PlayingSongBar(
                     onClick = { openPlayingSongScreen() },
