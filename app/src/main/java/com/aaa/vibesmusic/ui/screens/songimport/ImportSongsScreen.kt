@@ -8,18 +8,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.screens.songimport.composables.ImportSongsMethodButton
@@ -40,7 +37,7 @@ fun ImportSongsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.background_color))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
@@ -49,20 +46,16 @@ fun ImportSongsScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.import_music),
+                style = MaterialTheme.typography.titleLarge,
                 color = Color.White,
-                fontSize = 50.sp,
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Light,
                 modifier = Modifier
                     .padding(top = 5.dp)
             )
 
             Text(
                 text = stringResource(id = R.string.local),
+                style = MaterialTheme.typography.titleMedium,
                 color = Color.White,
-                fontSize = 30.sp,
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Light,
                 modifier = Modifier
                     .padding(top = 5.dp)
             )

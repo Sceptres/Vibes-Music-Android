@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -19,12 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.aaa.vibesmusic.R
 
 @Composable
@@ -40,7 +39,7 @@ fun TopBar(
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
-            .background(colorResource(id = R.color.foreground_color))
+            .background(MaterialTheme.colorScheme.primary)
     ) {
         Image(
             painter = painterResource(id = R.drawable.back_arrow),
@@ -61,7 +60,7 @@ fun TopBar(
         Text(
             text = text,
             color = Color.White,
-            fontSize = 24.sp,
+            style = MaterialTheme.typography.labelLarge,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)

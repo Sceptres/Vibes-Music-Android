@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -26,11 +27,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
@@ -81,13 +80,13 @@ fun SelectSongItem(
             .fillMaxWidth()
             .height(60.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(colorResource(id = R.color.foreground_color))
+            .background(MaterialTheme.colorScheme.primary)
             .clickable(onClick = onClick)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .background(colorResource(id = R.color.foreground_color))
+                .background(MaterialTheme.colorScheme.primary)
         ) {
             CustomCheckBox(
                 checked = checkValue,
@@ -117,8 +116,8 @@ fun SelectSongItem(
             ) {
                 Text(
                     text = song.name,
+                    style = MaterialTheme.typography.labelMedium,
                     color = Color.White,
-                    fontSize = 18.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
@@ -130,7 +129,7 @@ fun SelectSongItem(
                 Text(
                     text = "${song.artist} · ${song.albumName}",
                     color = Color.White,
-                    fontSize = 11.sp,
+                    style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier

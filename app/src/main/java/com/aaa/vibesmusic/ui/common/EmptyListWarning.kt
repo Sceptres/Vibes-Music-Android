@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -19,7 +20,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.nav.navigateToImportMusicScreen
@@ -57,7 +57,7 @@ fun EmptyListWarning(
             Text(
                 text = title,
                 color = Color.Gray,
-                fontSize = 20.sp
+                style = MaterialTheme.typography.labelMedium
             )
 
             Spacer(modifier = Modifier.height(5.dp))
@@ -65,7 +65,7 @@ fun EmptyListWarning(
             Text(
                 text = description,
                 color = Color.Gray,
-                fontSize = 15.sp,
+                style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )

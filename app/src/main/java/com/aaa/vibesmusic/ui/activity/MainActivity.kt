@@ -2,15 +2,16 @@ package com.aaa.vibesmusic.ui.activity
 
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
@@ -28,14 +29,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -44,7 +43,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.anim.PlayingSongScreenAnim
@@ -63,13 +61,14 @@ import com.aaa.vibesmusic.ui.screens.playlists.PlaylistsScreen
 import com.aaa.vibesmusic.ui.screens.playlistselect.AddSongToPlaylistScreen
 import com.aaa.vibesmusic.ui.screens.songimport.ImportSongsScreen
 import com.aaa.vibesmusic.ui.screens.songselect.AddEditPlaylistSongsScreen
+import com.aaa.vibesmusic.ui.theme.VibesMusicTheme
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +81,9 @@ class MainActivity : AppCompatActivity() {
         StorageUtil.setup(this.applicationContext)
 
         setContent {
-            VibesMusicApp()
+            VibesMusicTheme {
+                VibesMusicApp()
+            }
         }
     }
 
@@ -96,8 +97,8 @@ class MainActivity : AppCompatActivity() {
         val snackBarScope: CoroutineScope = rememberCoroutineScope()
         val playingSongScreenState: MutableTransitionState<Boolean> = remember { MutableTransitionState(false) }
 
-        val backgroundColor: Color = colorResource(id = R.color.background_color)
-        val navBarColor: Color = colorResource(id = R.color.navbar_color)
+        val backgroundColor: Color = MaterialTheme.colorScheme.background
+        val navBarColor: Color = MaterialTheme.colorScheme.secondary
 
         var navBarColorState: Color by remember { mutableStateOf(backgroundColor) }
         var statusBarColorState: Color by remember { mutableStateOf(backgroundColor) }
@@ -142,7 +143,7 @@ class MainActivity : AppCompatActivity() {
         globalCoroutineScope: CoroutineScope,
         openPlayingSongScreen: () -> Unit
     ) {
-        val navBarColor: Color = colorResource(id = R.color.navbar_color)
+        val navBarColor: Color = MaterialTheme.colorScheme.secondary
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -180,7 +181,9 @@ class MainActivity : AppCompatActivity() {
                             },
                             label = {
                                 Text(
-                                    text = navItemText
+                                    text = navItemText,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color.White
                                 )
                             },
                             selected = isSelected,
@@ -236,8 +239,8 @@ class MainActivity : AppCompatActivity() {
         statusBarColorSetter: (Color) -> Unit,
         modifier: Modifier = Modifier
     ) {
-        val backgroundColor: Color = colorResource(id = R.color.background_color)
-        val foregroundColor: Color = colorResource(id = R.color.foreground_color)
+        val backgroundColor: Color = MaterialTheme.colorScheme.background
+        val foregroundColor: Color = MaterialTheme.colorScheme.primary
 
         NavHost(
             navController = navController,

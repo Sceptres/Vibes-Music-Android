@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,12 +23,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
@@ -45,14 +44,12 @@ fun PlaylistCard(
     val playlist: PlaylistView = playlistSongs.playlist
     val songs: List<Song> = playlistSongs.songs
 
-    val transparent = colorResource(id = R.color.transparent)
-
     Box(
         modifier = Modifier
             .wrapContentSize()
             .height(300.dp)
             .clip(RoundedCornerShape(30.dp))
-            .background(colorResource(id = R.color.foreground_color))
+            .background(MaterialTheme.colorScheme.primary)
             .padding(10.dp)
             .clickable(onClick = onClick)
     ) {
@@ -64,7 +61,7 @@ fun PlaylistCard(
             Box(
                 modifier = Modifier
                     .size(200.dp)
-                    .background(colorResource(id = R.color.foreground_color))
+                    .background(MaterialTheme.colorScheme.primary)
                     .align(Alignment.CenterHorizontally)
             ) {
                 AsyncImage(
@@ -90,7 +87,7 @@ fun PlaylistCard(
                         modifier = Modifier
                             .size(45.dp)
                             .padding(end = 10.dp)
-                            .background(transparent)
+                            .background(Color.Transparent)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.options_btn),
@@ -104,8 +101,8 @@ fun PlaylistCard(
 
             Text(
                 text = playlist.playlistName,
+                style = MaterialTheme.typography.labelMedium,
                 color = Color.White,
-                fontSize = 20.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
@@ -117,7 +114,7 @@ fun PlaylistCard(
             Text(
                 text = getPlaylistLengthString(songs),
                 color = Color.White,
-                fontSize = 15.sp,
+                style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(top = 5.dp, bottom = 10.dp)
