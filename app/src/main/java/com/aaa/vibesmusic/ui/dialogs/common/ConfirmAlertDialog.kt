@@ -9,7 +9,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.sp
 import com.aaa.vibesmusic.R
 
 @Composable
@@ -43,7 +42,7 @@ fun ConfirmAlertDialog(
             Text(
                 text = text,
                 color = Color.White,
-                fontSize = 16.sp
+                style = MaterialTheme.typography.labelSmall
             )
         },
         onDismissRequest = onDismiss,

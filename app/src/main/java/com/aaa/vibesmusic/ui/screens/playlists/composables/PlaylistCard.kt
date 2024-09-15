@@ -27,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
@@ -115,7 +114,7 @@ fun PlaylistCard(
             Text(
                 text = getPlaylistLengthString(songs),
                 color = Color.White,
-                fontSize = 15.sp,
+                style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(top = 5.dp, bottom = 10.dp)
