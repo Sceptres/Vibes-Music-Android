@@ -36,7 +36,7 @@ fun ConfirmAlertDialog(
             Text(
                 text = title,
                 color = Color.White,
-                fontSize = 20.sp
+                style = MaterialTheme.typography.labelMedium
             )
         },
         text = {

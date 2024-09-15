@@ -69,7 +69,7 @@ fun EditPlaylistDialog(
             ) {
                 Text(
                     text = playlist.playlistName,
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.labelMedium,
                     color = Color.White,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

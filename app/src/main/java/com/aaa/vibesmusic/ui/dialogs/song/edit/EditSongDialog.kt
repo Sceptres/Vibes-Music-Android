@@ -67,7 +67,7 @@ fun EditSongDialog(
             ) {
                 Text(
                     text = song.name,
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.labelMedium,
                     color = Color.White,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

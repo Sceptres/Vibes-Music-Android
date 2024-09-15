@@ -65,7 +65,7 @@ fun AddPlaylistDialog(
             ) {
                 Text(
                     text = "New Playlist",
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.labelMedium,
                     color = Color.White,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
