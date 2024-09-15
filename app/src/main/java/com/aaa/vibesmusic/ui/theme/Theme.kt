@@ -10,9 +10,9 @@ fun VibesMusicTheme(
 ) {
     val colorScheme: ColorScheme = MaterialTheme.colorScheme.copy(
         background = BackgroundColor,
-        surface = ForegroundColor,
-        tertiary = NavBarColor,
-        secondaryContainer = PlayerBarColor,
+        primary = ForegroundColor,
+        secondary = NavBarColor,
+        tertiary = PlayerBarColor,
         outline = BlueSelected
     )
 
