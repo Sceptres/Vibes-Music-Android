@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -89,7 +88,7 @@ fun PlayingSongScreen(closeScreen: () -> Unit) {
         Text(
             text = song?.name ?: "Not Playing",
             color = Color.White,
-            fontSize = 28.sp,
+            style = MaterialTheme.typography.titleSmall,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
@@ -102,7 +101,7 @@ fun PlayingSongScreen(closeScreen: () -> Unit) {
         Text(
             text = song?.artist ?: "No Artist",
             color = Color.White,
-            fontSize = 18.sp,
+            style = MaterialTheme.typography.labelMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier

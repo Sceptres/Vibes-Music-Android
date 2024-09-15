@@ -24,7 +24,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.aaa.vibesmusic.R
 
 @Composable
@@ -61,7 +60,7 @@ fun TopBar(
         Text(
             text = text,
             color = Color.White,
-            fontSize = 24.sp,
+            style = MaterialTheme.typography.labelLarge,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
