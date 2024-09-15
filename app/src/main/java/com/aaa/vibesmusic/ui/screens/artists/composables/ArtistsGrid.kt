@@ -86,6 +86,7 @@ fun ArtistCard(
             Text(
                 text = artist.artist,
                 style = MaterialTheme.typography.labelMedium,
+                color = Color.White,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,

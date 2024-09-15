@@ -51,6 +51,7 @@ fun AddEditPlaylistSongsScreen(
             Text(
                 text = "Music Library",
                 style = MaterialTheme.typography.titleLarge,
+                color = Color.White,
                 modifier = Modifier
                     .padding(start = 10.dp, top = 5.dp)
             )

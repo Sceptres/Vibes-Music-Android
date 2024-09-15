@@ -57,6 +57,7 @@ fun LibraryScreen(navController: NavController) {
                 Text(
                     text = "Library",
                     style = MaterialTheme.typography.titleLarge,
+                    color = Color.White,
                     modifier = Modifier
                         .padding(start = 10.dp, top = 5.dp)
                 )
@@ -136,6 +137,7 @@ private fun LibraryText(
     Text(
         text = text,
         style = MaterialTheme.typography.titleMedium,
+        color = Color.White,
         modifier = modifier
     )
 }
@@ -167,6 +169,7 @@ private fun LibraryButton(
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
+            color = Color.White,
             modifier = Modifier
                 .padding(horizontal = 10.dp)
                 .weight(1f)

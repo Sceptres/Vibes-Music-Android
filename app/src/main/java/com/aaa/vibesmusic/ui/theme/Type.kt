@@ -1,7 +1,6 @@
 package com.aaa.vibesmusic.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -13,23 +12,19 @@ val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Light,
-        fontSize = 50.sp,
-        color = Color.White
+        fontSize = 50.sp
     ),
     titleMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Light,
-        fontSize = 30.sp,
-        color = Color.White
+        fontSize = 30.sp
     ),
     labelMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Light,
-        fontSize = 20.sp,
-        color = Color.White
+        fontSize = 20.sp
     ),
     labelSmall = TextStyle(
-        color = Color.White,
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Light,
         textAlign = TextAlign.Start,

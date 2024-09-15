@@ -91,6 +91,7 @@ fun PlaylistsScreen(
                 Text(
                     text = stringResource(id = R.string.playlists),
                     style = MaterialTheme.typography.titleLarge,
+                    color = Color.White,
                     modifier = Modifier.padding(top = 5.dp)
                 )
 

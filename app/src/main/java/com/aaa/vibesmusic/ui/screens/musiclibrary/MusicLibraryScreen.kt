@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -60,6 +61,7 @@ fun MusicLibraryScreen(
                 Text(
                     text = "Music Library",
                     style = MaterialTheme.typography.titleLarge,
+                    color = Color.White,
                     modifier = Modifier
                         .padding(start = 10.dp, top = 5.dp)
                 )

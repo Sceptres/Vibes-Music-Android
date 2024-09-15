@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -54,6 +55,7 @@ fun AlbumsScreen(navController: NavController) {
                 Text(
                     text = "Albums",
                     style = MaterialTheme.typography.titleLarge,
+                    color = Color.White,
                     modifier = Modifier
                         .padding(start = 10.dp, top = 5.dp)
                 )

@@ -182,7 +182,8 @@ class MainActivity : ComponentActivity() {
                             label = {
                                 Text(
                                     text = navItemText,
-                                    style = MaterialTheme.typography.labelSmall
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color.White
                                 )
                             },
                             selected = isSelected,
