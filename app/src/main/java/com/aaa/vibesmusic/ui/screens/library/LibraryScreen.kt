@@ -19,9 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -169,10 +166,7 @@ private fun LibraryButton(
         )
         Text(
             text = text,
-            color = Color.White,
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Light,
-            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.labelSmall,
             modifier = Modifier
                 .padding(horizontal = 10.dp)
                 .weight(1f)

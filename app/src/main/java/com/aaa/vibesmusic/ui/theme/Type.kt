@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 // Set of Material typography styles to start with
@@ -20,5 +21,12 @@ val Typography = Typography(
         fontWeight = FontWeight.Light,
         fontSize = 30.sp,
         color = Color.White
+    ),
+    labelSmall = TextStyle(
+        color = Color.White,
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.Light,
+        textAlign = TextAlign.Start,
+        fontSize = 15.sp
     )
 )
