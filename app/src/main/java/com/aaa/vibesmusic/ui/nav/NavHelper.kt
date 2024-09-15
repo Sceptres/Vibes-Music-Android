@@ -5,16 +5,17 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 
 /**
- * A method used to navigate to the import music screen from another screen.
+ * A method used to navigate to the import music screen from another nav item.
  */
 fun NavController.navigateToImportMusicScreen() {
-    this.navigate(Screens.IMPORT_MUSIC_PATH) {
-        popUpTo(this@navigateToImportMusicScreen.graph.findStartDestination().id) {
-            saveState = true
-        }
-        launchSingleTop = true
-        restoreState = true
-    }
+    this.navItemNavigate(Screens.IMPORT_MUSIC_PATH)
+}
+
+/**
+ * A method used to navigate to the playlists music screen from another nav item
+ */
+fun NavController.navigateToPlaylistsScreen() {
+    this.navItemNavigate(Screens.PLAYLISTS_NAV_PATH)
 }
 
 /**
