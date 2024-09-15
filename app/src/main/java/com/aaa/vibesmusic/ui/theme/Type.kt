@@ -22,6 +22,12 @@ val Typography = Typography(
         fontSize = 30.sp,
         color = Color.White
     ),
+    labelMedium = TextStyle(
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.Light,
+        fontSize = 20.sp,
+        color = Color.White
+    ),
     labelSmall = TextStyle(
         color = Color.White,
         fontFamily = FontFamily.SansSerif,
