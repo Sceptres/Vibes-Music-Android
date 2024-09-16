@@ -53,6 +53,7 @@ import com.aaa.vibesmusic.ui.screens.album.AlbumScreen
 import com.aaa.vibesmusic.ui.screens.albums.AlbumsScreen
 import com.aaa.vibesmusic.ui.screens.artist.ArtistScreen
 import com.aaa.vibesmusic.ui.screens.artists.ArtistsScreen
+import com.aaa.vibesmusic.ui.screens.favouritesongs.FavouriteSongsScreen
 import com.aaa.vibesmusic.ui.screens.library.LibraryScreen
 import com.aaa.vibesmusic.ui.screens.musiclibrary.MusicLibraryScreen
 import com.aaa.vibesmusic.ui.screens.playing.bar.PlayingSongBar
@@ -274,6 +275,15 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         snackBarState = snackBarHostState,
                         snackBarScope = snackBarScope,
+                    )
+                }
+
+                composable(route = Screens.FAVOURITE_SONGS_PATH) {
+                    statusBarColorSetter(backgroundColor)
+                    FavouriteSongsScreen(
+                        navController = navController,
+                        snackBarState = snackBarHostState,
+                        snackBarScope = snackBarScope
                     )
                 }
 

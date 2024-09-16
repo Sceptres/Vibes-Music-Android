@@ -27,6 +27,7 @@ import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.navigateToAlbumsScreen
 import com.aaa.vibesmusic.ui.nav.navigateToArtistsScreen
+import com.aaa.vibesmusic.ui.nav.navigateToFavouriteSongsScreen
 import com.aaa.vibesmusic.ui.nav.navigateToMusicLibraryScreen
 import com.aaa.vibesmusic.ui.nav.navigateToPlaylistsScreen
 
@@ -75,6 +76,15 @@ fun LibraryScreen(navController: NavController) {
                     icon = painterResource(id = R.drawable.music_note),
                     onClick = {
                         navController.navigateToMusicLibraryScreen()
+                    },
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                )
+
+                LibraryButton(
+                    text = "Favourite Songs",
+                    icon = painterResource(id = R.drawable.star),
+                    onClick = {
+                        navController.navigateToFavouriteSongsScreen()
                     },
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )

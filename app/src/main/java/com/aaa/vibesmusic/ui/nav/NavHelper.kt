@@ -102,6 +102,13 @@ fun NavController.navigateToAlbumsScreen() {
 }
 
 /**
+ * A method used to navigate to the favourite songs screen
+ */
+fun NavController.navigateToFavouriteSongsScreen() {
+    this.navigate(Screens.FAVOURITE_SONGS_PATH)
+}
+
+/**
  * A method used to control the navigation between nav bar items
  * @param route The route of the nav bar item
  */
