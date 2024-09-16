@@ -13,6 +13,7 @@ sealed class Screens(val route: String, @StringRes val screenNavText: Int, @Draw
         // Screen paths
         const val LIBRARY_PATH: String = "$LIBRARY_NAV_PATH/library"
         const val MUSIC_LIBRARY_PATH: String = "$LIBRARY_PATH/music_library"
+        const val FAVOURITE_SONGS_PATH: String = "$LIBRARY_PATH/favourite_songs"
         const val IMPORT_MUSIC_PATH: String = "import_music"
         const val PLAYLISTS_PATH: String = "$PLAYLISTS_NAV_PATH/playlists"
         const val PLAYLIST_PATH: String = "$PLAYLISTS_PATH/{playlistId}"
