@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.IBinder
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,11 +15,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.PlayStatus
 import com.aaa.vibesmusic.player.mode.PlayMode
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class PlayingSongsViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
@@ -28,6 +33,9 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
             }
         }
     }
+
+    private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.getApplication())
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     private var playerService: MediaPlayerService? by mutableStateOf(null)
 
@@ -43,6 +51,8 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
         this.playMode = this.playerService!!.playMode
         this.shuffleMode = this.playerService!!.shuffleMode
         this.currentSong = if(!this.playerService!!.isEmpty) this.playerService!!.currentSong else null
+
+        Log.d("RAN", "Prepared ran")
     }
 
     private val seekListener: (MediaPlayer?) -> Unit = { player ->
@@ -76,6 +86,28 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
 
     private fun isPlayerServiceNotEmpty(): Boolean {
         return this.playerService?.isEmpty == false
+    }
+
+    fun toggleSongFavourite() {
+        this.currentSong?.let {
+            val newSong: Song = Song(
+                it.songId,
+                it.name,
+                it.location,
+                it.artist,
+                it.albumName,
+                it.imageLocation,
+                it.duration,
+                !it.isFavourite
+            )
+
+            this.disposables.add(
+                this.db.songDao().updateSong(newSong)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
+            )
+        }
     }
 
     fun connectToPlayerService() {
@@ -148,5 +180,6 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
         this.playerService?.removePreparedListener()
         this.playerService?.pauseSeekListener()
         getApplication<Application>().unbindService(this.serviceConnection)
+        this.disposables.clear()
     }
 }
