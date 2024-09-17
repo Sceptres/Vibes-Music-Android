@@ -98,7 +98,8 @@ public class Song {
      * @return True if both songs have the same data. False otherwise.
      */
     public static boolean isSameSong(Song song1, Song song2) {
-        return song1.name.equals(song2.name) && song1.artist.equals(song2.artist) && song1.albumName.equals(song2.albumName) &&
+        return song1.name.equals(song2.name) && song1.artist.equals(song2.artist) &&
+                song1.albumName.equals(song2.albumName) && song1.isFavourite == song2.isFavourite &&
                 ((Objects.nonNull(song1.imageLocation) && Objects.equals(song1.imageLocation, song2.imageLocation)) ||
                         Objects.isNull(song1.imageLocation) && Objects.isNull(song2.imageLocation));
     }
