@@ -123,6 +123,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
      */
     public void setPreparedListener(MediaPlayer.OnPreparedListener listener) {
         this.preparedListener = listener;
+        this.runPreparedListener();
     }
 
     /**
@@ -152,8 +153,10 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
      * @param seekListener The {@link OnPlaySeekListener} of this player
      */
     public void setOnSeekListener(OnPlaySeekListener seekListener) {
-        if(Objects.nonNull(this.timeThread))
+        if(Objects.nonNull(this.timeThread)) {
             this.timeThread.setOnPlaySeekListener(seekListener);
+            seekListener.onPlaySeek(this.player);
+        }
     }
 
     /**

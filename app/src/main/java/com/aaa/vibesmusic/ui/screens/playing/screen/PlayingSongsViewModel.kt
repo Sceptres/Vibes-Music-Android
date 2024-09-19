@@ -95,9 +95,6 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
         this.playerService?.let { mediaPlayerService ->
             mediaPlayerService.setPreparedListener{ preparedListener(it) }
             mediaPlayerService.setOnSeekListener{ seekListener(it) }
-
-            // Call prepared listeners once to update states when service first connected
-            this.preparedListener(null)
         }
     }
 
