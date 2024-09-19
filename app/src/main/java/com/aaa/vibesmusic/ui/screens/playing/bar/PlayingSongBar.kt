@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +45,10 @@ fun PlayingSongBar(
     val playingSongBarState: PlayingSongBarState by remember {
         mutableStateOf(PlayingSongBarState(context))
     }
-    playingSongBarState.connectToPlayerService()
+
+    LaunchedEffect(Unit) {
+        playingSongBarState.connectToPlayerService()
+    }
 
     Box(
         modifier = modifier
