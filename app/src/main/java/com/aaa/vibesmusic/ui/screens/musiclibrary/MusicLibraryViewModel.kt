@@ -28,8 +28,6 @@ class MusicLibraryViewModel(application: Application) : PlayerServiceViewModel(a
     private val songsObserver: Observer<List<Song>> = Observer { value ->
         songs.clear()
         songs.addAll(value)
-
-        super.playerService?.updateSongs(value)
     }
 
     init {
@@ -44,6 +42,7 @@ class MusicLibraryViewModel(application: Application) : PlayerServiceViewModel(a
         if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         super.playerService?.setSongs(this.songs, index)
+        this.songsLiveData.observeForever(super.songsUpdatePlayerObserver)
     }
 
     @Composable
@@ -58,6 +57,7 @@ class MusicLibraryViewModel(application: Application) : PlayerServiceViewModel(a
     override fun onCleared() {
         super.onCleared()
         this.songsLiveData.removeObserver(this.songsObserver)
+        this.songsLiveData.removeObserver(super.songsUpdatePlayerObserver)
     }
 
     companion object {

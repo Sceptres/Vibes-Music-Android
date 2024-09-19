@@ -8,10 +8,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.Observer
+import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.player.MediaPlayerService
 
 open class PlayerServiceViewModel(application: Application,) : AndroidViewModel(application) {
     protected var playerService: MediaPlayerService? by mutableStateOf(null)
+    protected val songsUpdatePlayerObserver: Observer<List<Song>> = Observer {
+        this.playerService?.updateSongs(it)
+    }
 
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {

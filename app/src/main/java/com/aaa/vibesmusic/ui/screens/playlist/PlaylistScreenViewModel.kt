@@ -40,8 +40,9 @@ class PlaylistScreenViewModel(application: Application, playlistId: Int) : Playe
     private var playlistSongsLiveData: LiveData<PlaylistSongs> = this.getPlaylistSongsLiveData(playlistId)
     private val playlistSongObserver: Observer<PlaylistSongs> = Observer {playlistSongsData ->
         this.playlistSongs = playlistSongsData
-
-        super.playerService?.updateSongs(this.playlistSongs?.songs)
+    }
+    private val playlistSongUpdateObserver: Observer<PlaylistSongs> = Observer {
+        super.playerService?.updateSongs(it.songs)
     }
 
     init {
@@ -52,6 +53,7 @@ class PlaylistScreenViewModel(application: Application, playlistId: Int) : Playe
         if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         super.playerService?.setSongs(this.getPlaylistSongs(), index)
+        this.playlistSongsLiveData.observeForever(this.playlistSongUpdateObserver)
     }
 
     fun getPlaylistSongs(): List<Song> {
@@ -74,5 +76,6 @@ class PlaylistScreenViewModel(application: Application, playlistId: Int) : Playe
     override fun onCleared() {
         super.onCleared()
         this.playlistSongsLiveData.removeObserver(this.playlistSongObserver)
+        this.playlistSongsLiveData.removeObserver(this.playlistSongUpdateObserver)
     }
 }

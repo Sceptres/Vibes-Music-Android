@@ -37,8 +37,6 @@ class AlbumScreenViewModel(application: Application, private val albumName: Stri
     private val albumSongsObserver: Observer<List<Song>> = Observer{
         this.albumSongs.clear()
         this.albumSongs.addAll(it)
-
-        super.playerService?.updateSongs(this.albumSongs)
     }
 
     init {
@@ -50,6 +48,7 @@ class AlbumScreenViewModel(application: Application, private val albumName: Stri
         if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         super.playerService?.setSongs(this.albumSongs, index)
+        this.albumSongsLiveData.observeForever(super.songsUpdatePlayerObserver)
     }
 
     @Composable
@@ -68,5 +67,6 @@ class AlbumScreenViewModel(application: Application, private val albumName: Stri
     override fun onCleared() {
         super.onCleared()
         this.albumSongsLiveData.removeObserver(this.albumSongsObserver)
+        this.albumSongsLiveData.removeObserver(super.songsUpdatePlayerObserver)
     }
 }

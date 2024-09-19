@@ -35,8 +35,6 @@ class FavouriteSongsScreenViewModel(application: Application) : PlayerServiceVie
     private val favouriteSongsObserver: Observer<List<Song>> = Observer {
         this.favouriteSongs.clear()
         this.favouriteSongs.addAll(it)
-
-        super.playerService?.updateSongs(this.favouriteSongs)
     }
 
     init {
@@ -47,6 +45,7 @@ class FavouriteSongsScreenViewModel(application: Application) : PlayerServiceVie
         if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         super.playerService?.setSongs(this.favouriteSongs, index)
+        this.favouriteSongsLiveData.observeForever(super.songsUpdatePlayerObserver)
     }
 
     @Composable
@@ -65,5 +64,6 @@ class FavouriteSongsScreenViewModel(application: Application) : PlayerServiceVie
     override fun onCleared() {
         super.onCleared()
         this.favouriteSongsLiveData.removeObserver(this.favouriteSongsObserver)
+        this.favouriteSongsLiveData.removeObserver(super.songsUpdatePlayerObserver)
     }
 }

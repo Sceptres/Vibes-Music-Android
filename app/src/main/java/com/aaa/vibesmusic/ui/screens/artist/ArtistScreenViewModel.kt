@@ -39,8 +39,6 @@ class ArtistScreenViewModel(application: Application, private val artist: String
     private val artistSongsObserver: Observer<List<Song>> = Observer {
         this.artistSongs.clear()
         this.artistSongs.addAll(it)
-
-        super.playerService?.updateSongs(this.artistSongs)
     }
 
     init {
@@ -51,6 +49,7 @@ class ArtistScreenViewModel(application: Application, private val artist: String
         if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         super.playerService?.setSongs(this.artistSongs, index)
+        this.artistSongsLiveData.observeForever(super.songsUpdatePlayerObserver)
     }
 
     @Composable
@@ -69,6 +68,7 @@ class ArtistScreenViewModel(application: Application, private val artist: String
     override fun onCleared() {
         super.onCleared()
         this.artistSongsLiveData.removeObserver(this.artistSongsObserver)
+        this.artistSongsLiveData.removeObserver(super.songsUpdatePlayerObserver)
         this.disposables.clear()
     }
 }
