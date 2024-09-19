@@ -89,6 +89,12 @@ public class SongPlayer implements Playable {
             }
         }
 
+        if(this.originalSongs.isEmpty()) {
+            this.currentSongIndex = 0;
+        } else if(this.originalSongs.size()-1 < this.currentSongIndex) {
+            this.currentSongIndex = this.originalSongs.size()-1;
+        }
+
         return wasCurrentDeleted;
     }
 
@@ -231,6 +237,9 @@ public class SongPlayer implements Playable {
      * @return The current {@link Song} being played
      */
     public synchronized Song getCurrentSong() {
+        if(this.songs.isEmpty())
+            return null;
+
         return this.songs.get(this.currentSongIndex);
     }
 
