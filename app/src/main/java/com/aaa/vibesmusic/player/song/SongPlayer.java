@@ -69,23 +69,30 @@ public class SongPlayer implements Playable {
         boolean wasCurrentDeleted = false;
 
         this.setOriginalSongs(songs);
-        List<Song> deletedSongs = this.songs.stream().filter(s -> !this.originalSongs.contains(s)).collect(Collectors.toList());
+        List<Integer> originalSongIds = this.originalSongs.stream().map(Song::getSongId).collect(Collectors.toList());
+        List<Song> deletedSongs = this.songs.stream().filter(s -> !originalSongIds.contains(s.getSongId())).collect(Collectors.toList());
 
         for(Song deletedSong : deletedSongs) {
-            if(deletedSong.equals(this.getCurrentSong()))
+            if(Song.isSameSong(deletedSong, this.getCurrentSong()))
                 wasCurrentDeleted = true;
             this.songs.remove(deletedSong);
         }
 
         for(int i=0; i < this.songs.size(); i++) {
             Song currentSong = this.songs.get(i);
-            int songIndex = this.originalSongs.indexOf(currentSong);
+            int songIndex = originalSongIds.indexOf(currentSong.getSongId());
             Song newSong = this.originalSongs.get(songIndex);
 
-            if(!Song.isSameSong(currentSong, newSong)) {
+            if(!currentSong.equals(newSong)) {
                 this.songs.remove(i);
                 this.songs.add(i, newSong);
             }
+        }
+
+        if(this.originalSongs.isEmpty()) {
+            this.currentSongIndex = 0;
+        } else if(this.originalSongs.size()-1 < this.currentSongIndex) {
+            this.currentSongIndex = this.originalSongs.size()-1;
         }
 
         return wasCurrentDeleted;
@@ -230,6 +237,9 @@ public class SongPlayer implements Playable {
      * @return The current {@link Song} being played
      */
     public synchronized Song getCurrentSong() {
+        if(this.songs.isEmpty())
+            return null;
+
         return this.songs.get(this.currentSongIndex);
     }
 

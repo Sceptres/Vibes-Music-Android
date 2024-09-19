@@ -1,0 +1,204 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 7,
+    "identityHash": "c69b67cadecd29bb3241bb5e6d5d273f",
+    "entities": [
+      {
+        "tableName": "Songs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`songId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `location` TEXT NOT NULL, `artist` TEXT NOT NULL, `albumName` TEXT NOT NULL, `image_location` TEXT, `duration` INTEGER NOT NULL, `is_favourite` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "songId",
+            "columnName": "songId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "artist",
+            "columnName": "artist",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "albumName",
+            "columnName": "albumName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageLocation",
+            "columnName": "image_location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFavourite",
+            "columnName": "is_favourite",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "songId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Songs_location",
+            "unique": true,
+            "columnNames": [
+              "location"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Songs_location` ON `${TABLE_NAME}` (`location`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Playlists",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`playlistId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `playlistName` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "playlistId",
+            "columnName": "playlistId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "playlistName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "playlistId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Playlists_playlistName",
+            "unique": true,
+            "columnNames": [
+              "playlistName"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Playlists_playlistName` ON `${TABLE_NAME}` (`playlistName`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PlaylistSongRelationship",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`playlistId` INTEGER NOT NULL, `songId` INTEGER NOT NULL, PRIMARY KEY(`playlistId`, `songId`), FOREIGN KEY(`playlistId`) REFERENCES `Playlists`(`playlistId`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`songId`) REFERENCES `Songs`(`songId`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "playlistId",
+            "columnName": "playlistId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "songId",
+            "columnName": "songId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "playlistId",
+            "songId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_PlaylistSongRelationship_playlistId",
+            "unique": false,
+            "columnNames": [
+              "playlistId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_PlaylistSongRelationship_playlistId` ON `${TABLE_NAME}` (`playlistId`)"
+          },
+          {
+            "name": "index_PlaylistSongRelationship_songId",
+            "unique": false,
+            "columnNames": [
+              "songId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_PlaylistSongRelationship_songId` ON `${TABLE_NAME}` (`songId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Playlists",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "playlistId"
+            ],
+            "referencedColumns": [
+              "playlistId"
+            ]
+          },
+          {
+            "table": "Songs",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "songId"
+            ],
+            "referencedColumns": [
+              "songId"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [
+      {
+        "viewName": "PlaylistView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT Playlists.playlistId,\n          Playlists.playlistName,\n          (\n              SELECT Songs.image_location\n              FROM PlaylistSongRelationship\n              JOIN Songs ON PlaylistSongRelationship.songId = Songs.songId\n              WHERE PlaylistSongRelationship.playlistId = Playlists.playlistId\n                    AND Songs.image_location IS NOT NULL\n              LIMIT 1\n          ) AS playlistCoverImageLocation\nFROM Playlists"
+      },
+      {
+        "viewName": "ArtistView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT s1.artist as artist,\n           (\n                SELECT Songs.image_location\n                FROM Songs\n                WHERE s1.artist = Songs.artist\n                     AND Songs.image_location IS NOT NULL\n                LIMIT 1\n           ) AS artistCoverImage\n    FROM Songs AS s1\n    GROUP BY s1.artist"
+      },
+      {
+        "viewName": "AlbumView",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT s1.albumName as album,\n           (\n                SELECT Songs.image_location\n                FROM Songs\n                WHERE s1.albumName = Songs.albumName\n                     AND Songs.image_location IS NOT NULL\n                LIMIT 1\n           ) AS albumCoverImage\n    FROM Songs AS s1\n    GROUP BY s1.albumName"
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c69b67cadecd29bb3241bb5e6d5d273f')"
+    ]
+  }
+}
