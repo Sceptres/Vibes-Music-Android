@@ -78,7 +78,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         this.firebaseAnalytics = Firebase.analytics
-        this.firebaseAnalytics.setAnalyticsCollectionEnabled(false)
 
         VibesMusicDatabase.getInstance(applicationContext)
         StorageUtil.setup(this.applicationContext)
