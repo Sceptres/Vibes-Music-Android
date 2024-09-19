@@ -1,5 +1,6 @@
 package com.aaa.vibesmusic.ui.screens.musiclibrary.composables
 
+import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,6 +17,7 @@ import com.aaa.vibesmusic.ui.common.CustomDropdownMenuItem
 import com.aaa.vibesmusic.ui.dialogs.song.delete.DeleteSongDialog
 import com.aaa.vibesmusic.ui.dialogs.song.edit.EditSongDialog
 import com.aaa.vibesmusic.ui.nav.navigateToAddSongToPlaylistScreen
+import com.aaa.vibesmusic.ui.state.FavouriteSongState
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -28,7 +30,10 @@ fun MusicLibrarySongDropdown(
     snackBarScope: CoroutineScope,
     modifier: Modifier = Modifier
 ) {
-    val state: MusicLibrarySongDropdownState = MusicLibrarySongDropdownState(LocalContext.current)
+    val context: Context = LocalContext.current
+    val state: FavouriteSongState by remember {
+        mutableStateOf(FavouriteSongState(context))
+    }
     var editDialogState: Boolean by remember { mutableStateOf(false) }
     var deleteDialogState: Boolean by remember { mutableStateOf(false) }
 

@@ -20,9 +20,8 @@ import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.PlayStatus
 import com.aaa.vibesmusic.player.mode.PlayMode
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.aaa.vibesmusic.ui.state.FavouriteSongState
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class PlayingSongsViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
@@ -35,6 +34,7 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
 
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.getApplication())
     private val disposables: CompositeDisposable = CompositeDisposable()
+    private val favouriteSongState: FavouriteSongState = FavouriteSongState(this.getApplication())
 
     private var playerService: MediaPlayerService? by mutableStateOf(null)
 
@@ -87,23 +87,7 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
 
     fun toggleSongFavourite() {
         this.currentSong?.let {
-            val newSong: Song = Song(
-                it.songId,
-                it.name,
-                it.location,
-                it.artist,
-                it.albumName,
-                it.imageLocation,
-                it.duration,
-                !it.isFavourite
-            )
-
-            this.disposables.add(
-                this.db.songDao().updateSong(newSong)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
-            )
+            this.favouriteSongState.toggleSongFavourite(it)
         }
     }
 
@@ -178,5 +162,6 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
         this.playerService?.pauseSeekListener()
         getApplication<Application>().unbindService(this.serviceConnection)
         this.disposables.clear()
+        this.favouriteSongState.onClear()
     }
 }
