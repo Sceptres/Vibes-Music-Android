@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.screens.musiclibrary.composables
+package com.aaa.vibesmusic.ui.state
 
 import android.content.Context
 import com.aaa.vibesmusic.database.VibesMusicDatabase
@@ -7,11 +7,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class MusicLibrarySongDropdownState(private val context: Context) {
+class FavouriteSongState(private val context: Context) {
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.context)
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    fun toggleSongFavourite(song: Song, onSuccess: () -> Unit, onFail: (Throwable) -> Unit) {
+    fun toggleSongFavourite(song: Song, onSuccess: () -> Unit = {}, onFail: (Throwable) -> Unit = {}) {
         val newSongFavourite: Boolean = !song.isFavourite
         val newSong: Song = Song(
             song.songId,
@@ -30,5 +30,9 @@ class MusicLibrarySongDropdownState(private val context: Context) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onSuccess, onFail)
         )
+    }
+
+    fun onClear() {
+        this.disposables.clear()
     }
 }
