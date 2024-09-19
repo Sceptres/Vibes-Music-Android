@@ -39,6 +39,8 @@ class ArtistScreenViewModel(application: Application, private val artist: String
     private val artistSongsObserver: Observer<List<Song>> = Observer {
         this.artistSongs.clear()
         this.artistSongs.addAll(it)
+
+        super.playerService?.updateSongs(this.artistSongs)
     }
 
     init {
