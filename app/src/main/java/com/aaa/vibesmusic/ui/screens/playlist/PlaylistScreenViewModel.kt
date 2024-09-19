@@ -40,6 +40,8 @@ class PlaylistScreenViewModel(application: Application, playlistId: Int) : Playe
     private var playlistSongsLiveData: LiveData<PlaylistSongs> = this.getPlaylistSongsLiveData(playlistId)
     private val playlistSongObserver: Observer<PlaylistSongs> = Observer {playlistSongsData ->
         this.playlistSongs = playlistSongsData
+
+        super.playerService?.updateSongs(this.playlistSongs?.songs)
     }
 
     init {

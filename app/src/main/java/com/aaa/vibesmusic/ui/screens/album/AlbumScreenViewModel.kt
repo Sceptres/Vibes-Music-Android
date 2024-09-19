@@ -37,6 +37,8 @@ class AlbumScreenViewModel(application: Application, private val albumName: Stri
     private val albumSongsObserver: Observer<List<Song>> = Observer{
         this.albumSongs.clear()
         this.albumSongs.addAll(it)
+
+        super.playerService?.updateSongs(this.albumSongs)
     }
 
     init {

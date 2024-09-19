@@ -35,6 +35,8 @@ class FavouriteSongsScreenViewModel(application: Application) : PlayerServiceVie
     private val favouriteSongsObserver: Observer<List<Song>> = Observer {
         this.favouriteSongs.clear()
         this.favouriteSongs.addAll(it)
+
+        super.playerService?.updateSongs(this.favouriteSongs)
     }
 
     init {
