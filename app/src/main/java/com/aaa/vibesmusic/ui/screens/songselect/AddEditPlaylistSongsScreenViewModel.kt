@@ -145,4 +145,10 @@ class AddEditPlaylistSongsScreenViewModel(application: Application, playlistId: 
     private fun getPlaylistSongsLiveData(playlistId: Int): LiveData<PlaylistSongs> {
         return this.db.playlistDao().getPlaylistSongsByPlaylistId(playlistId)
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        this.songsLiveData.removeObserver(this.songsObserver)
+        this.playlistSongsLiveData.removeObserver(this.playlistSongsObserver)
+    }
 }
