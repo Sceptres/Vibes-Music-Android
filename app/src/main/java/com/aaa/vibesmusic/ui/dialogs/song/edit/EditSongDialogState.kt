@@ -37,10 +37,11 @@ class EditSongDialogState(private val context: Context, private val songObj: Son
             this.artistState.value,
             this.albumState.value,
             song.imageLocation,
-            song.duration
+            song.duration,
+            song.isFavourite
         )
 
-        if(!Song.isSameSong(song, newSong)) {
+        if(song != newSong) {
             this.disposables.add(
                 db.songDao().updateSong(newSong)
                     .subscribeOn(Schedulers.io())

@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.screens.album
+package com.aaa.vibesmusic.ui.screens.favouritesongs
 
 import android.Manifest
 import android.app.Application
@@ -19,36 +19,33 @@ import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.ui.viewmodel.PlayerServiceViewModel
 
-class AlbumScreenViewModel(application: Application, private val albumName: String) : PlayerServiceViewModel(application) {
+class FavouriteSongsScreenViewModel(application: Application) : PlayerServiceViewModel(application) {
     companion object {
-        fun getFactory(albumName: String): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    AlbumScreenViewModel(this[APPLICATION_KEY] as Application, albumName)
-                }
+        val FACTORY: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                FavouriteSongsScreenViewModel(this[APPLICATION_KEY] as Application)
             }
         }
     }
 
-    private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
+    private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.getApplication())
 
-    val albumSongs: MutableList<Song> = mutableStateListOf()
-    private val albumSongsLiveData: LiveData<List<Song>> = this.getAlbumSongsLiveData()
-    private val albumSongsObserver: Observer<List<Song>> = Observer{
-        this.albumSongs.clear()
-        this.albumSongs.addAll(it)
+    val favouriteSongs: MutableList<Song> = mutableStateListOf()
+    private val favouriteSongsLiveData: LiveData<List<Song>> = this.getFavouriteSongsLiveData()
+    private val favouriteSongsObserver: Observer<List<Song>> = Observer {
+        this.favouriteSongs.clear()
+        this.favouriteSongs.addAll(it)
     }
 
     init {
-        this.albumSongsLiveData.observeForever(this.albumSongsObserver)
+        this.favouriteSongsLiveData.observeForever(this.favouriteSongsObserver)
     }
 
-
-    fun onSongClicked(launcher: ManagedActivityResultLauncher<String, Boolean>, context: Context, index: Int) {
+    fun onSongClick(launcher: ManagedActivityResultLauncher<String, Boolean>, context: Context, index: Int) {
         if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        super.playerService?.setSongs(this.albumSongs, index)
-        this.albumSongsLiveData.observeForever(super.songsUpdatePlayerObserver)
+        super.playerService?.setSongs(this.favouriteSongs, index)
+        this.favouriteSongsLiveData.observeForever(super.songsUpdatePlayerObserver)
     }
 
     @Composable
@@ -60,13 +57,13 @@ class AlbumScreenViewModel(application: Application, private val albumName: Stri
         }
     }
 
-    private fun getAlbumSongsLiveData(): LiveData<List<Song>> {
-        return this.db.songDao().getAlbumSongs(this.albumName)
+    private fun getFavouriteSongsLiveData(): LiveData<List<Song>> {
+        return this.db.songDao().favouriteSongs
     }
 
     override fun onCleared() {
         super.onCleared()
-        this.albumSongsLiveData.removeObserver(this.albumSongsObserver)
-        this.albumSongsLiveData.removeObserver(super.songsUpdatePlayerObserver)
+        this.favouriteSongsLiveData.removeObserver(this.favouriteSongsObserver)
+        this.favouriteSongsLiveData.removeObserver(super.songsUpdatePlayerObserver)
     }
 }

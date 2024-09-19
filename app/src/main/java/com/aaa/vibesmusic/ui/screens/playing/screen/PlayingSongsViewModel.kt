@@ -14,11 +14,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.player.MediaPlayerService
 import com.aaa.vibesmusic.player.PlayStatus
 import com.aaa.vibesmusic.player.mode.PlayMode
 import com.aaa.vibesmusic.player.shuffle.ShuffleMode
+import com.aaa.vibesmusic.ui.state.FavouriteSongState
+import io.reactivex.disposables.CompositeDisposable
 
 class PlayingSongsViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
@@ -28,6 +31,10 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
             }
         }
     }
+
+    private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.getApplication())
+    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val favouriteSongState: FavouriteSongState = FavouriteSongState(this.getApplication())
 
     private var playerService: MediaPlayerService? by mutableStateOf(null)
 
@@ -76,6 +83,12 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
 
     private fun isPlayerServiceNotEmpty(): Boolean {
         return this.playerService?.isEmpty == false
+    }
+
+    fun toggleSongFavourite() {
+        this.currentSong?.let {
+            this.favouriteSongState.toggleSongFavourite(it)
+        }
     }
 
     fun connectToPlayerService() {
@@ -148,5 +161,7 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
         this.playerService?.removePreparedListener()
         this.playerService?.pauseSeekListener()
         getApplication<Application>().unbindService(this.serviceConnection)
+        this.disposables.clear()
+        this.favouriteSongState.onClear()
     }
 }
