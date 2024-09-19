@@ -98,10 +98,7 @@ public class Song {
      * @return True if both songs have the same data. False otherwise.
      */
     public static boolean isSameSong(Song song1, Song song2) {
-        return song1.name.equals(song2.name) && song1.artist.equals(song2.artist) &&
-                song1.albumName.equals(song2.albumName) && song1.isFavourite == song2.isFavourite &&
-                ((Objects.nonNull(song1.imageLocation) && Objects.equals(song1.imageLocation, song2.imageLocation)) ||
-                        Objects.isNull(song1.imageLocation) && Objects.isNull(song2.imageLocation));
+        return song1.songId == song2.songId && song1.location.equals(song2.location);
     }
 
     /**
@@ -178,7 +175,10 @@ public class Song {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Song song = (Song) o;
-        return songId == song.songId && location.equals(song.location);
+        return this.songId == song.songId && this.name.equals(song.name) && this.artist.equals(song.artist) &&
+                this.albumName.equals(song.albumName) && this.isFavourite == song.isFavourite &&
+                ((Objects.nonNull(this.imageLocation) && Objects.equals(this.imageLocation, song.imageLocation)) ||
+                        Objects.isNull(this.imageLocation) && Objects.isNull(song.imageLocation));
     }
 
     @Override

@@ -41,7 +41,7 @@ class EditSongDialogState(private val context: Context, private val songObj: Son
             song.isFavourite
         )
 
-        if(!Song.isSameSong(song, newSong)) {
+        if(song != newSong) {
             this.disposables.add(
                 db.songDao().updateSong(newSong)
                     .subscribeOn(Schedulers.io())
