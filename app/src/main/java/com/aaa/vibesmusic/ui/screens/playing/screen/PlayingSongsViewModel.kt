@@ -5,7 +5,6 @@ import android.content.ComponentName
 import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.IBinder
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -51,8 +50,6 @@ class PlayingSongsViewModel(application: Application) : AndroidViewModel(applica
         this.playMode = this.playerService!!.playMode
         this.shuffleMode = this.playerService!!.shuffleMode
         this.currentSong = if(!this.playerService!!.isEmpty) this.playerService!!.currentSong else null
-
-        Log.d("RAN", "Prepared ran")
     }
 
     private val seekListener: (MediaPlayer?) -> Unit = { player ->

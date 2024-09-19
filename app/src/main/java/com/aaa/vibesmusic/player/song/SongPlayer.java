@@ -1,7 +1,5 @@
 package com.aaa.vibesmusic.player.song;
 
-import android.util.Log;
-
 import com.aaa.vibesmusic.database.data.music.Song;
 import com.aaa.vibesmusic.player.PlayStatus;
 import com.aaa.vibesmusic.player.mode.PlayMode;
