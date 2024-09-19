@@ -63,9 +63,6 @@ class PlayingSongBarState(private val context: Context) {
         this.playerService?.let { mediaPlayerService ->
             mediaPlayerService.setPreparedListener{ preparedListener(it) }
             mediaPlayerService.setOnSeekListener{ seekListener(it) }
-
-            // Call prepared listeners once to update states when service first connected
-            preparedListener(null)
         }
     }
 
