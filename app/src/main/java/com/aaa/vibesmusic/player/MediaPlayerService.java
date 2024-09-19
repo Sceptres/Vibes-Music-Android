@@ -107,6 +107,7 @@ MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener, Playable, D
         boolean wasCurrentDeleted = this.songPlayer.updateSongs(songs);
         if(wasCurrentDeleted)
             this.setSong(this.getCurrentSong());
+        this.runPreparedListener();
     }
 
     /**
