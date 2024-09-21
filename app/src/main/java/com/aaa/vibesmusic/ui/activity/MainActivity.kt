@@ -113,13 +113,18 @@ class MainActivity : ComponentActivity() {
             window.statusBarColor = statusBarColorState.toArgb()
         }
 
+        val isVisible: Boolean = !playingSongScreenState.currentState || !playingSongScreenState.targetState
+
         AppScaffold(
             navController = navController,
-            statusBarColorSetter = { color -> statusBarColorState = color },
+            statusBarColorSetter = { color ->
+                if(isVisible)
+                    statusBarColorState = color
+            },
             snackBarHostState = snackBarHostState,
             snackBarScope = snackBarScope,
             globalCoroutineScope = globalCoroutineScope,
-            shouldShowPlayingSongBar = !playingSongScreenState.currentState || !playingSongScreenState.targetState,
+            shouldShowPlayingSongBar = isVisible,
             openPlayingSongScreen = { playingSongScreenState.targetState = true }
         )
 
