@@ -5,9 +5,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.aaa.vibesmusic.database.util.subscribeTo
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class EditSongDialogState(private val context: Context, private val songObj: Song) {
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(context)
@@ -44,9 +43,7 @@ class EditSongDialogState(private val context: Context, private val songObj: Son
         if(song != newSong) {
             this.disposables.add(
                 db.songDao().updateSong(newSong)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(onSuccess, onError)
+                    .subscribeTo(onSuccess, onError)
             )
         }
     }
