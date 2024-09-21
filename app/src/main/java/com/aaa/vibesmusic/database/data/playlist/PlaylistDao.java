@@ -18,25 +18,10 @@ public interface PlaylistDao {
     Completable insertPlaylist(Playlist playlist);
 
     @Upsert
-    Completable upsertPlaylists(Playlist... Playlists);
-
-    @Upsert
-    Completable upsertPlaylists(List<Playlist> Playlists);
-
-    @Upsert
     void upsertPlaylistSingle(Playlist playlist);
 
     @Upsert
     Completable upsertPlaylist(Playlist Playlist);
-
-    @Delete
-    Completable deletePlaylists(Playlist... Playlists);
-
-    @Delete
-    Completable deletePlaylists(List<Playlist> Playlists);
-
-    @Delete
-    Completable deletePlaylist(Playlist Playlist);
 
     @Delete
     void deletePlaylistSingle(Playlist playlist);
