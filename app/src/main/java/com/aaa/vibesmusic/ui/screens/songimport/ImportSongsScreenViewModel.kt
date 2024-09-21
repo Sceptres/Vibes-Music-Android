@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.database.util.subscribeTo
 import com.aaa.vibesmusic.exceptions.SongAlreadyExistsException
 import com.aaa.vibesmusic.metadata.SongMetaData
 import com.aaa.vibesmusic.metadata.retriever.SongMetadataRetriever
@@ -32,9 +33,7 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -165,9 +164,7 @@ class ImportSongsScreenViewModel(application: Application, private val globalSco
             if (importedSongs.isNotEmpty()) {
                 disposables.add(
                     db.songDao().insertSongs(importedSongs)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
+                        .subscribeTo {
                             val importedSongsCount: Int = uris.size - failedSongs - existingSongs
 
                             UIUtil.showSnackBar(
