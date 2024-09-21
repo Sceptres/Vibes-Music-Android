@@ -1,12 +1,8 @@
 package com.aaa.vibesmusic.ui.screens.artist
 
-import android.Manifest
 import android.app.Application
 import android.content.Context
 import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -16,7 +12,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
-import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.ui.viewmodel.PlayerServiceViewModel
 import io.reactivex.disposables.CompositeDisposable
 
@@ -46,19 +41,13 @@ class ArtistScreenViewModel(application: Application, private val artist: String
     }
 
     fun onSongClicked(launcher: ManagedActivityResultLauncher<String, Boolean>, context: Context, index: Int) {
-        if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
-            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        super.playerService?.setSongs(this.artistSongs, index)
+        super.onSongClicked(
+            launcher = launcher,
+            context = context,
+            songs = this.artistSongs,
+            index = index
+        )
         this.artistSongsLiveData.observeForever(super.songsUpdatePlayerObserver)
-    }
-
-    @Composable
-    fun getNotificationsPermissionLauncher(): ManagedActivityResultLauncher<String, Boolean> {
-        return rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
-            if(super.playerService?.isPlaying == true && isGranted) {
-                super.playerService?.showNotification()
-            }
-        }
     }
 
     private fun getArtistSongsLiveData(): LiveData<List<Song>> {
