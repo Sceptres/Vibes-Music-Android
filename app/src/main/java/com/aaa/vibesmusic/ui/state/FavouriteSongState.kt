@@ -3,9 +3,8 @@ package com.aaa.vibesmusic.ui.state
 import android.content.Context
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.aaa.vibesmusic.database.util.subscribeTo
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class FavouriteSongState(private val context: Context) {
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.context)
@@ -26,9 +25,7 @@ class FavouriteSongState(private val context: Context) {
 
         this.disposables.add(
             this.db.songDao().updateSong(newSong)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onSuccess, onFail)
+                .subscribeTo(onSuccess, onFail)
         )
     }
 

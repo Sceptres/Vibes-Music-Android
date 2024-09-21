@@ -5,10 +5,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.playlist.Playlist
+import com.aaa.vibesmusic.database.util.subscribeTo
 import com.aaa.vibesmusic.database.views.playlist.PlaylistView
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class EditPlaylistDialogState(val context: Context, playlist: PlaylistView) {
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.context)
@@ -29,9 +28,7 @@ class EditPlaylistDialogState(val context: Context, playlist: PlaylistView) {
         this.disposables.add(
             this.db.playlistDao()
                 .upsertPlaylist(newPlaylist)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onSuccess, onFail)
+                .subscribeTo(onSuccess, onFail)
         )
     }
 }

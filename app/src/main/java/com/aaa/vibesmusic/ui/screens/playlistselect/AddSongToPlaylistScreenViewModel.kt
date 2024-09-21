@@ -12,11 +12,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.SongPlaylists
 import com.aaa.vibesmusic.database.util.DatabaseUtil
+import com.aaa.vibesmusic.database.util.subscribeTo
 import com.aaa.vibesmusic.database.views.playlist.PlaylistView
 import com.aaa.vibesmusic.ui.common.SelectPlaylist
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class AddSongToPlaylistScreenViewModel(application: Application, songId: Int) : AndroidViewModel(application) {
     companion object {
@@ -67,9 +66,7 @@ class AddSongToPlaylistScreenViewModel(application: Application, songId: Int) : 
 
             this.disposables.add(
                 DatabaseUtil.upsertSongPlaylists(this.db, newSongPlaylists, removedPlaylists)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(onSuccess, onFail)
+                    .subscribeTo(onSuccess, onFail)
             )
         }
     }

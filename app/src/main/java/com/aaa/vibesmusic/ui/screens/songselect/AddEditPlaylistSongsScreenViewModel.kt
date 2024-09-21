@@ -18,11 +18,10 @@ import com.aaa.vibesmusic.database.data.playlist.Playlist
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.data.relationships.playlist.PlaylistSongRelationship
 import com.aaa.vibesmusic.database.util.DatabaseUtil
+import com.aaa.vibesmusic.database.util.subscribeTo
 import com.aaa.vibesmusic.database.views.playlist.PlaylistView
 import com.aaa.vibesmusic.ui.common.SelectSong
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class AddEditPlaylistSongsScreenViewModel(application: Application, playlistId: Int) : AndroidViewModel(application) {
     companion object {
@@ -77,9 +76,7 @@ class AddEditPlaylistSongsScreenViewModel(application: Application, playlistId: 
                 val removePlaylistSongsRelationship: List<PlaylistSongRelationship> = DatabaseUtil.convertPlaylistSongs(playlist, playlistSongsRemoved)
                 this.disposables.add(
                     this.db.playlistSongRelationshipDao().deletePlaylistSongRelationship(removePlaylistSongsRelationship)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
+                        .subscribeTo()
                 )
             }
 
@@ -89,9 +86,7 @@ class AddEditPlaylistSongsScreenViewModel(application: Application, playlistId: 
 
                 this.disposables.add(
                     DatabaseUtil.upsertPlaylistSong(this.db, newPlaylistSongs)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
+                        .subscribeTo()
                 )
             }
         }
