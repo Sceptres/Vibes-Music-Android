@@ -113,19 +113,18 @@ class MainActivity : ComponentActivity() {
             window.statusBarColor = statusBarColorState.toArgb()
         }
 
-        if(!playingSongScreenState.currentState || !playingSongScreenState.targetState) {
-            AppScaffold(
-                navController = navController,
-                statusBarColorSetter = { color -> statusBarColorState = color },
-                snackBarHostState = snackBarHostState,
-                snackBarScope = snackBarScope,
-                globalCoroutineScope = globalCoroutineScope,
-                openPlayingSongScreen = { playingSongScreenState.targetState = true }
-            )
+        AppScaffold(
+            navController = navController,
+            statusBarColorSetter = { color -> statusBarColorState = color },
+            snackBarHostState = snackBarHostState,
+            snackBarScope = snackBarScope,
+            globalCoroutineScope = globalCoroutineScope,
+            shouldShowPlayingSongBar = !playingSongScreenState.currentState || !playingSongScreenState.targetState,
+            openPlayingSongScreen = { playingSongScreenState.targetState = true }
+        )
 
-            if(!playingSongScreenState.targetState)
-                navBarColorState = navBarColor
-        }
+        if(!playingSongScreenState.targetState)
+            navBarColorState = navBarColor
 
         PlayingSongScreenAnim(visibleState = playingSongScreenState) {
             PlayingSongScreen(
@@ -143,6 +142,7 @@ class MainActivity : ComponentActivity() {
         snackBarHostState: SnackbarHostState,
         snackBarScope: CoroutineScope,
         globalCoroutineScope: CoroutineScope,
+        shouldShowPlayingSongBar: Boolean,
         openPlayingSongScreen: () -> Unit
     ) {
         val navBarColor: Color = MaterialTheme.colorScheme.secondary
@@ -228,15 +228,17 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                PlayingSongBar(
-                    onClick = { openPlayingSongScreen() },
-                    modifier = Modifier
-                        .constrainAs(playingSongBar) {
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom)
-                        }
-                )
+                if(shouldShowPlayingSongBar) {
+                    PlayingSongBar(
+                        onClick = { openPlayingSongScreen() },
+                        modifier = Modifier
+                            .constrainAs(playingSongBar) {
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                                bottom.linkTo(parent.bottom)
+                            }
+                    )
+                }
             }
         }
     }
