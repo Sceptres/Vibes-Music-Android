@@ -1,12 +1,8 @@
 package com.aaa.vibesmusic.ui.screens.playlist
 
-import android.Manifest
 import android.app.Application
 import android.content.Context
 import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,7 +15,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
-import com.aaa.vibesmusic.perms.PermissionsUtil
 import com.aaa.vibesmusic.ui.viewmodel.PlayerServiceViewModel
 
 class PlaylistScreenViewModel(application: Application, playlistId: Int) : PlayerServiceViewModel(application) {
@@ -50,23 +45,17 @@ class PlaylistScreenViewModel(application: Application, playlistId: Int) : Playe
     }
 
     fun onSongClicked(launcher: ManagedActivityResultLauncher<String, Boolean>, context: Context, index: Int) {
-        if(!PermissionsUtil.hasPermission(context, Manifest.permission.POST_NOTIFICATIONS))
-            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        super.playerService?.setSongs(this.getPlaylistSongs(), index)
+        super.onSongClicked(
+            launcher = launcher,
+            context = context,
+            songs = this.playlistSongs?.songs ?: listOf(),
+            index = index
+        )
         this.playlistSongsLiveData.observeForever(this.playlistSongUpdateObserver)
     }
 
     fun getPlaylistSongs(): List<Song> {
         return this.playlistSongs?.songs ?: listOf()
-    }
-
-    @Composable
-    fun getNotificationsPermissionLauncher(): ManagedActivityResultLauncher<String, Boolean> {
-        return rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
-            if(super.playerService?.isPlaying == true && isGranted) {
-                super.playerService?.showNotification()
-            }
-        }
     }
 
     private fun getPlaylistSongsLiveData(playlistId: Int): LiveData<PlaylistSongs> {
