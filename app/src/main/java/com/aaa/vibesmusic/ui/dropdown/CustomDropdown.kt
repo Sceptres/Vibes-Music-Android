@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.common
+package com.aaa.vibesmusic.ui.dropdown
 
 import androidx.compose.foundation.background
 import androidx.compose.material3.DropdownMenu
