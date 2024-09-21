@@ -4,9 +4,8 @@ import android.content.Context
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.playlist.PlaylistSongs
 import com.aaa.vibesmusic.database.util.DatabaseUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.aaa.vibesmusic.database.util.subscribeTo
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class DeletePlaylistDialogState(val context: Context) {
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(this.context)
@@ -19,9 +18,7 @@ class DeletePlaylistDialogState(val context: Context) {
     ) {
         this.disposables.add(
             DatabaseUtil.deletePlaylistSong(this.db, playlistSongs)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onSuccess, onFail)
+                .subscribeTo(onSuccess, onFail)
         )
     }
 }
