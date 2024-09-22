@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.ui.common.SongItem
 import com.aaa.vibesmusic.ui.viewmodel.PlayerServiceViewModel
 import io.reactivex.disposables.CompositeDisposable
 
@@ -29,11 +30,11 @@ class ArtistScreenViewModel(application: Application, private val artist: String
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    val artistSongs: MutableList<Song> = mutableStateListOf()
+    val artistSongs: MutableList<SongItem> = mutableStateListOf()
     private val artistSongsLiveData: LiveData<List<Song>> = this.getArtistSongsLiveData()
     private val artistSongsObserver: Observer<List<Song>> = Observer {
         this.artistSongs.clear()
-        this.artistSongs.addAll(it)
+        this.artistSongs.addAll(it.mapIndexed { index, song -> SongItem(index, song) })
     }
 
     init {
@@ -44,7 +45,7 @@ class ArtistScreenViewModel(application: Application, private val artist: String
         super.onSongClicked(
             launcher = launcher,
             context = context,
-            songs = this.artistSongs,
+            songs = this.artistSongs.map(SongItem::song),
             index = index
         )
         this.artistSongsLiveData.observeForever(super.songsUpdatePlayerObserver)
