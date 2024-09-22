@@ -9,11 +9,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.database.data.music.Song
-import com.aaa.vibesmusic.ui.dialogs.song.delete.DeleteSongDialog
-import com.aaa.vibesmusic.ui.dialogs.song.edit.EditSongDialog
 import com.aaa.vibesmusic.ui.common.dropdown.CustomDropdown
 import com.aaa.vibesmusic.ui.common.dropdown.CustomDropdownMenuItem
 import com.aaa.vibesmusic.ui.common.dropdown.FavouriteDropdownMenuItem
+import com.aaa.vibesmusic.ui.dialogs.song.delete.DeleteSongDialog
+import com.aaa.vibesmusic.ui.dialogs.song.edit.EditSongDialog
 import com.aaa.vibesmusic.ui.nav.navigateToAddSongToPlaylistScreen
 import kotlinx.coroutines.CoroutineScope
 
