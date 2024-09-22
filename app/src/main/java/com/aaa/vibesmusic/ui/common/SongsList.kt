@@ -37,7 +37,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
-import com.aaa.vibesmusic.ui.search.SearchableView
 
 data class SongItem(val index: Int, val song: Song)
 
