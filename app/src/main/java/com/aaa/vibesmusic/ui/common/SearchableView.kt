@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.search
+package com.aaa.vibesmusic.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
