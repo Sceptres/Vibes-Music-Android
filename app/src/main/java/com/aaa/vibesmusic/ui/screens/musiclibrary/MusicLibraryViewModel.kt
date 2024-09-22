@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.ui.common.SongItem
 import com.aaa.vibesmusic.ui.viewmodel.PlayerServiceViewModel
 
 class MusicLibraryViewModel(application: Application) : PlayerServiceViewModel(application) {
@@ -19,10 +20,10 @@ class MusicLibraryViewModel(application: Application) : PlayerServiceViewModel(a
 
     // Songs data state
     private val songsLiveData = this.getSongsFromDatabase()
-    val songs: MutableList<Song> = mutableStateListOf()
+    val songs: MutableList<SongItem> = mutableStateListOf()
     private val songsObserver: Observer<List<Song>> = Observer { value ->
         songs.clear()
-        songs.addAll(value)
+        songs.addAll(value.mapIndexed { index, song -> SongItem(index, song) })
     }
 
     init {
@@ -37,7 +38,7 @@ class MusicLibraryViewModel(application: Application) : PlayerServiceViewModel(a
         super.onSongClicked(
             launcher = launcher,
             context = context,
-            songs = this.songs,
+            songs = this.songs.map(SongItem::song),
             index = index
         )
         this.songsLiveData.observeForever(super.songsUpdatePlayerObserver)

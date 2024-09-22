@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aaa.vibesmusic.database.VibesMusicDatabase
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.ui.common.SongItem
 import com.aaa.vibesmusic.ui.viewmodel.PlayerServiceViewModel
 
 class AlbumScreenViewModel(application: Application, private val albumName: String) : PlayerServiceViewModel(application) {
@@ -27,11 +28,11 @@ class AlbumScreenViewModel(application: Application, private val albumName: Stri
 
     private val db: VibesMusicDatabase = VibesMusicDatabase.getInstance(application)
 
-    val albumSongs: MutableList<Song> = mutableStateListOf()
+    val albumSongs: MutableList<SongItem> = mutableStateListOf()
     private val albumSongsLiveData: LiveData<List<Song>> = this.getAlbumSongsLiveData()
     private val albumSongsObserver: Observer<List<Song>> = Observer{
         this.albumSongs.clear()
-        this.albumSongs.addAll(it)
+        this.albumSongs.addAll(it.mapIndexed{ index, song -> SongItem(index, song) })
     }
 
     init {
@@ -43,7 +44,7 @@ class AlbumScreenViewModel(application: Application, private val albumName: Stri
         super.onSongClicked(
             launcher = launcher,
             context = context,
-            songs = this.albumSongs,
+            songs = this.albumSongs.map(SongItem::song),
             index = index
         )
         this.albumSongsLiveData.observeForever(super.songsUpdatePlayerObserver)

@@ -22,9 +22,9 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aaa.vibesmusic.R
-import com.aaa.vibesmusic.database.data.music.Song
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.EmptyListWarning
+import com.aaa.vibesmusic.ui.common.SongItem
 import com.aaa.vibesmusic.ui.common.SongsList
 import com.aaa.vibesmusic.ui.common.TopBar
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
@@ -85,7 +85,7 @@ fun PlaylistScreen(
                     }
                 )
 
-                val songs: List<Song> = playlistScreenViewModel.getPlaylistSongs()
+                val songs: List<SongItem> = playlistScreenViewModel.getPlaylistSongs()
 
                 if(songs.isNotEmpty()) {
                     SongsList(
