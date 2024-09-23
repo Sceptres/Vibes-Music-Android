@@ -1,6 +1,7 @@
 package com.aaa.vibesmusic.ui.dialogs.common
 
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,13 +44,16 @@ fun EditField(
         },
         maxLines = 1,
         colors = TextFieldDefaults.colors(
+            cursorColor = Color.White,
             focusedTextColor = Color.White,
             unfocusedTextColor = Color.White,
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
             disabledContainerColor = Color.Transparent,
-            errorTextColor = Color.Red,
-            errorContainerColor = Color.Transparent,
+            selectionColors = TextSelectionColors(
+                handleColor = Color.White,
+                backgroundColor = Color.LightGray
+            )
         ),
         isError = !validator
     )
