@@ -1,4 +1,4 @@
-package com.aaa.vibesmusic.ui.dropdown
+package com.aaa.vibesmusic.ui.common.dropdown
 
 import android.content.Context
 import androidx.compose.material3.SnackbarHostState

@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,21 +38,36 @@ import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.data.music.Song
 
+data class SongItem(val index: Int, val song: Song)
+
 @Composable
 fun SongsList(
-    songs: List<Song>,
+    songs: List<SongItem>,
     modifier: Modifier = Modifier,
     onItemClick: (index: Int) -> Unit,
     SongItemDropdown: @Composable (expandedState: MutableState<Boolean>, song: Song) -> Unit
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(5.dp),
+    SearchableView(
+        searchableData = songs,
+        placeholder = "Song Name",
+        filter = { song, searchText ->
+            song.song.name.contains(searchText, true)
+        },
         modifier = modifier
-    ) {
-        itemsIndexed(songs) { index, song ->
-            val menuExpanded: MutableState<Boolean> = remember { mutableStateOf(false) }
-            SongListItem(song, index, onItemClick, { menuExpanded.value = true }) {
-                SongItemDropdown(menuExpanded, song)
+    ) { mod, filteredSongs ->
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = mod
+        ) {
+            items(filteredSongs) { song ->
+                val menuExpanded: MutableState<Boolean> = remember { mutableStateOf(false) }
+                SongListItem(
+                    song,
+                    onItemClick,
+                    { menuExpanded.value = true }
+                ) {
+                    SongItemDropdown(menuExpanded, song.song)
+                }
             }
         }
     }
@@ -60,19 +75,20 @@ fun SongsList(
 
 @Composable
 fun SongListItem(
-    song: Song,
-    index: Int,
+    songItem: SongItem,
     onItemClick: (index: Int) -> Unit,
     onOptionsClick: () -> Unit,
     SongItemMenu: @Composable () -> Unit
 ) {
+    val song: Song = songItem.song
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.primary)
-            .clickable { onItemClick(index) }
+            .clickable { onItemClick(songItem.index) }
     ) {
         Row(
             modifier = Modifier
