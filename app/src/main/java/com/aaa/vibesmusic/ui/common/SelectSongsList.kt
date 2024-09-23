@@ -45,25 +45,34 @@ fun SelectSongsList(
     modifier: Modifier = Modifier,
     onCheckedChange: (SelectSong, Boolean) -> Unit
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(5.dp),
+    SearchableView(
+        searchableData = songs,
+        placeholder = "Song Name",
+        filter = { selectSong, searchStr ->
+            selectSong.song.name.contains(searchStr, true)
+        },
         modifier = modifier
-    ) {
-        items(songs) { selectSong ->
-            val song: Song = selectSong.song
+    ) { mod, filteredSelectSongs ->
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(5.dp),
+            modifier = mod
+        ) {
+            items(filteredSelectSongs) { selectSong ->
+                val song: Song = selectSong.song
 
-            SelectSongItem(
-                song = song,
-                onClick = {
-                    selectSong.checkedState.value = !selectSong.checkedState.value
-                    onCheckedChange(selectSong, selectSong.checkedState.value)
-                },
-                checkValue = selectSong.checkedState.value,
-                onCheckedChange = {
-                    onCheckedChange(selectSong, it)
-                    selectSong.checkedState.value = it
-                }
-            )
+                SelectSongItem(
+                    song = song,
+                    onClick = {
+                        selectSong.checkedState.value = !selectSong.checkedState.value
+                        onCheckedChange(selectSong, selectSong.checkedState.value)
+                    },
+                    checkValue = selectSong.checkedState.value,
+                    onCheckedChange = {
+                        onCheckedChange(selectSong, it)
+                        selectSong.checkedState.value = it
+                    }
+                )
+            }
         }
     }
 }
