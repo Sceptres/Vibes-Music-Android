@@ -50,6 +50,8 @@ fun EditField(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
             disabledContainerColor = Color.Transparent,
+            errorTextColor = Color.Red,
+            errorContainerColor = Color.Transparent,
             selectionColors = TextSelectionColors(
                 handleColor = Color.White,
                 backgroundColor = Color.LightGray
