@@ -39,21 +39,30 @@ fun PlaylistsSelectGrid(
     onCheckedChange: (SelectPlaylist, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TwoColumnGrid(
-        items = playlistList,
+    SearchableView(
+        searchableData = playlistList,
+        placeholder = "Playlist Name",
+        filter = { selectPlaylist, searchText ->
+            selectPlaylist.playlist.playlistName.contains(searchText, true)
+        },
         modifier = modifier
-    ){ playlist ->
-        PlaylistSelectCard(
-            playlist = playlist.playlist,
-            checked = playlist.checkedState.value,
-            onClick = {
-                playlist.checkedState.value = !playlist.checkedState.value
-            },
-            onCheckedChange = {
-                onCheckedChange(playlist, it)
-                playlist.checkedState.value = it
-            }
-        )
+    ) { mod, filteredPlaylists ->
+        TwoColumnGrid(
+            items = filteredPlaylists,
+            modifier = mod
+        ){ playlist ->
+            PlaylistSelectCard(
+                playlist = playlist.playlist,
+                checked = playlist.checkedState.value,
+                onClick = {
+                    playlist.checkedState.value = !playlist.checkedState.value
+                },
+                onCheckedChange = {
+                    onCheckedChange(playlist, it)
+                    playlist.checkedState.value = it
+                }
+            )
+        }
     }
 }
 
