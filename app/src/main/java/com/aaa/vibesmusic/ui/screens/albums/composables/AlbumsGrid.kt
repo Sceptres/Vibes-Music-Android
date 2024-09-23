@@ -26,6 +26,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.database.views.album.AlbumView
+import com.aaa.vibesmusic.ui.common.SearchableView
 import com.aaa.vibesmusic.ui.common.TwoColumnGrid
 
 @Composable
@@ -34,14 +35,23 @@ fun AlbumsGrid(
     onItemClick: (AlbumView) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TwoColumnGrid(
-        items = albums,
+    SearchableView(
+        searchableData = albums,
+        placeholder = "Album Name",
+        filter = { albumView, searchText ->
+            albumView.album.contains(searchText, true)
+        },
         modifier = modifier
-    ) { album ->
-        AlbumCard(
-            album,
-            onClick = { onItemClick(album) }
-        )
+    ) { mod, filteredAlbums ->
+        TwoColumnGrid(
+            items = filteredAlbums,
+            modifier = mod
+        ) { album ->
+            AlbumCard(
+                album,
+                onClick = { onItemClick(album) }
+            )
+        }
     }
 }
 
