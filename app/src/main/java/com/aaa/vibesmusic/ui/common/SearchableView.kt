@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -20,6 +21,7 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,68 +50,75 @@ fun <T> SearchableView(
     Column(
         modifier = modifier
     ) {
-        SearchBar(
-            inputField = {
-                SearchBarDefaults.InputField(
-                    query = searchText,
-                    onQueryChange = { searchText = it },
-                    onSearch = { focusManager.clearFocus() },
-                    expanded = false,
-                    onExpandedChange = {},
-                    colors = TextFieldDefaults.colors(
-                        cursorColor = Color.White,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        selectionColors = TextSelectionColors(
-                            handleColor = Color.White,
-                            backgroundColor = Color.LightGray
-                        )
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(15.dp))
-                        .background(MaterialTheme.colorScheme.primary)
-                        .focusRequester(focusRequester),
-                    placeholder = {
-                        Text(
-                            placeholder,
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                    },
-                    leadingIcon = {
-                        IconButton(
-                            onClick = { focusManager.clearFocus() }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "Search",
-                                tint = Color.White
+        CompositionLocalProvider(
+            LocalTextSelectionColors provides TextSelectionColors(
+                handleColor = Color.White, // Change thumb (selection handle) color to white
+                backgroundColor = Color.LightGray // Selection highlight color
+            )
+        ) {
+            SearchBar(
+                inputField = {
+                    SearchBarDefaults.InputField(
+                        query = searchText,
+                        onQueryChange = { searchText = it },
+                        onSearch = { focusManager.clearFocus() },
+                        expanded = false,
+                        onExpandedChange = {},
+                        colors = TextFieldDefaults.colors(
+                            cursorColor = Color.White,
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                            selectionColors = TextSelectionColors(
+                                handleColor = Color.White,
+                                backgroundColor = Color.LightGray
                             )
-                        }
-                    },
-                    trailingIcon = {
-                        IconButton(
-                            onClick = {
-                                searchText = ""
-                                focusManager.clearFocus()
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(15.dp))
+                            .background(MaterialTheme.colorScheme.primary)
+                            .focusRequester(focusRequester),
+                        placeholder = {
+                            Text(
+                                placeholder,
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        },
+                        leadingIcon = {
+                            IconButton(
+                                onClick = { focusManager.clearFocus() }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Search,
+                                    contentDescription = "Search",
+                                    tint = Color.White
+                                )
                             }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Clear,
-                                contentDescription = "Clear",
-                                tint = Color.White,
-                            )
+                        },
+                        trailingIcon = {
+                            IconButton(
+                                onClick = {
+                                    searchText = ""
+                                    focusManager.clearFocus()
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Clear,
+                                    contentDescription = "Clear",
+                                    tint = Color.White,
+                                )
+                            }
                         }
-                    }
-                )
-            },
-            expanded = false,
-            onExpandedChange = {},
-            modifier = Modifier.fillMaxWidth().wrapContentHeight()
-        ) {}
+                    )
+                },
+                expanded = false,
+                onExpandedChange = {},
+                modifier = Modifier.fillMaxWidth().wrapContentHeight()
+            ) {}
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
 
