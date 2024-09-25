@@ -140,7 +140,6 @@ public class Song {
      *
      * @return The location of the album cover image
      */
-    @NonNull
     public String getImageLocation() {
         return this.imageLocation;
     }

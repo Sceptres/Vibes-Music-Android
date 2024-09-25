@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.aaa.vibesmusic.database.data.music.Song
+import com.aaa.vibesmusic.storage.StorageUtil
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.dialogs.common.ConfirmAlertDialog
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +43,10 @@ fun DeleteSongDialog(
                         snackBarState = snackBarState,
                         message = "The song ${song.name} has been successfully deleted!"
                     )
+                    StorageUtil.deleteFile(song.location)
+                    song.imageLocation ?: run {
+                        StorageUtil.deleteFile(song.imageLocation)
+                    }
                 },
                 onFail = {
                     UIUtil.showSnackBar(
