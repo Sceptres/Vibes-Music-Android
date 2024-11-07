@@ -19,6 +19,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.aaa.vibesmusic.BuildConfig
 import com.aaa.vibesmusic.ui.UIUtil
 import com.aaa.vibesmusic.ui.common.EmptySongsListWarning
 import com.aaa.vibesmusic.ui.common.SongsList
@@ -99,7 +100,7 @@ fun MusicLibraryScreen(
             }
         }
         AdmobBanner(
-            adId = "***REMOVED***",
+            adId = BuildConfig.ADMOB_MUSIC_LIBRARY_SCREEN_BANNER_AD_ID,
             modifier = Modifier
                 .wrapContentSize()
                 .constrainAs(adview) {

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import com.aaa.vibesmusic.BuildConfig
 import com.aaa.vibesmusic.connection.ConnectionStatus
 import com.aaa.vibesmusic.connection.currentConnectionStatus
 import com.aaa.vibesmusic.connection.rememberConnectionStatus
@@ -34,9 +35,9 @@ fun AdmobBanner(adId: String, modifier: Modifier = Modifier) {
 
 class Ads {
     companion object {
-        const val IMPORT_MUSIC_AD_ID: String = "***REMOVED***"
-        const val OPEN_APP_AD_ID: String = "***REMOVED***"
-        const val MUSIC_PLAYED_AD_ID: String = "***REMOVED***"
+        const val IMPORT_MUSIC_AD_ID: String = BuildConfig.ADMOB_IMPORT_SONGS_INTERESTRIAL_AD_ID
+        const val OPEN_APP_AD_ID: String = BuildConfig.ADMOB_OPEN_INTERESTRIAL_AD_ID
+        const val MUSIC_PLAYED_AD_ID: String = BuildConfig.ADMOB_PLAYED_SONGS_INTERESTRIAL_AD_ID
 
         /**
          *

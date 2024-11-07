@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
+import com.aaa.vibesmusic.BuildConfig
 import com.aaa.vibesmusic.R
 import com.aaa.vibesmusic.ui.monetization.AdmobBanner
 import com.aaa.vibesmusic.ui.nav.navigateToAlbumsScreen
@@ -127,7 +128,7 @@ fun LibraryScreen(navController: NavController) {
         }
 
         AdmobBanner(
-            adId = "***REMOVED***",
+            adId = BuildConfig.ADMOB_LIBRARY_SCREEN_BANNER_AD_ID,
             modifier = Modifier
                 .constrainAs(adView) {
                     bottom.linkTo(parent.bottom)

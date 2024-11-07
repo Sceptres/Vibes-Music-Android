@@ -6,6 +6,15 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+// Read the admob ids from local.properties
+def localProperties = new Properties()
+def localPropsFile = rootProject.file("local.properties")
+if (localPropsFile.exists()) {
+    localProperties.load(new FileInputStream(localPropsFile))
+} else {
+    throw new GradleException("local.properties file is missing!")
+}
+
 android {
     namespace 'com.aaa.vibesmusic'
     compileSdk 34
@@ -21,11 +30,29 @@ android {
         versionCode 7
         versionName "1.2.3"
 
+        // Placeholder for the app admob id
+        manifestPlaceholders = [ADMOB_APP_ID: localProperties.getProperty("ADMOB_APP_ID")]
+
+        // Build config fields for admob ad ids
+        buildConfigField "String", "ADMOB_OPEN_INTERESTRIAL_AD_ID", "\"${localProperties.getProperty("ADMOB_OPEN_INTERESTRIAL_AD_ID")}\""
+        buildConfigField "String", "ADMOB_IMPORT_SONGS_INTERESTRIAL_AD_ID", "\"${localProperties.getProperty("ADMOB_IMPORT_SONGS_INTERESTRIAL_AD_ID")}\""
+        buildConfigField "String", "ADMOB_PLAYED_SONGS_INTERESTRIAL_AD_ID", "\"${localProperties.getProperty("ADMOB_PLAYED_SONGS_INTERESTRIAL_AD_ID")}\""
+        buildConfigField "String", "ADMOB_LIBRARY_SCREEN_BANNER_AD_ID", "\"${localProperties.getProperty("ADMOB_LIBRARY_SCREEN_BANNER_AD_ID")}\""
+        buildConfigField "String", "ADMOB_MUSIC_LIBRARY_SCREEN_BANNER_AD_ID", "\"${localProperties.getProperty("ADMOB_MUSIC_LIBRARY_SCREEN_BANNER_AD_ID")}\""
+        buildConfigField "String", "ADMOB_FAVOURITE_SONGS_SCREEN_BANNER_AD_ID", "\"${localProperties.getProperty("ADMOB_FAVOURITE_SONGS_SCREEN_BANNER_AD_ID")}\""
+        buildConfigField "String", "ADMOB_PLAYLISTS_SCREEN_BANNER_AD_ID", "\"${localProperties.getProperty("ADMOB_PLAYLISTS_SCREEN_BANNER_AD_ID")}\""
+        buildConfigField "String", "ADMOB_PLAYLIST_SCREEN_BANNER_AD_ID", "\"${localProperties.getProperty("ADMOB_PLAYLIST_SCREEN_BANNER_AD_ID")}\""
+        buildConfigField "String", "ADMOB_ARTISTS_SCREEN_BANNER_AD_ID", "\"${localProperties.getProperty("ADMOB_ARTISTS_SCREEN_BANNER_AD_ID")}\""
+        buildConfigField "String", "ADMOB_ARTIST_SCREEN_BANNER_AD_ID", "\"${localProperties.getProperty("ADMOB_ARTIST_SCREEN_BANNER_AD_ID")}\""
+        buildConfigField "String", "ADMOB_ALBUMS_SCREEN_BANNER_AD_ID", "\"${localProperties.getProperty("ADMOB_ALBUMS_SCREEN_BANNER_AD_ID")}\""
+        buildConfigField "String", "ADMOB_ALBUM_SCREEN_BANNER_AD_ID", "\"${localProperties.getProperty("ADMOB_ALBUM_SCREEN_BANNER_AD_ID")}\""
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
         compose true
+        buildConfig true
     }
 
     buildTypes {
